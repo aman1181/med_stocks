@@ -1,0 +1,19 @@
+              🏥 MEDSTOCKS PHARMACY
+         ================================
+           Bill No: BILL-1755769534860
+           Date: 21/8/2025, 3:15:34 pm
+                 Customer: rakesh
+                Phone: 7894253685
+                Doctor: Dr. rahul
+==================================================
+Item                      Qty     Price     Total
+--------------------------------------------------
+abcd                        9    100.00    900.00
+--------------------------------------------------
+                                 Subtotal: ₹900.00
+                           Discount (10%): -₹90.00
+                              Grand Total: ₹810.00
+                                     Payment: CASH
+
+           Thank you for your business!
+                 Visit again! 🙏

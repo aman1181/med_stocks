@@ -1,0 +1,13 @@
+           MEDSTOCKS PHARMACY
+               Bill No: 
+     Date: 2025-08-15T09:12:47.529Z
+----------------------------------------
+Item                Qty  Price   Total
+----------------------------------------
+undefined             1  50.00   50.00
+----------------------------------------
+                             Total: 0.00
+                          Discount: 2.70
+                      Grand Total: -2.70
+
+               Thank you!

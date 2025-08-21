@@ -1,0 +1,19 @@
+              🏥 MEDSTOCKS PHARMACY
+         ================================
+           Bill No: BILL-1755681827235
+           Date: 20/8/2025, 2:53:47 pm
+                 Customer: shayam
+                Phone: 7043469396
+                 Doctor: Dr. aman
+==================================================
+Item                      Qty     Price     Total
+--------------------------------------------------
+abcd                       10    100.00   1000.00
+--------------------------------------------------
+                                Subtotal: ₹1000.00
+                            Discount (9%): -₹90.00
+                              Grand Total: ₹910.00
+                                     Payment: CASH
+
+           Thank you for your business!
+                 Visit again! 🙏
