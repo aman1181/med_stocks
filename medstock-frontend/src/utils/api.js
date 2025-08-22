@@ -45,7 +45,9 @@ export const apiCallJSON = async (endpoint, options = {}) => {
 
 // Helper function for making API calls
 export const apiCall = async (endpoint, options = {}) => {
-  const url = `${API}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
+  // Ensure endpoint starts with / but doesn't duplicate it
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const url = `${API}${cleanEndpoint}`;
   
   const defaultOptions = {
     headers: {
@@ -58,26 +60,27 @@ export const apiCall = async (endpoint, options = {}) => {
   // Merge options properly - method should come from options
   const finalOptions = { ...defaultOptions, ...options };
   
-  // Only log in development
+  // Only log in development OR if there's an error (for production debugging)
   if (import.meta.env.DEV) {
     console.log(`🌐 API Call: ${finalOptions.method || 'GET'} ${url}`);
     console.log(`📤 Request options:`, finalOptions);
   }
+  
+  // Always log final URL for debugging
+  console.log(`🔗 Final API URL: ${url}`);
   
   try {
     const response = await fetch(url, finalOptions);
     
     // Return the response object for the caller to handle
     // This allows checking response.ok, response.status, etc.
-    if (import.meta.env.DEV && !response.ok) {
+    if (!response.ok) {
       console.error(`❌ API Error: ${response.status} ${response.statusText} - ${url}`);
     }
     
     return response;
   } catch (error) {
-    if (import.meta.env.DEV) {
-      console.error(`❌ Network Error: ${error.message} - ${url}`);
-    }
+    console.error(`❌ Network Error: ${error.message} - ${url}`);
     throw error;
   }
 };
