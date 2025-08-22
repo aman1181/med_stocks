@@ -50,8 +50,11 @@ const useAuth = () => {
 
 
 
+
 export default function Reports({ setCurrentScreen, user, onLogout }) {
-  const { canViewReports, canViewFinancials, canViewStock, isAudit } = useAuth();
+  // Always get the latest user from localStorage, not from props
+  const auth = useAuth();
+  const { canViewReports, canViewFinancials, canViewStock, isAudit, currentUser } = auth;
 
   const [dailySales, setDailySales] = useState({});
   const [weeklySales, setWeeklySales] = useState([]);
@@ -71,25 +74,19 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
 
   const getAuthToken = () => {
     const directToken = localStorage.getItem('token');
-    
     if (directToken && directToken !== 'undefined' && directToken !== 'null') {
       return directToken;
     }
-    
     const userStr = localStorage.getItem('user');
     if (userStr) {
       try {
         const user = JSON.parse(userStr);
         const userToken = user.token;
-        
         if (userToken && userToken !== 'undefined' && userToken !== 'null') {
           return userToken;
         }
-      } catch (err) {
-        // Silent fail
-      }
+      } catch (err) {}
     }
-    
     return null;
   };
 
@@ -101,11 +98,12 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
     };
   };
 
+  // Only fetch reports after currentUser is loaded and permissions are known
   useEffect(() => {
-    if (user) {
+    if (currentUser && canViewReports) {
       fetchReports();
     }
-  }, [user]);
+  }, [currentUser, canViewReports]);
 
   async function fetchReports() {
     try {
@@ -354,7 +352,18 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
     );
   };
 
-  // Check if user has permission to view reports
+  // Wait for currentUser to load before showing access denied
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center bg-white p-8 rounded-lg shadow-md">
+          <div className="text-6xl mb-4">🔄</div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Loading user...</h2>
+        </div>
+      </div>
+    );
+  }
+
   if (!canViewReports) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">

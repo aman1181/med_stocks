@@ -138,9 +138,7 @@ router.use((error, req, res, next) => {
   });
 });
 
-// ✅ REMOVED: These problematic lines that were causing the error
-// router.use(authenticateToken);      // ← REMOVE THIS
-// router.use(blockAuditWrites);       // ← REMOVE THIS (doesn't exist)
+
 
 console.log('✅ Auth routes loaded successfully');
 console.log('📋 Available endpoints:');

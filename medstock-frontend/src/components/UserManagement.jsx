@@ -375,6 +375,7 @@ const UserManagement = ({ onLogout }) => {
         </p>
       </div>
       )}
+
   {isAudit && (
     <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg mb-6">
       <div className="flex items-center">
@@ -387,8 +388,8 @@ const UserManagement = ({ onLogout }) => {
         </div>
       </div>
     </div>
-  )}  
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+  )}    
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
         <div className="bg-white p-6 rounded-lg border border-gray-200">
           <div className="flex items-center">
             <div className="p-2 bg-blue-50 rounded-lg">
@@ -446,9 +447,9 @@ const UserManagement = ({ onLogout }) => {
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-lg border border-gray-200 mb-6">
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-1">
+      <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200 mb-6">
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1 min-w-0">
             <div className="relative">
               <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -463,7 +464,7 @@ const UserManagement = ({ onLogout }) => {
             </div>
           </div>
 
-          <div className="sm:w-48">
+          <div className="w-full sm:w-48">
             <select
               value={filterRole}
               onChange={(e) => setFilterRole(e.target.value)}
@@ -478,7 +479,7 @@ const UserManagement = ({ onLogout }) => {
 
           <button
             onClick={fetchUsers}
-            className="px-4 py-2 text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="w-full sm:w-auto px-4 py-2 text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -509,7 +510,7 @@ const UserManagement = ({ onLogout }) => {
         </div>
       )}
 
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+  <div className="bg-white rounded-lg border border-gray-200 overflow-x-auto">
         {filteredUsers.length === 0 ? (
           <div className="text-center py-12">
             <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -519,8 +520,8 @@ const UserManagement = ({ onLogout }) => {
             <p className="text-gray-500">Try adjusting your search criteria.</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+          <div className="w-full">
+            <table className="min-w-full divide-y divide-gray-200 text-sm md:text-base">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
@@ -598,10 +599,10 @@ const UserManagement = ({ onLogout }) => {
       </div>
 
       {filteredUsers.length > 0 && (
-        <div className="mt-6 bg-gray-50 px-6 py-3 rounded-lg border border-gray-200">
-          <div className="flex items-center justify-between text-sm text-gray-600">
+        <div className="mt-6 bg-gray-50 px-4 sm:px-6 py-3 rounded-lg border border-gray-200">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between text-sm text-gray-600 gap-2 md:gap-0">
             <span>Showing {filteredUsers.length} of {users.length} users</span>
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-wrap items-center gap-2 md:gap-4">
               {['admin', 'pharmacist', 'audit'].map(role => {
                 const count = filteredUsers.filter(u => u.role === role).length;
                 return count > 0 ? (
