@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
+import { API, apiCall } from '../utils/api'
 
 export default function Login({ onLogin }){
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-
-  const API = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
   async function handleSubmit(e){
     e.preventDefault()
@@ -15,7 +14,7 @@ export default function Login({ onLogin }){
     
     try {
       // ✅ Updated endpoint for JWT auth
-      const res = await fetch(`${API}/api/auth/login`, {
+      const res = await apiCall('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -94,7 +93,7 @@ export default function Login({ onLogin }){
       if (existingToken && existingUser) {
         try {
           // Verify token with backend
-          const res = await fetch(`${API}/api/auth/me`, {
+          const res = await apiCall('/api/auth/me', {
             headers: { 
               'Authorization': `Bearer ${existingToken}`,
               'Content-Type': 'application/json'

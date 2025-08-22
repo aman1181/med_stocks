@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { PlusIcon, PrinterIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
+import { API, apiCall } from '../utils/api';
 
 const useAuth = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -73,8 +74,6 @@ const Billing = ({ user, onLogout }) => {
   const [showProductDropdown, setShowProductDropdown] = useState(false);
   const [filteredInventory, setFilteredInventory] = useState([]);
 
-  const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
   const getAuthToken = () => {
     const directToken = localStorage.getItem('token');
     
@@ -119,7 +118,7 @@ const Billing = ({ user, onLogout }) => {
         return;
       }
       
-      const res = await fetch(`${API}/api/billing`, {
+      const res = await apiCall('/api/billing', {
         headers: getAuthHeaders()
       });
       
@@ -151,7 +150,7 @@ const Billing = ({ user, onLogout }) => {
       const token = getAuthToken();
       if (!token) return;
       
-      const res = await fetch(`${API}/api/inventory`, {
+      const res = await apiCall('/api/inventory', {
         headers: getAuthHeaders()
       });
       
@@ -170,7 +169,7 @@ const Billing = ({ user, onLogout }) => {
       const token = getAuthToken();
       if (!token) return;
       
-      const res = await fetch(`${API}/api/doctors`, {
+      const res = await apiCall('/api/doctors', {
         headers: getAuthHeaders()
       });
       
@@ -188,7 +187,7 @@ const Billing = ({ user, onLogout }) => {
       const token = getAuthToken();
       if (!token) return;
       
-      const res = await fetch(`${API}/api/vendors`, {
+      const res = await apiCall('/api/vendors', {
         headers: getAuthHeaders()
       });
       
@@ -364,7 +363,7 @@ const Billing = ({ user, onLogout }) => {
         items: currentBill.items
       };
 
-      const res = await fetch(`${API}/api/billing`, {
+      const res = await apiCall('/api/billing', {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify(billData),

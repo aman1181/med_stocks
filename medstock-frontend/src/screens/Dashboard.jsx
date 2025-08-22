@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { API, apiCall } from '../utils/api';
 import { 
   ChartBarIcon, 
   CubeIcon, 
@@ -80,8 +81,6 @@ const Dashboard = ({ user, onLogout }) => {
   const [lastUpdate, setLastUpdate] = useState(new Date());
   const [error, setError] = useState('');
 
-  const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
   const getAuthToken = () => {
     const directToken = localStorage.getItem('token');
     
@@ -126,7 +125,7 @@ const Dashboard = ({ user, onLogout }) => {
       }
       
       // Fetch inventory data (available to all roles)
-      const inventoryResponse = await fetch(`${API}/api/inventory`, { 
+      const inventoryResponse = await apiCall('/api/inventory', { 
         headers: getAuthHeaders() 
       });
       
@@ -151,7 +150,7 @@ const Dashboard = ({ user, onLogout }) => {
       if (canViewFinancials) {
         try {
           // Try daily sales endpoint first
-          const dailySalesResponse = await fetch(`${API}/api/reports/sales/daily`, { 
+          const dailySalesResponse = await apiCall('/api/reports/sales/daily', { 
             headers: getAuthHeaders() 
           });
           
@@ -161,7 +160,7 @@ const Dashboard = ({ user, onLogout }) => {
             revenue = dailyData.revenue || 0;
           } else {
             // Fallback to billing endpoint
-            const billsResponse = await fetch(`${API}/api/billing`, { 
+            const billsResponse = await apiCall('/api/billing', { 
               headers: getAuthHeaders() 
             });
             

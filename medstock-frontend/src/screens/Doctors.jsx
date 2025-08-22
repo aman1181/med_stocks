@@ -64,8 +64,6 @@ const Doctors = ({ user, onLogout }) => {
   const [showForm, setShowForm] = useState(false);
   const [error, setError] = useState('');
 
-  const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
   const getAuthToken = () => {
     const directToken = localStorage.getItem('token');
     
