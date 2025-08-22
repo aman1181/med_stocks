@@ -245,18 +245,18 @@ const Doctors = ({ user, onLogout }) => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white shadow border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Doctors Management</h1>
-              <p className="mt-2 text-gray-600">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Doctors Management</h1>
+              <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">
                 Manage doctor profiles and specializations
-                {isAudit && <span className="text-blue-600"> • Read-only access</span>}
+                {isAudit && <span className="text-blue-600 block sm:inline"> • Read-only access</span>}
               </p>
             </div>
-            <div className="mt-4 sm:mt-0 flex items-center space-x-3">
-              <div className="bg-blue-100 px-4 py-2 rounded-lg">
-                <span className="text-blue-800 font-semibold">{doctors.length} Doctors</span>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
+              <div className="bg-blue-100 px-3 sm:px-4 py-2 rounded-lg w-full sm:w-auto text-center">
+                <span className="text-blue-800 font-semibold text-sm sm:text-base">{doctors.length} Doctors</span>
               </div>
               {canCreate && (
                 <button
@@ -264,9 +264,9 @@ const Doctors = ({ user, onLogout }) => {
                     resetForm();
                     setShowForm(!showForm);
                   }}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors shadow flex items-center space-x-2"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 rounded-lg transition-colors shadow flex items-center justify-center space-x-2 w-full sm:w-auto text-sm sm:text-base"
                 >
-                  <PlusIcon className="h-5 w-5" />
+                  <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                   <span>{showForm ? 'Cancel' : 'Add Doctor'}</span>
                 </button>
               )}
@@ -275,23 +275,23 @@ const Doctors = ({ user, onLogout }) => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         
         {isAudit && (
           <div className="mb-6 bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg">
-            <div className="flex items-center">
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-start">
+              <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <div>
                 <p className="font-medium">Audit Mode Active</p>
-                <p className="text-sm">You have read-only access to doctor data. Contact administrator for modification permissions.</p>
+                <p className="text-sm mt-1">You have read-only access to doctor data. Contact administrator for modification permissions.</p>
               </div>
             </div>
           </div>
         )}
 
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <div className="relative max-w-md">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

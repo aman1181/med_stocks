@@ -659,14 +659,14 @@ const Billing = ({ user, onLogout }) => {
   const totals = calculateTotals();
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <div className="mb-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">Billing & Sales</h1>
-            <p className="text-gray-600">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Billing & Sales</h1>
+            <p className="text-sm sm:text-base text-gray-600">
               Create and manage pharmacy bills
-              {isAudit && <span className="text-blue-600"> • Read-only access</span>}
+              {isAudit && <span className="text-blue-600 block sm:inline"> • Read-only access</span>}
             </p>
           </div>
           {canCreate && (
@@ -675,9 +675,9 @@ const Billing = ({ user, onLogout }) => {
                 resetForm();
                 setShowForm(!showForm);
               }}
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow transition-colors"
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg shadow transition-colors text-sm sm:text-base w-full sm:w-auto justify-center"
             >
-              <PlusIcon className="h-5 w-5" />
+              <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5" />
               {showForm ? 'Cancel' : 'New Bill'}
             </button>
           )}
@@ -686,36 +686,36 @@ const Billing = ({ user, onLogout }) => {
 
       {isAudit && (
         <div className="mb-6 bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg">
-          <div className="flex items-center">
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex items-start">
+            <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <div>
               <p className="font-medium">Audit Mode Active</p>
-              <p className="text-sm">You have read-only access to billing data. Contact administrator for billing permissions.</p>
+              <p className="text-sm mt-1">You have read-only access to billing data. Contact administrator for billing permissions.</p>
             </div>
           </div>
         </div>
       )}
 
-      <div className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-green-50 p-4 rounded-lg text-center border border-green-200">
-          <div className="text-2xl font-bold text-green-600">{bills.length}</div>
-          <div className="text-sm text-green-800">Total Bills</div>
+      <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-green-50 p-3 sm:p-4 rounded-lg text-center border border-green-200">
+          <div className="text-xl sm:text-2xl font-bold text-green-600">{bills.length}</div>
+          <div className="text-xs sm:text-sm text-green-800">Total Bills</div>
         </div>
-        <div className="bg-blue-50 p-4 rounded-lg text-center border border-blue-200">
-          <div className="text-2xl font-bold text-blue-600">
+        <div className="bg-blue-50 p-3 sm:p-4 rounded-lg text-center border border-blue-200">
+          <div className="text-xl sm:text-2xl font-bold text-blue-600">
             Rs {bills.reduce((sum, bill) => sum + parseFloat(bill.total || 0), 0).toFixed(2)}
           </div>
-          <div className="text-sm text-blue-800">Total Revenue</div>
+          <div className="text-xs sm:text-sm text-blue-800">Total Revenue</div>
         </div>
-        <div className="bg-purple-50 p-4 rounded-lg text-center border border-purple-200">
-          <div className="text-2xl font-bold text-purple-600">{doctors.length}</div>
-          <div className="text-sm text-purple-800">Active Doctors</div>
+        <div className="bg-purple-50 p-3 sm:p-4 rounded-lg text-center border border-purple-200">
+          <div className="text-xl sm:text-2xl font-bold text-purple-600">{doctors.length}</div>
+          <div className="text-xs sm:text-sm text-purple-800">Active Doctors</div>
         </div>
-        <div className="bg-orange-50 p-4 rounded-lg text-center border border-orange-200">
-          <div className="text-2xl font-bold text-orange-600">{vendors.length}</div>
-          <div className="text-sm text-orange-800">Active Vendors</div>
+        <div className="bg-orange-50 p-3 sm:p-4 rounded-lg text-center border border-orange-200">
+          <div className="text-xl sm:text-2xl font-bold text-orange-600">{vendors.length}</div>
+          <div className="text-xs sm:text-sm text-orange-800">Active Vendors</div>
         </div>
       </div>
 
@@ -735,17 +735,17 @@ const Billing = ({ user, onLogout }) => {
       )}
 
       {showForm && canCreate && (
-        <div className="mb-8 bg-white p-6 rounded-lg shadow-md border">
+        <div className="mb-8 bg-white p-4 sm:p-6 rounded-lg shadow-md border">
           <h2 className="text-lg font-semibold mb-4 text-gray-800">Create New Bill</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Customer Name *</label>
               <input
                 type="text"
                 value={currentBill.customer_name}
                 onChange={(e) => setCurrentBill(prev => ({ ...prev, customer_name: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                 placeholder="Enter customer name"
                 required
               />
@@ -756,19 +756,19 @@ const Billing = ({ user, onLogout }) => {
                 type="tel"
                 value={currentBill.customer_phone}
                 onChange={(e) => setCurrentBill(prev => ({ ...prev, customer_phone: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                 placeholder="Enter phone number"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Doctor (Optional)</label>
               <select
                 value={currentBill.doctor_id}
                 onChange={(e) => setCurrentBill(prev => ({ ...prev, doctor_id: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
               >
                 <option value="">Walk-in Customer</option>
                 {doctors.map(doctor => (
@@ -783,7 +783,7 @@ const Billing = ({ user, onLogout }) => {
               <select
                 value={currentBill.payment_method}
                 onChange={(e) => setCurrentBill(prev => ({ ...prev, payment_method: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
               >
                 <option value="cash">Cash</option>
                 <option value="card">Card</option>
@@ -794,9 +794,9 @@ const Billing = ({ user, onLogout }) => {
           </div>
 
           <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-            <h3 className="text-md font-medium mb-3 text-gray-800">Add Products</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="md:col-span-2 relative">
+            <h3 className="text-sm sm:text-md font-medium mb-3 text-gray-800">Add Products</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div className="lg:col-span-2 relative">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Search Product</label>
                 <input
                   type="text"

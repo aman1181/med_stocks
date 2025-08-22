@@ -251,41 +251,41 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
     }
 
     return (
-      <div className="bg-white shadow-lg rounded-xl p-6 mb-6">
-        <h2 className="text-xl font-bold mb-4 text-blue-600 flex items-center gap-2">
+      <div className="bg-white shadow-lg rounded-xl p-4 sm:p-6 mb-6">
+        <h2 className="text-lg sm:text-xl font-bold mb-4 text-blue-600 flex items-center gap-2">
           {title}
         </h2>
         
         {isDaily ? (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-blue-50 p-4 rounded-lg text-center border border-blue-200">
-              <div className="text-3xl font-bold text-blue-600">{dailySales.sales || 0}</div>
-              <div className="text-sm text-blue-800 font-medium">Items Sold</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-blue-50 p-3 sm:p-4 rounded-lg text-center border border-blue-200">
+              <div className="text-2xl sm:text-3xl font-bold text-blue-600">{dailySales.sales || 0}</div>
+              <div className="text-xs sm:text-sm text-blue-800 font-medium">Items Sold</div>
             </div>
-            <div className="bg-green-50 p-4 rounded-lg text-center border border-green-200">
-              <div className="text-3xl font-bold text-green-600">Rs {(dailySales.revenue || 0).toFixed(2)}</div>
-              <div className="text-sm text-green-800 font-medium">Revenue</div>
+            <div className="bg-green-50 p-3 sm:p-4 rounded-lg text-center border border-green-200">
+              <div className="text-2xl sm:text-3xl font-bold text-green-600">Rs {(dailySales.revenue || 0).toFixed(2)}</div>
+              <div className="text-xs sm:text-sm text-green-800 font-medium">Revenue</div>
             </div>
-            <div className="bg-purple-50 p-4 rounded-lg text-center border border-purple-200">
-              <div className="text-3xl font-bold text-purple-600">{dailySales.transactions || 0}</div>
-              <div className="text-sm text-purple-800 font-medium">Transactions</div>
+            <div className="bg-purple-50 p-3 sm:p-4 rounded-lg text-center border border-purple-200">
+              <div className="text-2xl sm:text-3xl font-bold text-purple-600">{dailySales.transactions || 0}</div>
+              <div className="text-xs sm:text-sm text-purple-800 font-medium">Transactions</div>
             </div>
-            <div className="bg-gray-50 p-4 rounded-lg text-center border border-gray-200">
-              <div className="text-lg font-bold text-gray-600">
+            <div className="bg-gray-50 p-3 sm:p-4 rounded-lg text-center border border-gray-200">
+              <div className="text-base sm:text-lg font-bold text-gray-600">
                 {dailySales.date || new Date().toISOString().split('T')[0]}
               </div>
-              <div className="text-sm text-gray-800 font-medium">Date</div>
+              <div className="text-xs sm:text-sm text-gray-800 font-medium">Date</div>
             </div>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full border border-gray-200 text-sm">
+            <table className="min-w-full border border-gray-200 text-xs sm:text-sm">
               <thead className="bg-gray-100">
                 <tr>
                   {columns.map((col) => (
                     <th
                       key={col}
-                      className="border px-4 py-3 text-left font-medium text-gray-700 uppercase tracking-wider"
+                      className="border px-2 sm:px-4 py-2 sm:py-3 text-left font-medium text-gray-700 uppercase tracking-wider"
                     >
                       {col.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                     </th>
@@ -380,24 +380,24 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white shadow-sm border-b">
-        <div className="flex items-center justify-between p-4">
-          <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <button
               onClick={() => handleNavigation('dashboard')}
-              className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors"
+              className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors text-sm sm:text-base"
             >
-              <HomeIcon className="h-5 w-5" />
+              <HomeIcon className="h-4 w-4 sm:h-5 sm:w-5" />
               Dashboard
             </button>
             <span className="text-gray-400">/</span>
-            <h1 className="text-xl font-bold text-blue-700">
+            <h1 className="text-lg sm:text-xl font-bold text-blue-700">
               Reports & Analytics
-              {isAudit && <span className="text-blue-600 text-sm font-normal"> • Audit Access</span>}
+              {isAudit && <span className="text-blue-600 text-sm font-normal block sm:inline"> • Audit Access</span>}
             </h1>
           </div>
           <button
             onClick={fetchReports}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow transition-colors"
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg shadow transition-colors text-sm sm:text-base w-full sm:w-auto justify-center"
             disabled={loading}
           >
             <ArrowPathIcon className={`h-5 w-5 ${loading ? 'animate-spin' : ''}`} />

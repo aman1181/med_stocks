@@ -390,12 +390,12 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-white shadow-sm border-b">
-        <div className="flex items-center justify-between p-4">
+        <div className="bg-white shadow-sm border-b">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 gap-4">
           <div className="flex items-center gap-4">
-            <h1 className="text-xl font-bold text-green-700">
+            <h1 className="text-lg sm:text-xl font-bold text-green-700">
               Inventory Management
-              {isAudit && <span className="text-blue-600 text-sm font-normal"> • Read-only access</span>}
+              {isAudit && <span className="text-blue-600 text-sm font-normal block sm:inline"> • Read-only access</span>}
             </h1>
           </div>
           {canCreate && (
@@ -405,50 +405,48 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
                 setIsEditing(false);
                 setShowForm(!showForm);
               }}
-              className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow transition-colors"
+              className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-3 sm:px-4 py-2 rounded-lg shadow transition-colors text-sm sm:text-base w-full sm:w-auto justify-center"
             >
-              <PlusIcon className="h-5 w-5" />
+              <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5" />
               {showForm ? 'Cancel' : 'Add Product'}
             </button>
           )}
         </div>
-      </div>
-
-      <div className="p-6">
+      </div>      <div className="p-4 sm:p-6">
         {isAudit && (
           <div className="mb-6 bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg">
-            <div className="flex items-center">
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-start">
+              <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <div>
                 <p className="font-medium">Audit Mode Active</p>
-                <p className="text-sm">You have read-only access to inventory data. Contact administrator for inventory management permissions.</p>
+                <p className="text-sm mt-1">You have read-only access to inventory data. Contact administrator for inventory management permissions.</p>
               </div>
             </div>
           </div>
         )}
 
-        <div className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="md:col-span-2 relative">
+        <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="sm:col-span-2 lg:col-span-2 relative">
             <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               placeholder="Search products, batches, or vendors..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm sm:text-base"
             />
           </div>
           <div className="bg-blue-50 p-3 rounded-lg text-center">
-            <div className="text-2xl font-bold text-blue-600">{inventory.length}</div>
-            <div className="text-sm text-blue-800">Total Items</div>
+            <div className="text-xl sm:text-2xl font-bold text-blue-600">{inventory.length}</div>
+            <div className="text-xs sm:text-sm text-blue-800">Total Items</div>
           </div>
           <div className="bg-red-50 p-3 rounded-lg text-center">
-            <div className="text-2xl font-bold text-red-600">
+            <div className="text-xl sm:text-2xl font-bold text-red-600">
               {inventory.filter(item => isExpired(item.expiry_date)).length}
             </div>
-            <div className="text-sm text-red-800">Expired Items</div>
+            <div className="text-xs sm:text-sm text-red-800">Expired Items</div>
           </div>
         </div>
 
@@ -468,26 +466,26 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
         )}
 
         {showForm && canCreate && (
-          <div className="mb-8 bg-white p-6 rounded-lg shadow-md border">
+          <div className="mb-8 bg-white p-4 sm:p-6 rounded-lg shadow-md border">
             <h2 className="text-lg font-semibold mb-4 text-gray-800">
               {isEditing ? 'Edit Product' : 'Add New Product'}
             </h2>
             <form onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                 <input
                   type="text"
                   name="name"
                   placeholder="Product Name *"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
                   required
                 />
                 <select
                   name="vendor_id"
                   value={formData.vendor_id}
                   onChange={handleInputChange}
-                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
                   required
                 >
                   <option value="">Select Vendor *</option>
@@ -503,19 +501,19 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
                   placeholder="Batch Number *"
                   value={formData.batch_no}
                   onChange={handleInputChange}
-                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm sm:text-base sm:col-span-2 lg:col-span-1"
                   required
                 />
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                 <input
                   type="text"
                   name="unit"
                   placeholder="Unit (e.g., tablets, ml)"
                   value={formData.unit}
                   onChange={handleInputChange}
-                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
                 />
                 <input
                   type="number"
@@ -523,7 +521,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
                   placeholder="Quantity"
                   value={formData.qty}
                   onChange={handleInputChange}
-                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
                   min="0"
                 />
                 <input
@@ -532,7 +530,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
                   placeholder="Cost Price"
                   value={formData.cost}
                   onChange={handleInputChange}
-                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
                   min="0"
                   step="0.01"
                 />
@@ -542,20 +540,20 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
                   placeholder="Selling Price"
                   value={formData.price}
                   onChange={handleInputChange}
-                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
                   min="0"
                   step="0.01"
                 />
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <input
                   type="date"
                   name="expiry_date"
                   placeholder="Expiry Date"
                   value={formData.expiry_date}
                   onChange={handleInputChange}
-                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
                 />
                 <input
                   type="number"
@@ -563,17 +561,17 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
                   placeholder="Tax Rate (%)"
                   value={formData.tax}
                   onChange={handleInputChange}
-                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
                   min="0"
                   max="100"
                   step="0.01"
                 />
               </div>
               
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   type="submit"
-                  className="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg font-medium transition-colors"
+                  className="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg font-medium transition-colors text-sm sm:text-base"
                 >
                   {isEditing ? 'Update Product' : 'Save Product'}
                 </button>
@@ -583,7 +581,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
                     resetForm();
                     setShowForm(false);
                   }}
-                  className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-6 rounded-lg font-medium transition-colors"
+                  className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-6 rounded-lg font-medium transition-colors text-sm sm:text-base"
                 >
                   Cancel
                 </button>
@@ -593,7 +591,8 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
         )}
 
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Desktop Table View */}
+          <div className="hidden lg:block overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
@@ -702,6 +701,104 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile Card View */}
+          <div className="lg:hidden">
+            {filteredInventory.length > 0 ? (
+              <div className="divide-y divide-gray-200">
+                {filteredInventory.map((item, index) => (
+                  <div 
+                    key={item.batch_id || `item-${index}`}
+                    className={`p-4 ${
+                      isExpired(item.expiry_date) ? 'bg-red-50' : 
+                      item.qty <= LOW_STOCK_LIMIT ? 'bg-yellow-50' : 'bg-white'
+                    }`}
+                  >
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="flex-1">
+                        <h3 className="font-medium text-gray-900 text-sm">{item.product_name}</h3>
+                        <p className="text-xs text-gray-500 mt-1">ID: {item.product_id}</p>
+                      </div>
+                      <div className="flex flex-col items-end">
+                        <span className={`text-sm font-medium ${
+                          item.qty <= 0 ? 'text-red-600' : 
+                          item.qty <= LOW_STOCK_LIMIT ? 'text-yellow-600' : 'text-green-600'
+                        }`}>
+                          Qty: {item.qty}
+                        </span>
+                        <span className="text-sm text-gray-900">Rs {item.price}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 mb-3">
+                      <div>
+                        <span className="font-medium">Vendor:</span> {item.vendor_name || 'N/A'}
+                      </div>
+                      <div>
+                        <span className="font-medium">Batch:</span> {item.batch_no}
+                      </div>
+                      <div>
+                        <span className="font-medium">Unit:</span> 
+                        <span className="ml-1 px-2 py-0.5 text-xs bg-gray-100 text-gray-800 rounded">
+                          {item.unit || 'N/A'}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="font-medium">Expiry:</span>
+                        <span className={`ml-1 ${isExpired(item.expiry_date) ? 'text-red-600 font-medium' : ''}`}>
+                          {item.expiry_date ? new Date(item.expiry_date).toLocaleDateString() : 'N/A'}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-wrap gap-2">
+                      {canSell && (
+                        <button
+                          onClick={() => handleSell(item.batch_id)}
+                          disabled={item.qty <= 0}
+                          className={`px-3 py-1 rounded text-xs flex-1 sm:flex-none ${
+                            item.qty <= 0 
+                              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                              : 'bg-blue-600 hover:bg-blue-700 text-white'
+                          }`}
+                        >
+                          Sell
+                        </button>
+                      )}
+                      {canUpdate && (
+                        <button
+                          onClick={() => handleEdit(item)}
+                          className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-xs flex-1 sm:flex-none"
+                        >
+                          Edit
+                        </button>
+                      )}
+                      {canDelete && (
+                        <button
+                          onClick={() => handleDelete(item.batch_id, item.product_name)}
+                          className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs flex-1 sm:flex-none"
+                        >
+                          Delete
+                        </button>
+                      )}
+                      {isAudit && (
+                        <span className="text-gray-400 text-xs px-2 py-1 bg-gray-100 rounded flex-1 text-center">
+                          View Only
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-8 text-center text-gray-500">
+                <div className="text-lg mb-2">No inventory items found</div>
+                <p className="text-sm">
+                  {searchTerm ? 'No products found matching your search.' : 'Add some products to get started!'}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
