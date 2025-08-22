@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { HomeIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
 // Simple Toast component
 function Toast({ message, onClose }) {
   useEffect(() => {
@@ -17,9 +18,7 @@ function Toast({ message, onClose }) {
     </div>
   );
 }
-  // Toast state
-  const [toastMsg, setToastMsg] = useState("");
-import { HomeIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
+
 import { API, apiCall, apiCallJSON } from '../utils/api';
 
 const useAuth = () => {
@@ -72,6 +71,8 @@ const useAuth = () => {
 
 
 export default function Reports({ setCurrentScreen, user, onLogout }) {
+  // Toast state for success messages
+  const [toastMsg, setToastMsg] = useState("");
   // Always get the latest user from localStorage, not from props
   const auth = useAuth();
   const { canViewReports, canViewFinancials, canViewStock, isAudit, currentUser } = auth;

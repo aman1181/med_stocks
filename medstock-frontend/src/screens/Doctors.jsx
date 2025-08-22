@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// Toast component for success popups
-import React, { useState, useEffect } from 'react';
 
 function Toast({ message, onClose }) {
   useEffect(() => {

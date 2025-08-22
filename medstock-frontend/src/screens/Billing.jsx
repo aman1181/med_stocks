@@ -2,23 +2,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 // Toast component for success popups
-function Toast({ message, onClose }) {
-  useEffect(() => {
-    if (!message) return;
-    const timer = setTimeout(() => {
-      onClose();
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, [message, onClose]);
-  if (!message) return null;
-  return (
-    <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slide-in">
-      <span className="font-semibold">Success:</span>
-      <span>{message}</span>
-      <button onClick={onClose} className="ml-2 text-white hover:text-gray-200 font-bold">×</button>
-    </div>
-  );
-}
 
 function Toast({ message, onClose }) {
   useEffect(() => {

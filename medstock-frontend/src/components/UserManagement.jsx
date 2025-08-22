@@ -18,7 +18,7 @@ function Toast({ message, onClose }) {
     </div>
   );
 }
-import { useState, useEffect } from 'react';
+// (removed duplicate import)
 import { apiCallJSON } from '../utils/api';
 
 const useAuth = () => {
