@@ -2,7 +2,19 @@
 const getAPIUrl = () => {
   const url = import.meta.env.VITE_API_URL || 'http://localhost:5000';
   // Remove trailing slash if present
-  return url.endsWith('/') ? url.slice(0, -1) : url;
+  const cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url;
+  
+  // Debug logging for production
+  console.log('🔧 Environment Mode:', import.meta.env.MODE);
+  console.log('🌐 API URL:', cleanUrl);
+  console.log('📋 Full env vars:', {
+    VITE_API_URL: import.meta.env.VITE_API_URL,
+    MODE: import.meta.env.MODE,
+    PROD: import.meta.env.PROD,
+    DEV: import.meta.env.DEV
+  });
+  
+  return cleanUrl;
 };
 
 export const API = getAPIUrl();
