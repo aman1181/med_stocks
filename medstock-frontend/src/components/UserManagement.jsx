@@ -1,3 +1,23 @@
+// Toast component for success popups
+import React, { useState, useEffect } from 'react';
+
+function Toast({ message, onClose }) {
+  useEffect(() => {
+    if (!message) return;
+    const timer = setTimeout(() => {
+      onClose();
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [message, onClose]);
+  if (!message) return null;
+  return (
+    <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slide-in">
+      <span className="font-semibold">Success:</span>
+      <span>{message}</span>
+      <button onClick={onClose} className="ml-2 text-white hover:text-gray-200 font-bold">×</button>
+    </div>
+  );
+}
 import { useState, useEffect } from 'react';
 import { apiCallJSON } from '../utils/api';
 
@@ -49,6 +69,8 @@ const useAuth = () => {
 };
 
 const UserManagement = ({ onLogout }) => {
+  // Toast state
+  const [toastMsg, setToastMsg] = useState("");
   const { isAudit, canCreate, canUpdate, canDelete, currentUserRole, isAdmin } = useAuth();
 
   // All hooks must be declared before any conditional returns
@@ -94,7 +116,7 @@ const UserManagement = ({ onLogout }) => {
     return null;
   };
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (showToast) => {
     try {
       setLoading(true);
       setError('');
@@ -132,7 +154,8 @@ const UserManagement = ({ onLogout }) => {
 
       const validUsers = usersList.filter(u => u && u.id && u.username);
       console.log('✅ Valid users loaded:', validUsers.length);
-      setUsers(validUsers);
+  setUsers(validUsers);
+  if (showToast) setToastMsg('Users loaded successfully!');
 
     } catch (err) {
       console.error('❌ Error fetching users:', err);
@@ -197,9 +220,10 @@ const UserManagement = ({ onLogout }) => {
 
       console.log('✅ User created successfully:', responseData);
 
-      setShowAddUserModal(false);
-      setNewUser({ username: '', password: '', role: 'pharmacist' });
-      await fetchUsers();
+  setShowAddUserModal(false);
+  setNewUser({ username: '', password: '', role: 'pharmacist' });
+  setToastMsg('User added successfully!');
+  await fetchUsers();
 
     } catch (err) {
       console.error('❌ Error in handleAddUser:', err);
@@ -258,9 +282,10 @@ const UserManagement = ({ onLogout }) => {
       });
 
       console.log('✅ User updated successfully:', responseData);
-      setShowEditUserModal(false);
-      setEditingUser(null);
-      await fetchUsers();
+  setShowEditUserModal(false);
+  setEditingUser(null);
+  setToastMsg('User updated successfully!');
+  await fetchUsers();
 
     } catch (err) {
       console.error('❌ Error updating user:', err);
@@ -293,7 +318,8 @@ const UserManagement = ({ onLogout }) => {
       });
 
       console.log('✅ User deleted successfully:', responseData);
-      await fetchUsers();
+  setToastMsg('User deleted successfully!');
+  await fetchUsers();
 
     } catch (err) {
       console.error('❌ Error deleting user:', err);
@@ -338,6 +364,7 @@ const UserManagement = ({ onLogout }) => {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
+      <Toast message={toastMsg} onClose={() => setToastMsg("")} />
       {/* Admin-only access check: render access denied if not admin */}
       {!isAdmin && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center mb-8">

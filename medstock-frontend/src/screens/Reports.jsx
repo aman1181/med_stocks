@@ -1,4 +1,24 @@
 import React, { useEffect, useState } from "react";
+// Simple Toast component
+function Toast({ message, onClose }) {
+  useEffect(() => {
+    if (!message) return;
+    const timer = setTimeout(() => {
+      onClose();
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [message, onClose]);
+  if (!message) return null;
+  return (
+    <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slide-in">
+      <span className="font-semibold">Success:</span>
+      <span>{message}</span>
+      <button onClick={onClose} className="ml-2 text-white hover:text-gray-200 font-bold">×</button>
+    </div>
+  );
+}
+  // Toast state
+  const [toastMsg, setToastMsg] = useState("");
 import { HomeIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
 import { API, apiCall, apiCallJSON } from '../utils/api';
 
@@ -105,7 +125,7 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
     }
   }, [currentUser, canViewReports]);
 
-  async function fetchReports() {
+  async function fetchReports(showToast) {
     try {
       setLoading(true);
       setError("");
@@ -182,7 +202,6 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
 
       // Fetch other reports based on permissions
       const endpoints = [];
-      
       if (canViewFinancials) {
         endpoints.push(
           { endpoint: '/api/reports/sales/weekly', setter: setWeeklySales, name: 'Weekly Sales' },
@@ -191,23 +210,19 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
           { endpoint: '/api/reports/vendor-wise', setter: setVendorWise, name: 'Vendor Wise' }
         );
       }
-      
       if (canViewStock) {
         endpoints.push(
           { endpoint: '/api/reports/stock', setter: setStock, name: 'Stock Report' },
           { endpoint: '/api/reports/stock-expiry', setter: setExpiry, name: 'Expiry Report' }
         );
       }
-
       for (const endpointInfo of endpoints) {
         try {
           const data = await apiCallJSON(endpointInfo.endpoint, { 
             headers: getAuthHeaders() 
           });
-          
           const processedData = Array.isArray(data) ? data : [];
           endpointInfo.setter(processedData);
-          
         } catch (err) {
           console.error(`${endpointInfo.name} fetch failed:`, err);
           if (err.message.includes('401')) {
@@ -217,7 +232,8 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
           endpointInfo.setter([]);
         }
       }
-      
+      // Show toast if requested
+      if (showToast) setToastMsg('Reports refreshed successfully!');
     } catch (err) {
       setError(`Failed to fetch reports: ${err.message}`);
     } finally {
@@ -389,12 +405,14 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
           <ArrowPathIcon className="h-12 w-12 animate-spin text-blue-600 mx-auto mb-4" />
           <p className="text-gray-600">Loading reports...</p>
         </div>
+        <Toast message={toastMsg} onClose={() => setToastMsg("")} />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Toast message={toastMsg} onClose={() => setToastMsg("")} />
       <div className="bg-white shadow-sm border-b">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 gap-4">
           <div className="flex items-center gap-2 sm:gap-4">
@@ -412,7 +430,7 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
             </h1>
           </div>
           <button
-            onClick={fetchReports}
+            onClick={() => fetchReports(true)}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg shadow transition-colors text-sm sm:text-base w-full sm:w-auto justify-center"
             disabled={loading}
           >

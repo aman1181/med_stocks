@@ -1,4 +1,24 @@
 import React, { useState, useEffect } from 'react';
+// Toast component for success popups
+import React, { useState, useEffect } from 'react';
+
+function Toast({ message, onClose }) {
+  useEffect(() => {
+    if (!message) return;
+    const timer = setTimeout(() => {
+      onClose();
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [message, onClose]);
+  if (!message) return null;
+  return (
+    <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slide-in">
+      <span className="font-semibold">Success:</span>
+      <span>{message}</span>
+      <button onClick={onClose} className="ml-2 text-white hover:text-gray-200 font-bold">×</button>
+    </div>
+  );
+}
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { API, apiCall } from '../utils/api';
 
@@ -55,6 +75,8 @@ const formatDate = (dateString) => {
 };
 
 const Doctors = ({ user, onLogout }) => {
+  // Toast state
+  const [toastMsg, setToastMsg] = useState("");
   const { isAudit, canCreate, canUpdate, canDelete } = useAuth();
   
   const [doctors, setDoctors] = useState([]);
@@ -167,6 +189,7 @@ const Doctors = ({ user, onLogout }) => {
       setShowForm(false);
       fetchDoctors();
       alert("Doctor added successfully!");
+  setToastMsg('Doctor added successfully!');
     } catch (err) {
       setError("Error adding doctor. Please try again.");
     }
@@ -200,6 +223,7 @@ const Doctors = ({ user, onLogout }) => {
       setEditingDoctor(null);
       fetchDoctors();
       alert("Doctor updated successfully!");
+  setToastMsg('Doctor updated successfully!');
     } catch (err) {
       setError("Error updating doctor. Please try again.");
     }
@@ -225,6 +249,7 @@ const Doctors = ({ user, onLogout }) => {
 
       fetchDoctors();
       alert("Doctor deleted successfully!");
+  setToastMsg('Doctor deleted successfully!');
     } catch (err) {
       setError("Error deleting doctor. Please try again.");
     }
@@ -244,6 +269,7 @@ const Doctors = ({ user, onLogout }) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+  <Toast message={toastMsg} onClose={() => setToastMsg("")} />
       <div className="bg-white shadow border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

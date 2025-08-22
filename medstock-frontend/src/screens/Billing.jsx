@@ -1,4 +1,42 @@
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+
+// Toast component for success popups
+function Toast({ message, onClose }) {
+  useEffect(() => {
+    if (!message) return;
+    const timer = setTimeout(() => {
+      onClose();
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [message, onClose]);
+  if (!message) return null;
+  return (
+    <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slide-in">
+      <span className="font-semibold">Success:</span>
+      <span>{message}</span>
+      <button onClick={onClose} className="ml-2 text-white hover:text-gray-200 font-bold">×</button>
+    </div>
+  );
+}
+
+function Toast({ message, onClose }) {
+  useEffect(() => {
+    if (!message) return;
+    const timer = setTimeout(() => {
+      onClose();
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [message, onClose]);
+  if (!message) return null;
+  return (
+    <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slide-in">
+      <span className="font-semibold">Success:</span>
+      <span>{message}</span>
+      <button onClick={onClose} className="ml-2 text-white hover:text-gray-200 font-bold">×</button>
+    </div>
+  );
+}
 import { PlusIcon, PrinterIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
 import { API, apiCall } from '../utils/api';
@@ -50,6 +88,8 @@ const useAuth = () => {
 };
 
 const Billing = ({ user, onLogout }) => {
+  // Toast state
+  const [toastMsg, setToastMsg] = useState("");
   const { isAudit, canCreate, currentUserRole } = useAuth();
 
   const [bills, setBills] = useState([]);
@@ -380,6 +420,7 @@ const Billing = ({ user, onLogout }) => {
       const result = await res.json();
       if (result.success) {
         alert(`Bill generated successfully! Total Amount: Rs ${totals.total}`);
+  setToastMsg('Bill generated successfully!'); // Show toast message
         resetForm();
         setShowForm(false);
         fetchBills();
@@ -652,6 +693,7 @@ const Billing = ({ user, onLogout }) => {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading billing data...</p>
         </div>
+        <Toast message={toastMsg} onClose={() => setToastMsg("")} />
       </div>
     );
   }

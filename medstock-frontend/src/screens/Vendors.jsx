@@ -1,4 +1,24 @@
 import React, { useState, useEffect } from 'react';
+// Toast component for success popups
+import React, { useState, useEffect } from 'react';
+
+function Toast({ message, onClose }) {
+  useEffect(() => {
+    if (!message) return;
+    const timer = setTimeout(() => {
+      onClose();
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [message, onClose]);
+  if (!message) return null;
+  return (
+    <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slide-in">
+      <span className="font-semibold">Success:</span>
+      <span>{message}</span>
+      <button onClick={onClose} className="ml-2 text-white hover:text-gray-200 font-bold">×</button>
+    </div>
+  );
+}
 import { PlusIcon, MagnifyingGlassIcon, PencilIcon, TrashIcon, PhoneIcon, MapPinIcon } from '@heroicons/react/24/solid';
 import { API, apiCall } from '../utils/api';
 
@@ -59,6 +79,8 @@ const Vendors = ({ user, onLogout }) => {
   
   const [vendors, setVendors] = useState([]);
   const [loading, setLoading] = useState(true);
+  // Toast state
+  const [toastMsg, setToastMsg] = useState("");
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [newVendor, setNewVendor] = useState({ name: "", contact: "", address: "" });
@@ -192,6 +214,7 @@ const Vendors = ({ user, onLogout }) => {
       const result = await res.json();
       if (result.success) {
         alert("Vendor added successfully!");
+  setToastMsg('Vendor added successfully!');
         resetForm();
         fetchVendors();
       } else {
@@ -231,6 +254,7 @@ const Vendors = ({ user, onLogout }) => {
       const result = await res.json();
       if (result.success) {
         alert("Vendor updated successfully!");
+  setToastMsg('Vendor updated successfully!');
         resetForm();
         fetchVendors();
       } else {
@@ -310,6 +334,7 @@ const Vendors = ({ user, onLogout }) => {
               onClick={() => {
                 resetForm();
                 setShowForm(!showForm);
+                <Toast message={toastMsg} onClose={() => setToastMsg("")} />
               }}
               className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg shadow transition-colors text-sm sm:text-base w-full sm:w-auto justify-center"
             >

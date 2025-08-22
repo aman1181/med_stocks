@@ -1,6 +1,48 @@
+
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, MagnifyingGlassIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { API, apiCall, apiCallJSON } from '../utils/api';
+
+// Toast component for success popups
+function Toast({ message, onClose }) {
+  useEffect(() => {
+    if (!message) return;
+    const timer = setTimeout(() => {
+      onClose();
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [message, onClose]);
+  if (!message) return null;
+  return (
+    <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slide-in">
+      <span className="font-semibold">Success:</span>
+      <span>{message}</span>
+      <button onClick={onClose} className="ml-2 text-white hover:text-gray-200 font-bold">×</button>
+    </div>
+  );
+}
+
+function Toast({ message, onClose }) {
+  useEffect(() => {
+    if (!message) return;
+    const timer = setTimeout(() => {
+      onClose();
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [message, onClose]);
+  if (!message) return null;
+  return (
+    <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slide-in">
+      <span className="font-semibold">Success:</span>
+      <span>{message}</span>
+      <button onClick={onClose} className="ml-2 text-white hover:text-gray-200 font-bold">×</button>
+    </div>
+  );
+}
+
+export default function Inventory({ setCurrentScreen, user, onLogout }) {
+  // Toast state
+  const [toastMsg, setToastMsg] = useState("");
 
 const useAuth = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -50,7 +92,6 @@ const useAuth = () => {
   };
 };
 
-export default function Inventory({ setCurrentScreen, user, onLogout }) {
   const { isAudit, canCreate, canUpdate, canDelete, canSell } = useAuth();
 
   const [inventory, setInventory] = useState([]);
@@ -212,7 +253,8 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  // Example: setToastMsg('Inventory updated successfully!'); after successful inventory action
     
     if (!formData.name?.trim() || !formData.vendor_id || !formData.batch_no?.trim()) {
       setError("Product name, vendor, and batch number are required");
@@ -377,6 +419,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading inventory...</p>
         </div>
+        <Toast message={toastMsg} onClose={() => setToastMsg("")} />
       </div>
     );
   }
