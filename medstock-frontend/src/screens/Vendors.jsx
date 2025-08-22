@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, MagnifyingGlassIcon, PencilIcon, TrashIcon, PhoneIcon, MapPinIcon } from '@heroicons/react/24/solid';
+import { API, apiCall } from '../utils/api';
 
 const useAuth = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -98,20 +99,24 @@ const Vendors = ({ user, onLogout }) => {
 
   const fetchVendors = async () => {
     try {
+      console.log('🔄 Starting fetchVendors...');
       setLoading(true);
       setError("");
       
       const token = getAuthToken();
+      console.log('🔑 Token found:', !!token);
       
       if (!token) {
         setError('No authentication token found. Please login again.');
         return;
       }
       
+      console.log('📡 Making API call to /api/vendors...');
       const res = await apiCall('/api/vendors', {
         headers: getAuthHeaders()
       });
 
+      console.log('📄 Response status:', res.status);
       if (!res.ok) {
         if (res.status === 401) {
           onLogout();
@@ -121,6 +126,7 @@ const Vendors = ({ user, onLogout }) => {
       }
 
       const data = await res.json();
+      console.log('📦 Received data:', data);
       
       let vendorsList = [];
       if (Array.isArray(data)) {
@@ -132,9 +138,11 @@ const Vendors = ({ user, onLogout }) => {
       }
       
       const validVendors = vendorsList.filter(v => v.uuid && v.name);
+      console.log('✅ Valid vendors found:', validVendors.length);
       setVendors(validVendors);
       
     } catch (err) {
+      console.error('❌ Error in fetchVendors:', err);
       setError("Failed to fetch vendors. Please check server connection.");
       setVendors([]);
     } finally {
