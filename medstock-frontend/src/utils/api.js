@@ -62,43 +62,55 @@ export const apiCallJSON = async (endpoint, options = {}) => {
 export const apiCall = async (endpoint, options = {}) => {
   // Debug the inputs
   console.log('🔍 apiCall inputs:', { endpoint, API });
-  
+
   // Ensure endpoint starts with / but doesn't duplicate it
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
   const url = `${API}${cleanEndpoint}`;
-  
+
   // Debug the final URL
   console.log('🔗 Final constructed URL:', url);
-  
+
+  // Get token from localStorage (if present)
+  let token = null;
+  try {
+    token = localStorage.getItem('token');
+  } catch (e) {
+    // Ignore if not available (e.g. server-side)
+  }
+
+  // Build headers, attach Authorization if token exists
+  const headers = {
+    'Content-Type': 'application/json',
+    ...options.headers,
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+  };
+
   const defaultOptions = {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers
-    },
+    headers,
     credentials: 'include'  // Important for CORS with credentials
   };
-  
+
   // Merge options properly - method should come from options
-  const finalOptions = { ...defaultOptions, ...options };
-  
+  const finalOptions = { ...defaultOptions, ...options, headers };
+
   // Only log in development OR if there's an error (for production debugging)
   if (import.meta.env.DEV) {
     console.log(`🌐 API Call: ${finalOptions.method || 'GET'} ${url}`);
     console.log(`📤 Request options:`, finalOptions);
   }
-  
+
   // Always log final URL for debugging
   console.log(`🔗 Final API URL: ${url}`);
-  
+
   try {
     const response = await fetch(url, finalOptions);
-    
+
     // Return the response object for the caller to handle
     // This allows checking response.ok, response.status, etc.
     if (!response.ok) {
       console.error(`❌ API Error: ${response.status} ${response.statusText} - ${url}`);
     }
-    
+
     return response;
   } catch (error) {
     console.error(`❌ Network Error: ${error.message} - ${url}`);

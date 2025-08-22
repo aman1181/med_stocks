@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { API, apiCall, apiCallJSON } from '../utils/api';
+import { useState, useEffect } from 'react';
+import { apiCallJSON } from '../utils/api';
 
 const useAuth = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -68,23 +68,7 @@ const UserManagement = ({ onLogout }) => {
   const [addingUser, setAddingUser] = useState(false);
   const [updatingUser, setUpdatingUser] = useState(false);
 
-  // Admin-only access check (after all hooks)
-  if (!isAdmin) {
-    return (
-      <div className="max-w-7xl mx-auto p-6">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-          <div className="text-6xl mb-4">🔒</div>
-          <h2 className="text-2xl font-bold text-red-800 mb-2">Access Denied</h2>
-          <p className="text-red-600 mb-4">
-            User Management is only available to administrators.
-          </p>
-          <p className="text-sm text-red-500">
-            Current role: <span className="font-medium">{currentUserRole || 'Unknown'}</span>
-          </p>
-        </div>
-      </div>
-    );
-  }
+  // Remove early return for admin-only access. Render access denied inside main return instead.
 
   const getAuthToken = () => {
     const directToken = localStorage.getItem('token');
@@ -340,6 +324,7 @@ const UserManagement = ({ onLogout }) => {
     }
   };
 
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -353,6 +338,22 @@ const UserManagement = ({ onLogout }) => {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
+      {/* Admin-only access check: render access denied if not admin */}
+      {!isAdmin && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center mb-8">
+          <div className="text-6xl mb-4">🔒</div>
+          <h2 className="text-2xl font-bold text-red-800 mb-2">Access Denied</h2>
+          <p className="text-red-600 mb-4">
+            User Management is only available to administrators.
+          </p>
+          <p className="text-sm text-red-500">
+            Current role: <span className="font-medium">{currentUserRole || 'Unknown'}</span>
+          </p>
+        </div>
+
+  )}
+      {/* Only render the rest of the UI if admin */}
+      {isAdmin && (
       <div className="mb-8">
         <div className="flex items-center justify-between mb-2">
           <h1 className="text-3xl font-semibold text-gray-900">User Management</h1>
@@ -373,21 +374,20 @@ const UserManagement = ({ onLogout }) => {
           {isAudit && <span className="text-blue-600"> • Read-only access</span>}
         </p>
       </div>
-
-      {isAudit && (
-        <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg mb-6">
-          <div className="flex items-center">
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <div>
-              <p className="font-medium">Audit Mode Active</p>
-              <p className="text-sm">You have read-only access. Contact administrator for user management permissions.</p>
-            </div>
-          </div>
-        </div>
       )}
-
+  {isAudit && (
+    <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg mb-6">
+      <div className="flex items-center">
+        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+          <p className="font-medium">Audit Mode Active</p>
+          <p className="text-sm">You have read-only access. Contact administrator for user management permissions.</p>
+        </div>
+      </div>
+    </div>
+  )}  
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div className="bg-white p-6 rounded-lg border border-gray-200">
           <div className="flex items-center">
