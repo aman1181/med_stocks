@@ -1,0 +1,17 @@
+              🏥 MEDSTOCKS PHARMACY
+         ================================
+           Bill No: BILL-1755841778026
+           Date: 22/8/2025, 11:19:38 am
+                  Customer: jhon
+                Phone: 1248659725
+==================================================
+Item                      Qty     Price     Total
+--------------------------------------------------
+abcd                        1    100.00    100.00
+--------------------------------------------------
+                                 Subtotal: ₹100.00
+                              Grand Total: ₹100.00
+                                     Payment: CASH
+
+           Thank you for your business!
+                 Visit again! 🙏

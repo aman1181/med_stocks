@@ -58,6 +58,7 @@ const Billing = ({ user, onLogout }) => {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [error, setError] = useState('');
+  const [printingBills, setPrintingBills] = useState(new Set()); // Track printing bills
   const [currentBill, setCurrentBill] = useState({
     customer_name: '',
     customer_phone: '',
@@ -68,6 +69,9 @@ const Billing = ({ user, onLogout }) => {
   });
   const [selectedProduct, setSelectedProduct] = useState('');
   const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [productSearch, setProductSearch] = useState('');
+  const [showProductDropdown, setShowProductDropdown] = useState(false);
+  const [filteredInventory, setFilteredInventory] = useState([]);
 
   const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -197,6 +201,40 @@ const Billing = ({ user, onLogout }) => {
     }
   };
 
+  // Filter products based on search
+  const filterProducts = (searchTerm) => {
+    if (!searchTerm.trim()) {
+      setFilteredInventory(inventory);
+      return;
+    }
+    
+    const filtered = inventory.filter(item => 
+      item.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.vendor_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.batch_id.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredInventory(filtered);
+  };
+
+  // Handle product search input
+  const handleProductSearch = (value) => {
+    setProductSearch(value);
+    setShowProductDropdown(true);
+    filterProducts(value);
+  };
+
+  // Select a product from dropdown
+  const selectProduct = (product) => {
+    setSelectedProduct(product.batch_id);
+    setProductSearch(`${product.product_name} (${product.vendor_name}) - Rs ${product.price}`);
+    setShowProductDropdown(false);
+  };
+
+  // Update filtered inventory when inventory changes
+  useEffect(() => {
+    setFilteredInventory(inventory);
+  }, [inventory]);
+
   useEffect(() => {
     if (user) {
       fetchBills();
@@ -217,6 +255,8 @@ const Billing = ({ user, onLogout }) => {
     });
     setSelectedProduct('');
     setSelectedQuantity(1);
+    setProductSearch('');
+    setShowProductDropdown(false);
     setError('');
   };
 
@@ -272,6 +312,8 @@ const Billing = ({ user, onLogout }) => {
 
     setSelectedProduct('');
     setSelectedQuantity(1);
+    setProductSearch('');
+    setShowProductDropdown(false);
     setError('');
   };
 
@@ -374,24 +416,94 @@ const Billing = ({ user, onLogout }) => {
     }
   };
 
-  const printBill = (bill) => {
-    const doctorName = getDoctorName(bill.doctor_id);
-    const billItems = typeof bill.items === 'string' ? JSON.parse(bill.items) : bill.items || [];
+  const printBill = React.useCallback((bill) => {
+    const billKey = `${bill.bill_no || bill.bill_id}`;
     
-    const printWindow = window.open('', '_blank');
-    const printContent = `
-      <html>
+    console.log(`Print request for bill: ${billKey}`);
+    console.log('Current printing bills:', Array.from(printingBills));
+    
+    // Check if already printing
+    if (printingBills.has(billKey)) {
+      console.log(`Bill ${billKey} is already being printed, ignoring request`);
+      return;
+    }
+    
+    // Add to printing set
+    setPrintingBills(prev => new Set(prev).add(billKey));
+    console.log(`Added ${billKey} to printing set`);
+    
+    try {
+      const doctorName = getDoctorName(bill.doctor_id);
+      const billItems = typeof bill.items === 'string' ? JSON.parse(bill.items) : bill.items || [];
+      
+      // Create unique window
+      const timestamp = Date.now();
+      const windowName = `medstock_bill_${billKey}_${timestamp}`;
+      
+      console.log(`Opening print window: ${windowName}`);
+      const printWindow = window.open('', windowName, 'width=800,height=600,scrollbars=yes');
+      
+      if (!printWindow) {
+        alert('Please allow popups for this site to print bills');
+        setPrintingBills(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(billKey);
+          return newSet;
+        });
+        return;
+      }
+      
+      const printContent = `<!DOCTYPE html>
+        <html>
         <head>
           <title>Bill #${bill.bill_no}</title>
+          <meta charset="UTF-8">
           <style>
-            body { font-family: Arial, sans-serif; margin: 20px; }
-            .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; }
+            * { box-sizing: border-box; }
+            body { 
+              font-family: Arial, sans-serif; 
+              margin: 20px; 
+              line-height: 1.4;
+              color: #333;
+            }
+            .header { 
+              text-align: center; 
+              border-bottom: 2px solid #333; 
+              padding-bottom: 10px; 
+              margin-bottom: 20px;
+            }
+            .header h1 { margin: 0; font-size: 24px; }
             .bill-info { margin: 20px 0; }
-            .items-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-            .items-table th, .items-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-            .items-table th { background-color: #f2f2f2; }
-            .total-section { margin-top: 20px; text-align: right; }
-            .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #666; }
+            .bill-info p { margin: 5px 0; }
+            .items-table { 
+              width: 100%; 
+              border-collapse: collapse; 
+              margin: 20px 0; 
+            }
+            .items-table th, .items-table td { 
+              border: 1px solid #ddd; 
+              padding: 8px; 
+              text-align: left; 
+            }
+            .items-table th { 
+              background-color: #f2f2f2; 
+              font-weight: bold;
+            }
+            .total-section { 
+              margin-top: 20px; 
+              text-align: right; 
+            }
+            .footer { 
+              margin-top: 30px; 
+              text-align: center; 
+              font-size: 12px; 
+              color: #666; 
+            }
+            @media print {
+              body { margin: 0; }
+              .header { page-break-after: avoid; }
+              .items-table { page-break-inside: avoid; }
+            }
           </style>
         </head>
         <body>
@@ -443,14 +555,96 @@ const Billing = ({ user, onLogout }) => {
             <p>Thank you for your business!</p>
             <p>Generated on ${new Date().toLocaleString()}</p>
           </div>
+          
+          <script>
+            let printExecuted = false;
+            
+            console.log('Print window script loaded for bill: ${billKey}');
+            
+            function executePrint() {
+              if (printExecuted) {
+                console.log('Print already executed, skipping');
+                return;
+              }
+              
+              printExecuted = true;
+              console.log('Executing print for bill: ${billKey}');
+              
+              setTimeout(() => {
+                window.print();
+                
+                // Clean up after print
+                setTimeout(() => {
+                  console.log('Cleaning up for bill: ${billKey}');
+                  try {
+                    if (window.opener && window.opener.setPrintingBills) {
+                      window.opener.setPrintingBills(prev => {
+                        const newSet = new Set(prev);
+                        newSet.delete('${billKey}');
+                        console.log('Removed ${billKey} from parent printing set');
+                        return newSet;
+                      });
+                    }
+                  } catch(e) {
+                    console.log('Could not access parent window for cleanup');
+                  }
+                  window.close();
+                }, 2000);
+              }, 500);
+            }
+            
+            // Execute when page loads
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', executePrint);
+            } else {
+              executePrint();
+            }
+            
+            // Cleanup on window close
+            window.addEventListener('beforeunload', function() {
+              try {
+                if (window.opener && window.opener.setPrintingBills) {
+                  window.opener.setPrintingBills(prev => {
+                    const newSet = new Set(prev);
+                    newSet.delete('${billKey}');
+                    return newSet;
+                  });
+                }
+              } catch(e) {
+                console.log('Could not clean up on beforeunload');
+              }
+            });
+          </script>
         </body>
-      </html>
-    `;
+        </html>`;
+      
+      printWindow.document.write(printContent);
+      printWindow.document.close();
+      
+      console.log(`Print window content written for ${billKey}`);
+      
+    } catch (error) {
+      console.error('Error in printBill:', error);
+      setPrintingBills(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(billKey);
+        return newSet;
+      });
+    }
     
-    printWindow.document.write(printContent);
-    printWindow.document.close();
-    printWindow.print();
-  };
+    // Fallback cleanup after 15 seconds
+    setTimeout(() => {
+      setPrintingBills(prev => {
+        if (prev.has(billKey)) {
+          console.log(`Fallback cleanup for ${billKey}`);
+          const newSet = new Set(prev);
+          newSet.delete(billKey);
+          return newSet;
+        }
+        return prev;
+      });
+    }, 15000);
+  }, [printingBills, getDoctorName]);
 
   if (loading) {
     return (
@@ -603,20 +797,56 @@ const Billing = ({ user, onLogout }) => {
           <div className="mb-6 p-4 bg-gray-50 rounded-lg">
             <h3 className="text-md font-medium mb-3 text-gray-800">Add Products</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Select Product</label>
-                <select
-                  value={selectedProduct}
-                  onChange={(e) => setSelectedProduct(e.target.value)}
+              <div className="md:col-span-2 relative">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Search Product</label>
+                <input
+                  type="text"
+                  value={productSearch}
+                  onChange={(e) => handleProductSearch(e.target.value)}
+                  onFocus={() => setShowProductDropdown(true)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Choose a product...</option>
-                  {inventory.map(item => (
-                    <option key={item.batch_id} value={item.batch_id}>
-                      {item.product_name} ({item.vendor_name}) - Rs {item.price} - Qty: {item.qty}
-                    </option>
-                  ))}
-                </select>
+                  placeholder="Search by product name, vendor, or batch ID..."
+                />
+                
+                {/* Searchable Dropdown */}
+                {showProductDropdown && (
+                  <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+                    {filteredInventory.length > 0 ? (
+                      filteredInventory.map(item => (
+                        <div
+                          key={item.batch_id}
+                          onClick={() => selectProduct(item)}
+                          className="px-4 py-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                        >
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <div className="font-medium text-gray-900">{item.product_name}</div>
+                              <div className="text-sm text-gray-500">
+                                {item.vendor_name} • Batch: {item.batch_id}
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="font-medium text-green-600">Rs {item.price}</div>
+                              <div className="text-sm text-gray-500">Qty: {item.qty}</div>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="px-4 py-3 text-gray-500 text-center">
+                        {productSearch ? 'No products found matching your search' : 'No products available'}
+                      </div>
+                    )}
+                  </div>
+                )}
+                
+                {/* Backdrop to close dropdown */}
+                {showProductDropdown && (
+                  <div 
+                    className="fixed inset-0 z-40" 
+                    onClick={() => setShowProductDropdown(false)}
+                  ></div>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
@@ -630,7 +860,8 @@ const Billing = ({ user, onLogout }) => {
                   />
                   <button
                     onClick={addItemToBill}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-r-md transition-colors"
+                    disabled={!selectedProduct}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-r-md transition-colors"
                   >
                     <PlusIcon className="h-4 w-4" />
                   </button>
@@ -790,11 +1021,16 @@ const Billing = ({ user, onLogout }) => {
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
                         <button
-                          onClick={() => printBill(bill)}
-                          className="flex items-center gap-1 px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-xs"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            printBill(bill);
+                          }}
+                          className="flex items-center gap-1 px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-xs disabled:bg-gray-400 disabled:cursor-not-allowed"
+                          disabled={printingBills.has(`${bill.bill_no || bill.bill_id}`)}
                         >
                           <PrinterIcon className="h-3 w-3" />
-                          Print
+                          {printingBills.has(`${bill.bill_no || bill.bill_id}`) ? 'Printing...' : 'Print'}
                         </button>
                       </td>
                     </tr>

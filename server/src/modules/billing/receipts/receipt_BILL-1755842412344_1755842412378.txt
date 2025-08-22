@@ -1,0 +1,17 @@
+              🏥 MEDSTOCKS PHARMACY
+         ================================
+           Bill No: BILL-1755842412344
+           Date: 22/8/2025, 11:30:12 am
+                  Customer: aass
+                Phone: 1223456789
+==================================================
+Item                      Qty     Price     Total
+--------------------------------------------------
+xyz                         1     15.00     15.00
+--------------------------------------------------
+                                  Subtotal: ₹15.00
+                               Grand Total: ₹15.00
+                                     Payment: CASH
+
+           Thank you for your business!
+                 Visit again! 🙏

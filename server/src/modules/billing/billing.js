@@ -10,13 +10,6 @@ function createBill(billData) {
     try {
         console.log("💾 Creating bill:", billData);
 
-        // Log bill creation attempt
-        logEvent(Events.BILL_CREATED, {
-            action: 'attempt',
-            customerName: billData.customer_name,
-            itemCount: billData.items?.length || 0
-        }, `Bill creation attempt for customer: ${billData.customer_name}`);
-
         // Generate bill ID and number
         const billId = uuidv4();
         const billNo = `BILL-${Date.now()}`;
@@ -24,11 +17,6 @@ function createBill(billData) {
 
         // Validate required fields
         if (!billData.customer_name || !billData.items || billData.items.length === 0) {
-            logEvent(Events.SYSTEM_ERROR, {
-                error: 'Invalid bill data',
-                customerName: billData.customer_name,
-                itemCount: billData.items?.length || 0
-            }, 'Bill validation failed');
             throw new Error("Invalid bill data: customer name and items required");
         }
 
@@ -71,11 +59,7 @@ function createBill(billData) {
             timestamp
         };
 
-        // 1. Log billing event using eventServices
-        const eventId = logBillingEvent(completeBillData);
-        console.log("✅ Bill logged using eventServices:", eventId);
-
-        // 2. Save to bills table (if exists)
+        // 1. Save to bills table (if exists)
         try {
             const billsTableExists = db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='bills'");
             if (billsTableExists) {
@@ -91,24 +75,12 @@ function createBill(billData) {
                     ]
                 );
                 console.log("✅ Bill saved to bills table");
-                
-                logEvent(Events.BILL_CREATED, {
-                    action: 'table_save_success',
-                    billId,
-                    billNo
-                }, `Bill saved to bills table: ${billNo}`);
             }
         } catch (billTableErr) {
             console.warn("⚠️ Bills table save failed:", billTableErr.message);
-            logEvent(Events.SYSTEM_ERROR, {
-                error: 'Bills table save failed',
-                billId,
-                billNo,
-                details: billTableErr.message
-            }, 'Bills table save failed');
         }
 
-        // 3. Save bill items (if bill_items table exists)
+        // 2. Save bill items (if bill_items table exists)
         try {
             const billItemsTableExists = db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='bill_items'");
             if (billItemsTableExists) {
@@ -125,34 +97,16 @@ function createBill(billData) {
                             ]
                         );
                         console.log(`✅ Bill item saved: ${item.product_name}`);
-                        
-                        logEvent(Events.BILL_CREATED, {
-                            action: 'item_save_success',
-                            billId,
-                            productName: item.product_name,
-                            quantity: item.quantity
-                        }, `Bill item saved: ${item.product_name}`);
                     } catch (itemErr) {
                         console.warn(`⚠️ Bill item save failed for ${item.product_name}:`, itemErr.message);
-                        logEvent(Events.SYSTEM_ERROR, {
-                            error: 'Bill item save failed',
-                            billId,
-                            productName: item.product_name,
-                            details: itemErr.message
-                        }, `Bill item save failed: ${item.product_name}`);
                     }
                 });
             }
         } catch (itemsErr) {
             console.warn("⚠️ Bill items save failed:", itemsErr.message);
-            logEvent(Events.SYSTEM_ERROR, {
-                error: 'Bill items save failed',
-                billId,
-                details: itemsErr.message
-            }, 'Bill items save failed');
         }
 
-        // 4. Update stock quantities
+        // 3. Update stock quantities
         console.log("📦 Updating inventory...");
         for (const item of billData.items) {
             try {
@@ -164,51 +118,18 @@ function createBill(billData) {
                         [item.quantity, item.batch_id]
                     );
                     console.log(`✅ Stock updated for ${item.product_name}: -${item.quantity}`);
-                    
-                    // Log stock update using eventServices
-                    logEvent(Events.STOCK_SOLD, {
-                        billId: billId,
-                        billNo: billNo,
-                        batchId: item.batch_id,
-                        productName: item.product_name,
-                        quantitySold: item.quantity,
-                        price: item.price,
-                        previousStock: batch.qty,
-                        newStock: batch.qty - item.quantity,
-                        timestamp
-                    }, `Stock sold: ${item.product_name} x${item.quantity}`);
-                    
                 } else {
                     const errorMsg = `Insufficient stock for ${item.product_name}. Available: ${batch?.qty || 0}, Required: ${item.quantity}`;
                     console.warn(`⚠️ ${errorMsg}`);
-                    
-                    logEvent(Events.STOCK_LOW, {
-                        billId,
-                        billNo,
-                        batchId: item.batch_id,
-                        productName: item.product_name,
-                        available: batch?.qty || 0,
-                        required: item.quantity
-                    }, errorMsg);
-                    
                     throw new Error(errorMsg);
                 }
             } catch (stockErr) {
                 console.error(`❌ Stock update failed for ${item.product_name}:`, stockErr.message);
-                
-                logEvent(Events.SYSTEM_ERROR, {
-                    error: 'Stock update failed',
-                    billId,
-                    billNo,
-                    productName: item.product_name,
-                    details: stockErr.message
-                }, `Stock update failed: ${item.product_name}`);
-                
                 throw stockErr;
             }
         }
 
-        // 5. Generate text receipt
+        // 4. Generate text receipt
         const receiptPath = generateTextReceipt({
             ...billData,
             bill_no: billNo,
@@ -219,24 +140,25 @@ function createBill(billData) {
             doctor_name: doctorName
         });
 
-        // Log receipt generation
-        logEvent(Events.REPORT_GENERATED, {
-            type: 'receipt',
-            billId,
-            billNo,
-            receiptPath
-        }, `Receipt generated for bill: ${billNo}`);
-
         console.log("🎉 Bill creation completed successfully!");
 
-        // Log successful bill completion
+        // Log successful bill completion - SINGLE EVENT
         logEvent(Events.BILL_CREATED, {
             action: 'completed',
             billId,
             billNo,
             customerName: completeBillData.customerName,
+            customerPhone: completeBillData.customerPhone,
+            doctorId: completeBillData.doctorId,
+            doctorName: completeBillData.doctorName,
+            paymentMethod: completeBillData.paymentMethod,
+            discount: completeBillData.discount,
+            subtotal: completeBillData.subtotal,
+            discountAmount: completeBillData.discountAmount,
             totalAmount: grandTotal,
-            itemCount: billData.items.length
+            itemCount: billData.items.length,
+            items: billData.items,
+            timestamp: timestamp
         }, `Bill creation completed: ${billNo}`);
 
         return {
@@ -271,30 +193,22 @@ function getBills() {
     try {
         console.log("📋 Fetching bills from event log...");
         
-        // Log bills fetch request
-        logEvent(Events.REPORT_GENERATED, {
-            type: 'bills_list',
-            action: 'fetch_request'
-        }, 'Bills fetch requested');
-
         // Check if events table exists
         const eventsTableExists = db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='events'");
         if (!eventsTableExists) {
             console.log("ℹ️ Events table doesn't exist");
-            logEvent(Events.SYSTEM_ERROR, {
-                error: 'Events table not found'
-            }, 'Events table does not exist');
             return [];
         }
 
-        // Fetch bill events
+        // Fetch only completed bill events (to avoid duplicates)
         const billEvents = db.all(`
             SELECT * FROM events 
             WHERE type = 'BILL_CREATED' 
+            AND JSON_EXTRACT(payload, '$.action') = 'completed'
             ORDER BY timestamp DESC
         `);
 
-        console.log(`📋 Found ${billEvents.length} bill events`);
+        console.log(`📋 Found ${billEvents.length} completed bill events`);
         
         const bills = billEvents.map(event => {
             try {
@@ -315,23 +229,11 @@ function getBills() {
                 };
             } catch (parseErr) {
                 console.warn("⚠️ Could not parse bill event:", parseErr);
-                logEvent(Events.SYSTEM_ERROR, {
-                    error: 'Bill event parse failed',
-                    eventId: event.uuid,
-                    details: parseErr.message
-                }, 'Failed to parse bill event');
-                return {
-                    bill_id: event.uuid,
-                    bill_no: `BILL-${event.timestamp}`,
-                    created_at: event.timestamp,
-                    customer_name: 'Walk-in Customer',
-                    total: 0,
-                    items: '[]'
-                };
+                return null;
             }
-        });
+        }).filter(bill => bill !== null && bill.total > 0); // Filter out null and zero amount bills
 
-        console.log(`✅ Processed ${bills.length} bills from event log`);
+        console.log(`✅ Processed ${bills.length} valid bills from event log`);
         
         // Log successful bills fetch
         logEvent(Events.REPORT_GENERATED, {
