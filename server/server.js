@@ -35,7 +35,7 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    const allowedOrigins = [
+    const allowedOrigins = [ 
       'http://localhost:5173',
       'http://localhost:5174',
       'http://localhost:3000'
