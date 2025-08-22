@@ -190,10 +190,13 @@ const UserManagement = ({ onLogout }) => {
     }
 
     try {
+      console.log('🔄 Starting user creation process...');
       setAddingUser(true);
       setError('');
 
       const token = getAuthToken();
+      console.log('🔑 Token found for user creation:', !!token);
+      
       if (!token) {
         setError('Authentication required');
         return;
@@ -204,26 +207,38 @@ const UserManagement = ({ onLogout }) => {
         'Content-Type': 'application/json'
       };
 
+      const userData = {
+        username: newUser.username.trim(),
+        password: newUser.password,
+        role: newUser.role
+      };
+      
+      console.log('📤 Sending user data:', { ...userData, password: '[HIDDEN]' });
+      console.log('📡 Making API call to /api/auth/register...');
+
       const response = await apiCall('/api/auth/register', {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify({
-          username: newUser.username.trim(),
-          password: newUser.password,
-          role: newUser.role
-        })
+        body: JSON.stringify(userData)
       });
+
+      console.log('📄 User creation response status:', response.status);
 
       if (!response.ok) {
         const errorData = await response.json();
+        console.error('❌ User creation failed:', errorData);
         throw new Error(errorData.error || 'Failed to create user');
       }
+
+      const responseData = await response.json();
+      console.log('✅ User created successfully:', responseData);
 
       setShowAddUserModal(false);
       setNewUser({ username: '', password: '', role: 'pharmacist' });
       await fetchUsers();
 
     } catch (err) {
+      console.error('❌ Error in handleAddUser:', err);
       setError(`Failed to add user: ${err.message}`);
     } finally {
       setAddingUser(false);

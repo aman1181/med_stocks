@@ -81,8 +81,8 @@ router.get('/users', authenticateToken, authorizeWithAuditCheck, (req, res) => {
   authController.getAllUsers(req, res);
 });
 
-router.post('/register', authenticateToken, authorizeWithAuditCheck, (req, res) => {
-  console.log('➕ POST /api/auth/register called by:', req.user?.username);
+router.post('/register', authenticateToken, isAdmin, (req, res) => {
+  console.log('➕ POST /api/auth/register called by admin:', req.user?.username);
   authController.register(req, res);
 });
 
