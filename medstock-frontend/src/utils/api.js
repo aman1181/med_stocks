@@ -86,8 +86,8 @@ export const apiCall = async (endpoint, options = {}) => {
   };
 
   const defaultOptions = {
-    headers,
-    credentials: 'include'  // Important for CORS with credentials
+    headers
+    // credentials: 'include' // Removed for JWT header auth
   };
 
   // Merge options properly - method should come from options

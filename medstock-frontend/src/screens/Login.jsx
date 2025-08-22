@@ -60,9 +60,7 @@ export default function Login({ onLogin }){
       console.log('Saved User:', JSON.parse(savedUser));
 
       
-      // ✅ Set auth header for future requests
-      window.authToken = data.token
-      
+
       console.log('Login successful:', {
         user: data.user.username,
         role: data.user.role,
@@ -103,7 +101,6 @@ export default function Login({ onLogin }){
           if (res.ok) {
             const data = await res.json()
             if (data.success && data.user) {
-              window.authToken = existingToken
               onLogin({
                 ...data.user,
                 token: existingToken
@@ -118,7 +115,6 @@ export default function Login({ onLogin }){
         // Clear invalid tokens
         localStorage.removeItem('token')
         localStorage.removeItem('user')
-        window.authToken = null
       }
     }
     
