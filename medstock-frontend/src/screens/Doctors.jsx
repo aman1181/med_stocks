@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
+import { API, apiCall } from '../utils/api';
 
 const useAuth = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -108,7 +109,7 @@ const Doctors = ({ user, onLogout }) => {
         return;
       }
 
-      const res = await fetch(`${API}/api/doctors`, {
+      const res = await apiCall('/api/doctors', {
         headers: getAuthHeaders()
       });
       
@@ -145,7 +146,7 @@ const Doctors = ({ user, onLogout }) => {
 
     try {
       setError('');
-      const res = await fetch(`${API}/api/doctors`, {
+      const res = await apiCall('/api/doctors', {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -179,7 +180,7 @@ const Doctors = ({ user, onLogout }) => {
 
     try {
       setError('');
-      const res = await fetch(`${API}/api/doctors/${editingDoctor.uuid}`, {
+      const res = await apiCall(`/api/doctors/${editingDoctor.uuid}`, {
         method: "PUT",
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -209,7 +210,7 @@ const Doctors = ({ user, onLogout }) => {
 
     try {
       setError('');
-      const res = await fetch(`${API}/api/doctors/${id}`, { 
+      const res = await apiCall(`/api/doctors/${id}`, { 
         method: "DELETE",
         headers: getAuthHeaders()
       });
