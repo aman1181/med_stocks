@@ -64,8 +64,6 @@ const Vendors = ({ user, onLogout }) => {
   const [editingVendor, setEditingVendor] = useState(null);
   const [error, setError] = useState("");
 
-  const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
   const getAuthToken = () => {
     const directToken = localStorage.getItem('token');
     
@@ -110,7 +108,7 @@ const Vendors = ({ user, onLogout }) => {
         return;
       }
       
-      const res = await fetch(`${API}/api/vendors`, {
+      const res = await apiCall('/api/vendors', {
         headers: getAuthHeaders()
       });
 
@@ -165,7 +163,7 @@ const Vendors = ({ user, onLogout }) => {
 
     try {
       setError("");
-      const res = await fetch(`${API}/api/vendors`, {
+      const res = await apiCall('/api/vendors', {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -204,7 +202,7 @@ const Vendors = ({ user, onLogout }) => {
 
     try {
       setError("");
-      const res = await fetch(`${API}/api/vendors/${editingVendor.uuid}`, {
+      const res = await apiCall(`/api/vendors/${editingVendor.uuid}`, {
         method: "PUT",
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -240,7 +238,7 @@ const Vendors = ({ user, onLogout }) => {
 
     try {
       setError("");
-      const res = await fetch(`${API}/api/vendors/${id}`, {
+      const res = await apiCall(`/api/vendors/${id}`, {
         method: "DELETE",
         headers: getAuthHeaders()
       });
