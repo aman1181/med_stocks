@@ -45,9 +45,15 @@ export const apiCallJSON = async (endpoint, options = {}) => {
 
 // Helper function for making API calls
 export const apiCall = async (endpoint, options = {}) => {
+  // Debug the inputs
+  console.log('🔍 apiCall inputs:', { endpoint, API });
+  
   // Ensure endpoint starts with / but doesn't duplicate it
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
   const url = `${API}${cleanEndpoint}`;
+  
+  // Debug the final URL
+  console.log('🔗 Final constructed URL:', url);
   
   const defaultOptions = {
     headers: {
