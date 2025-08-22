@@ -32,7 +32,9 @@ const app = express();
 app.use(cors({
   origin: [
     'http://localhost:5173',
+    'http://localhost:5174',
     'http://localhost:3000', 
+    'https://medstock-seven.vercel.app',
     'https://med-stocks-project.vercel.app',
     process.env.FRONTEND_URL
   ].filter(Boolean),
