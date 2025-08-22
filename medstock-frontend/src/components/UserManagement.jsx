@@ -51,7 +51,24 @@ const useAuth = () => {
 const UserManagement = ({ onLogout }) => {
   const { isAudit, canCreate, canUpdate, canDelete, currentUserRole, isAdmin } = useAuth();
 
-  // Admin-only access check
+  // All hooks must be declared before any conditional returns
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterRole, setFilterRole] = useState('all');
+  const [showAddUserModal, setShowAddUserModal] = useState(false);
+  const [showEditUserModal, setShowEditUserModal] = useState(false);
+  const [editingUser, setEditingUser] = useState(null);
+  const [newUser, setNewUser] = useState({
+    username: '',
+    password: '',
+    role: 'pharmacist'
+  });
+  const [addingUser, setAddingUser] = useState(false);
+  const [updatingUser, setUpdatingUser] = useState(false);
+
+  // Admin-only access check (after all hooks)
   if (!isAdmin) {
     return (
       <div className="max-w-7xl mx-auto p-6">
@@ -68,22 +85,6 @@ const UserManagement = ({ onLogout }) => {
       </div>
     );
   }
-
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterRole, setFilterRole] = useState('all');
-  const [showAddUserModal, setShowAddUserModal] = useState(false);
-  const [showEditUserModal, setShowEditUserModal] = useState(false);
-  const [editingUser, setEditingUser] = useState(null);
-  const [newUser, setNewUser] = useState({
-    username: '',
-    password: '',
-    role: 'pharmacist'
-  });
-  const [addingUser, setAddingUser] = useState(false);
-  const [updatingUser, setUpdatingUser] = useState(false);
 
   const getAuthToken = () => {
     const directToken = localStorage.getItem('token');
