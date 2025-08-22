@@ -85,13 +85,15 @@ export const apiCall = async (endpoint, options = {}) => {
     ...(token ? { 'Authorization': `Bearer ${token}` } : {})
   };
 
-  const defaultOptions = {
-    headers
-    // credentials: 'include' // Removed for JWT header auth
-  };
 
-  // Merge options properly - method should come from options
-  const finalOptions = { ...defaultOptions, ...options, headers };
+  // Merge options properly - ensure Authorization header is never lost
+  const finalOptions = {
+    ...options,
+    headers: {
+      ...headers,
+      ...(options.headers || {})
+    }
+  };
 
   // Only log in development OR if there's an error (for production debugging)
   if (import.meta.env.DEV) {

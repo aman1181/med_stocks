@@ -41,60 +41,69 @@ const PERMISSIONS = {
 // ✅ KEEP AND FIX: Your existing authenticateToken is better
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
-  
   if (!authHeader) {
-    return res.status(401).json({ 
-      error: 'Access token required', 
-      success: false, 
-      code: 'NO_HEADER' 
+    console.error('❌ No Authorization header present');
+    return res.status(401).json({
+      error: 'Access token required',
+      success: false,
+      code: 'NO_HEADER'
+    });
+  }
+
+  // Check for Bearer prefix
+  if (!authHeader.startsWith('Bearer ')) {
+    console.error('❌ Authorization header missing Bearer prefix:', authHeader);
+    return res.status(401).json({
+      error: 'Invalid Authorization header format',
+      success: false,
+      code: 'INVALID_HEADER_FORMAT'
     });
   }
 
   const token = authHeader.split(' ')[1];
-  
   if (!token) {
-    return res.status(401).json({ 
-      error: 'Access token required', 
-      success: false, 
-      code: 'NO_TOKEN' 
+    console.error('❌ No token found after Bearer prefix');
+    return res.status(401).json({
+      error: 'Access token required',
+      success: false,
+      code: 'NO_TOKEN'
     });
   }
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
+    console.log('🔑 Decoded JWT payload:', decoded);
     const userId = decoded.id || decoded.uuid;
-    
     const user = db.get('SELECT uuid, username, role FROM users WHERE uuid = ?', [userId]);
-    
+    console.log('👤 User lookup result:', user);
     if (!user) {
-      return res.status(401).json({ 
-        error: 'User not found', 
-        success: false, 
-        code: 'USER_NOT_FOUND' 
+      console.error('❌ User not found for token:', userId);
+      return res.status(401).json({
+        error: 'User not found',
+        success: false,
+        code: 'USER_NOT_FOUND'
       });
     }
-
     req.user = {
       id: user.uuid,
       username: user.username,
       role: user.role
     };
-    
     next();
-    
   } catch (err) {
     if (err.name === 'TokenExpiredError') {
-      return res.status(401).json({ 
-        error: 'Token expired', 
-        success: false, 
-        code: 'TOKEN_EXPIRED' 
+      console.error('❌ Token expired');
+      return res.status(401).json({
+        error: 'Token expired',
+        success: false,
+        code: 'TOKEN_EXPIRED'
       });
     }
-    
-    return res.status(401).json({ 
-      error: 'Invalid token', 
-        success: false, 
-      code: 'INVALID_TOKEN' 
+    console.error('❌ Invalid token:', err.message);
+    return res.status(401).json({
+      error: 'Invalid token',
+      success: false,
+      code: 'INVALID_TOKEN'
     });
   }
 };
