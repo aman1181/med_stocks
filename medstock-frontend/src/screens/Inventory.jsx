@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, MagnifyingGlassIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
+import { API, apiCall } from '../utils/api';
 
 const useAuth = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -136,7 +137,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
         return;
       }
       
-      const res = await fetch(`${API}/api/inventory`, {
+      const res = await apiCall('/api/inventory', {
         headers: getAuthHeaders()
       });
       
@@ -163,7 +164,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
       const token = getAuthToken();
       if (!token) return;
       
-      const res = await fetch(`${API}/api/vendors`, {
+      const res = await apiCall('/api/vendors', {
         headers: getAuthHeaders()
       });
       
@@ -234,7 +235,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
       
       const method = isEditing ? "PUT" : "POST";
       
-      const res = await fetch(url, {
+      const res = await apiCall(url, {
         method,
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -291,7 +292,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
 
     try {
       setError('');
-      const res = await fetch(`${API}/api/inventory/${batchId}`, {
+      const res = await apiCall(`/api/inventory/${batchId}`, {
         method: "DELETE",
         headers: getAuthHeaders()
       });
@@ -343,7 +344,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
       }
 
       setError('');
-      const res = await fetch(`${API}/api/inventory/sell/${batchId}`, {
+      const res = await apiCall(`/api/inventory/sell/${batchId}`, {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify({ quantity }),
