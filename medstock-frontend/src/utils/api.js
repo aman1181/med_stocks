@@ -4,20 +4,44 @@ const getAPIUrl = () => {
   // Remove trailing slash if present
   const cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url;
   
-  // Debug logging for production
-  console.log('🔧 Environment Mode:', import.meta.env.MODE);
-  console.log('🌐 API URL:', cleanUrl);
-  console.log('📋 Full env vars:', {
-    VITE_API_URL: import.meta.env.VITE_API_URL,
-    MODE: import.meta.env.MODE,
-    PROD: import.meta.env.PROD,
-    DEV: import.meta.env.DEV
-  });
+  // Debug logging only in development
+  if (import.meta.env.DEV) {
+    console.log('🔧 Environment Mode:', import.meta.env.MODE);
+    console.log('🌐 API URL:', cleanUrl);
+    console.log('📋 Full env vars:', {
+      VITE_API_URL: import.meta.env.VITE_API_URL,
+      MODE: import.meta.env.MODE,
+      PROD: import.meta.env.PROD,
+      DEV: import.meta.env.DEV
+    });
+  }
   
   return cleanUrl;
 };
 
 export const API = getAPIUrl();
+
+// Helper function for JSON API calls
+export const apiCallJSON = async (endpoint, options = {}) => {
+  const response = await apiCall(endpoint, options);
+  
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+  
+  // Handle empty responses
+  const text = await response.text();
+  if (!text) return null;
+  
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    if (import.meta.env.DEV) {
+      console.error('Failed to parse JSON response:', text);
+    }
+    throw new Error('Invalid JSON response from server');
+  }
+};
 
 // Helper function for making API calls
 export const apiCall = async (endpoint, options = {}) => {
@@ -34,22 +58,28 @@ export const apiCall = async (endpoint, options = {}) => {
   // Merge options properly - method should come from options
   const finalOptions = { ...defaultOptions, ...options };
   
-  console.log(`🌐 API Call: ${finalOptions.method || 'GET'} ${url}`);
-  console.log(`📤 Request options:`, finalOptions);
+  // Only log in development
+  if (import.meta.env.DEV) {
+    console.log(`🌐 API Call: ${finalOptions.method || 'GET'} ${url}`);
+    console.log(`📤 Request options:`, finalOptions);
+  }
   
   try {
     const response = await fetch(url, finalOptions);
     
-    if (!response.ok) {
+    // Return the response object for the caller to handle
+    // This allows checking response.ok, response.status, etc.
+    if (import.meta.env.DEV && !response.ok) {
       console.error(`❌ API Error: ${response.status} ${response.statusText} - ${url}`);
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
     
     return response;
   } catch (error) {
-    console.error(`❌ Network Error: ${error.message} - ${url}`);
+    if (import.meta.env.DEV) {
+      console.error(`❌ Network Error: ${error.message} - ${url}`);
+    }
     throw error;
   }
 };
 
-export default { API, apiCall };
+export default { API, apiCall, apiCallJSON };
