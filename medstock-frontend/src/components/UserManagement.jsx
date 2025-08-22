@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
-const API = 'http://localhost:5000';
+import { API, apiCall } from '../utils/api';
 
 const useAuth = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -50,7 +49,25 @@ const useAuth = () => {
 };
 
 const UserManagement = ({ onLogout }) => {
-  const { isAudit, canCreate, canUpdate, canDelete, currentUserRole } = useAuth();
+  const { isAudit, canCreate, canUpdate, canDelete, currentUserRole, isAdmin } = useAuth();
+
+  // Admin-only access check
+  if (!isAdmin) {
+    return (
+      <div className="max-w-7xl mx-auto p-6">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+          <div className="text-6xl mb-4">🔒</div>
+          <h2 className="text-2xl font-bold text-red-800 mb-2">Access Denied</h2>
+          <p className="text-red-600 mb-4">
+            User Management is only available to administrators.
+          </p>
+          <p className="text-sm text-red-500">
+            Current role: <span className="font-medium">{currentUserRole || 'Unknown'}</span>
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -109,13 +126,19 @@ const UserManagement = ({ onLogout }) => {
         'Content-Type': 'application/json'
       };
 
-      const res = await fetch(`${API}/api/auth/users`, {
+      console.log('🔄 Fetching users from:', `${API}/api/auth/users`);
+      console.log('🔑 Using token:', !!token);
+
+      const res = await apiCall('/api/auth/users', {
         method: 'GET',
         headers: headers
       });
 
+      console.log('📄 Users API response status:', res.status);
+
       if (!res.ok) {
         if (res.status === 401) {
+          console.log('❌ Unauthorized - redirecting to login');
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           onLogout();
@@ -134,6 +157,7 @@ const UserManagement = ({ onLogout }) => {
       }
 
       const data = await res.json();
+      console.log('📦 Users data received:', data);
 
       let usersList = [];
       if (Array.isArray(data)) {
@@ -145,9 +169,11 @@ const UserManagement = ({ onLogout }) => {
       }
 
       const validUsers = usersList.filter(u => u && u.id && u.username);
+      console.log('✅ Valid users loaded:', validUsers.length);
       setUsers(validUsers);
 
     } catch (err) {
+      console.error('❌ Error fetching users:', err);
       setError(`Failed to fetch users: ${err.message}`);
       setUsers([]);
     } finally {
@@ -178,7 +204,7 @@ const UserManagement = ({ onLogout }) => {
         'Content-Type': 'application/json'
       };
 
-      const response = await fetch(`${API}/api/auth/register`, {
+      const response = await apiCall('/api/auth/register', {
         method: 'POST',
         headers: headers,
         body: JSON.stringify({
@@ -246,7 +272,7 @@ const UserManagement = ({ onLogout }) => {
         updateData.password = editingUser.password;
       }
 
-      const response = await fetch(`${API}/api/auth/users/${editingUser.id}`, {
+      const response = await apiCall(`/api/auth/users/${editingUser.id}`, {
         method: 'PUT',
         headers: headers,
         body: JSON.stringify(updateData)
@@ -285,7 +311,7 @@ const UserManagement = ({ onLogout }) => {
         'Content-Type': 'application/json'
       };
 
-      const response = await fetch(`${API}/api/auth/users/${userId}`, {
+      const response = await apiCall(`/api/auth/users/${userId}`, {
         method: 'DELETE',
         headers: headers
       });
