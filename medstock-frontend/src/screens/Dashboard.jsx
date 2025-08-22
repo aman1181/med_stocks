@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { API, apiCall } from '../utils/api';
+import { API, apiCall, apiCallJSON } from '../utils/api';
 import { 
   ChartBarIcon, 
   CubeIcon, 

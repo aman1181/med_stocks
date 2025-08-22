@@ -102,15 +102,22 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
   };
 
   useEffect(() => {
-    if (user && canViewReports) {
+    if (user) {
       fetchReports();
     }
-  }, [user, canViewReports]);
+  }, [user]);
 
   async function fetchReports() {
     try {
       setLoading(true);
       setError("");
+      
+      // Check permissions first
+      if (!canViewReports) {
+        setError('Access denied - insufficient permissions for reports');
+        setLoading(false);
+        return;
+      }
       
       const token = getAuthToken();
       if (!token) {
