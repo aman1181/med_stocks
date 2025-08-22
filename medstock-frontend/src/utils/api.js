@@ -1,20 +1,35 @@
 // API Configuration utility
 const getAPIUrl = () => {
-  const url = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  // For production, hardcode the API URL as fallback
+  const productionAPI = 'https://med-stocks.onrender.com';
+  const developmentAPI = 'http://localhost:5000';
+  
+  // Get from environment variables
+  let url = import.meta.env.VITE_API_URL;
+  
+  // Safety checks and fallbacks
+  if (!url || url.trim() === '') {
+    // If no environment variable, detect based on current location
+    if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
+      url = productionAPI;
+      console.log('🌐 Using production API (detected Vercel)');
+    } else if (import.meta.env.PROD) {
+      url = productionAPI;
+      console.log('🌐 Using production API (PROD mode)');
+    } else {
+      url = developmentAPI;
+      console.log('🌐 Using development API (DEV mode)');
+    }
+  }
+  
   // Remove trailing slash if present
   const cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url;
   
-  // Debug logging only in development
-  if (import.meta.env.DEV) {
-    console.log('🔧 Environment Mode:', import.meta.env.MODE);
-    console.log('🌐 API URL:', cleanUrl);
-    console.log('📋 Full env vars:', {
-      VITE_API_URL: import.meta.env.VITE_API_URL,
-      MODE: import.meta.env.MODE,
-      PROD: import.meta.env.PROD,
-      DEV: import.meta.env.DEV
-    });
-  }
+  // Always log API URL for debugging
+  console.log('🔧 Environment Mode:', import.meta.env.MODE);
+  console.log('🌐 Raw VITE_API_URL:', import.meta.env.VITE_API_URL);
+  console.log('🌐 Final API URL:', cleanUrl);
+  console.log('🌍 Current hostname:', typeof window !== 'undefined' ? window.location.hostname : 'server-side');
   
   return cleanUrl;
 };
