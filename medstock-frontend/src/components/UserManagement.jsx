@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { API, apiCall } from '../utils/api';
+import { API, apiCall, apiCallJSON } from '../utils/api';
 
 const useAuth = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -127,37 +127,14 @@ const UserManagement = ({ onLogout }) => {
         'Content-Type': 'application/json'
       };
 
-      console.log('🔄 Fetching users from:', `${API}/api/auth/users`);
-      console.log('🔑 Using token:', !!token);
+      console.log('🔄 Starting fetchUsers...');
+      console.log('🔑 Token found:', !!token);
 
-      const res = await apiCall('/api/auth/users', {
+      const data = await apiCallJSON('/api/auth/users', {
         method: 'GET',
         headers: headers
       });
 
-      console.log('📄 Users API response status:', res.status);
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          console.log('❌ Unauthorized - redirecting to login');
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          onLogout();
-          return;
-        }
-        if (res.status === 403) {
-          setError("Access Denied: You don't have permission to view users.");
-          return;
-        }
-        try {
-          const errorData = await res.json();
-          throw new Error(errorData.error || `Server error: ${res.status}`);
-        } catch {
-          throw new Error(`Server error: ${res.status}`);
-        }
-      }
-
-      const data = await res.json();
       console.log('📦 Users data received:', data);
 
       let usersList = [];
@@ -175,6 +152,17 @@ const UserManagement = ({ onLogout }) => {
 
     } catch (err) {
       console.error('❌ Error fetching users:', err);
+      if (err.message.includes('401')) {
+        console.log('❌ Unauthorized - redirecting to login');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        onLogout();
+        return;
+      }
+      if (err.message.includes('403')) {
+        setError("Access Denied: You don't have permission to view users.");
+        return;
+      }
       setError(`Failed to fetch users: ${err.message}`);
       setUsers([]);
     } finally {
@@ -217,21 +205,12 @@ const UserManagement = ({ onLogout }) => {
       console.log('📤 Sending user data:', { ...userData, password: '[HIDDEN]' });
       console.log('📡 Making API call to /api/auth/register...');
 
-      const response = await apiCall('/api/auth/register', {
+      const responseData = await apiCallJSON('/api/auth/register', {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(userData)
       });
 
-      console.log('📄 User creation response status:', response.status);
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('❌ User creation failed:', errorData);
-        throw new Error(errorData.error || 'Failed to create user');
-      }
-
-      const responseData = await response.json();
       console.log('✅ User created successfully:', responseData);
 
       setShowAddUserModal(false);
@@ -288,22 +267,19 @@ const UserManagement = ({ onLogout }) => {
         updateData.password = editingUser.password;
       }
 
-      const response = await apiCall(`/api/auth/users/${editingUser.id}`, {
+      const responseData = await apiCallJSON(`/api/auth/users/${editingUser.id}`, {
         method: 'PUT',
         headers: headers,
         body: JSON.stringify(updateData)
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to update user');
-      }
-
+      console.log('✅ User updated successfully:', responseData);
       setShowEditUserModal(false);
       setEditingUser(null);
       await fetchUsers();
 
     } catch (err) {
+      console.error('❌ Error updating user:', err);
       setError(`Failed to update user: ${err.message}`);
     } finally {
       setUpdatingUser(false);
@@ -327,19 +303,16 @@ const UserManagement = ({ onLogout }) => {
         'Content-Type': 'application/json'
       };
 
-      const response = await apiCall(`/api/auth/users/${userId}`, {
+      const responseData = await apiCallJSON(`/api/auth/users/${userId}`, {
         method: 'DELETE',
         headers: headers
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to delete user');
-      }
-
+      console.log('✅ User deleted successfully:', responseData);
       await fetchUsers();
 
     } catch (err) {
+      console.error('❌ Error deleting user:', err);
       setError(`Failed to delete user: ${err.message}`);
     }
   };
