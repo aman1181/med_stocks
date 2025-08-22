@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { HomeIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
+import { API, apiCall, apiCallJSON } from '../utils/api';
 
 const useAuth = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -47,7 +48,7 @@ const useAuth = () => {
   };
 };
 
-const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 
 export default function Reports({ setCurrentScreen, user, onLogout }) {
   const { canViewReports, canViewFinancials, canViewStock, isAudit } = useAuth();
@@ -121,22 +122,21 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
       const fetchDailySales = async () => {
         try {
           // Method 1: Try dedicated daily sales endpoint
-          const dailyResponse = await fetch(`${API}/api/reports/sales/daily`, { 
+          const dailyData = await apiCallJSON('/api/reports/sales/daily', { 
             headers: getAuthHeaders() 
           });
           
-          if (dailyResponse.ok) {
-            const dailyData = await dailyResponse.json();
-            return dailyData;
-          }
+          return dailyData;
           
-          // Method 2: If daily endpoint fails, calculate from bills
-          const billsResponse = await fetch(`${API}/api/billing`, { 
-            headers: getAuthHeaders() 
-          });
+        } catch (err) {
+          console.log('Daily sales endpoint failed, trying bills endpoint...');
           
-          if (billsResponse.ok) {
-            const billsData = await billsResponse.json();
+          try {
+            // Method 2: If daily endpoint fails, calculate from bills
+            const billsData = await apiCallJSON('/api/billing', { 
+              headers: getAuthHeaders() 
+            });
+            
             const bills = Array.isArray(billsData) ? billsData : (billsData.bills || []);
             
             // Calculate today's sales from bills
@@ -157,18 +157,17 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
             };
             
             return calculatedDaily;
+            
+          } catch (billsErr) {
+            console.error('Both daily sales and bills endpoints failed:', billsErr);
+            // Return default structure
+            return {
+              sales: 0,
+              revenue: 0,
+              transactions: 0,
+              date: new Date().toISOString().split('T')[0]
+            };
           }
-          
-          throw new Error('Both daily sales and bills endpoints failed');
-          
-        } catch (err) {
-          // Return default structure
-          return {
-            sales: 0,
-            revenue: 0,
-            transactions: 0,
-            date: new Date().toISOString().split('T')[0]
-          };
         }
       };
 
@@ -181,35 +180,36 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
       
       if (canViewFinancials) {
         endpoints.push(
-          { url: `${API}/api/reports/sales/weekly`, setter: setWeeklySales, name: 'Weekly Sales' },
-          { url: `${API}/api/reports/sales/monthly`, setter: setMonthlySales, name: 'Monthly Sales' },
-          { url: `${API}/api/reports/doctor-wise`, setter: setDoctorWise, name: 'Doctor Wise' },
-          { url: `${API}/api/reports/vendor-wise`, setter: setVendorWise, name: 'Vendor Wise' }
+          { endpoint: '/api/reports/sales/weekly', setter: setWeeklySales, name: 'Weekly Sales' },
+          { endpoint: '/api/reports/sales/monthly', setter: setMonthlySales, name: 'Monthly Sales' },
+          { endpoint: '/api/reports/doctor-wise', setter: setDoctorWise, name: 'Doctor Wise' },
+          { endpoint: '/api/reports/vendor-wise', setter: setVendorWise, name: 'Vendor Wise' }
         );
       }
       
       if (canViewStock) {
         endpoints.push(
-          { url: `${API}/api/reports/stock`, setter: setStock, name: 'Stock Report' },
-          { url: `${API}/api/reports/stock-expiry`, setter: setExpiry, name: 'Expiry Report' }
+          { endpoint: '/api/reports/stock', setter: setStock, name: 'Stock Report' },
+          { endpoint: '/api/reports/stock-expiry', setter: setExpiry, name: 'Expiry Report' }
         );
       }
 
-      for (const endpoint of endpoints) {
+      for (const endpointInfo of endpoints) {
         try {
-          const response = await fetch(endpoint.url, { headers: getAuthHeaders() });
-          if (response.ok) {
-            const data = await response.json();
-            const processedData = Array.isArray(data) ? data : [];
-            endpoint.setter(processedData);
-          } else if (response.status === 401) {
+          const data = await apiCallJSON(endpointInfo.endpoint, { 
+            headers: getAuthHeaders() 
+          });
+          
+          const processedData = Array.isArray(data) ? data : [];
+          endpointInfo.setter(processedData);
+          
+        } catch (err) {
+          console.error(`${endpointInfo.name} fetch failed:`, err);
+          if (err.message.includes('401')) {
             onLogout && onLogout();
             return;
-          } else {
-            endpoint.setter([]);
           }
-        } catch (err) {
-          endpoint.setter([]);
+          endpointInfo.setter([]);
         }
       }
       
