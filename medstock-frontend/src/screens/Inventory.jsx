@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PlusIcon, MagnifyingGlassIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
-import { API, apiCall } from '../utils/api';
+import { API, apiCall, apiCallJSON } from '../utils/api';
 
 const useAuth = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -74,7 +74,6 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
   });
 
   const LOW_STOCK_LIMIT = 10;
-  const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
   const getAuthToken = () => {
     const directToken = localStorage.getItem('token');
@@ -137,21 +136,17 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
         return;
       }
       
-      const res = await apiCall('/api/inventory', {
+      const data = await apiCallJSON('/api/inventory', {
         headers: getAuthHeaders()
       });
       
-      if (!res.ok) {
-        if (res.status === 401) {
-          onLogout && onLogout();
-          return;
-        }
-        throw new Error(`Server error: ${res.status}`);
-      }
-      
-      const data = await res.json();
       setInventory(Array.isArray(data) ? data : []);
     } catch (err) {
+      console.error('Fetch inventory error:', err);
+      if (err.message.includes('401')) {
+        onLogout && onLogout();
+        return;
+      }
       setError("Failed to fetch inventory. Please check server connection.");
       setInventory([]);
     } finally {
@@ -164,13 +159,9 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
       const token = getAuthToken();
       if (!token) return;
       
-      const res = await apiCall('/api/vendors', {
+      const data = await apiCallJSON('/api/vendors', {
         headers: getAuthHeaders()
       });
-      
-      if (!res.ok) throw new Error(`Server error: ${res.status}`);
-      
-      const data = await res.json();
       
       let vendorsList = [];
       if (Array.isArray(data)) {
@@ -183,6 +174,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
       
       setVendors(vendorsList);
     } catch (err) {
+      console.error('Fetch vendors error:', err);
       setVendors([]);
     }
   };
@@ -229,13 +221,25 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
 
     try {
       setError('');
-      const url = isEditing 
-        ? `${API}/api/inventory/${editId}`
-        : `${API}/api/inventory`;
+      const endpoint = isEditing 
+        ? `/api/inventory/${editId}`
+        : `/api/inventory`;
       
       const method = isEditing ? "PUT" : "POST";
       
-      const res = await apiCall(url, {
+      console.log(`📦 ${isEditing ? 'Updating' : 'Adding'} product:`, {
+        endpoint,
+        method,
+        data: {
+          ...formData,
+          qty: parseInt(formData.qty) || 0,
+          cost: parseFloat(formData.cost) || 0,
+          price: parseFloat(formData.price) || 0,
+          tax: parseFloat(formData.tax) || 0
+        }
+      });
+      
+      const result = await apiCallJSON(endpoint, {
         method,
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -247,25 +251,23 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
         }),
       });
 
-      if (!res.ok) {
-        if (res.status === 401) {
-          onLogout && onLogout();
-          return;
-        }
-        throw new Error(`Server error: ${res.status}`);
-      }
-
-      const result = await res.json();
-      if (result.success) {
+      console.log(`📦 Product ${isEditing ? 'update' : 'add'} result:`, result);
+      
+      if (result && result.success) {
         alert(`Product ${isEditing ? 'updated' : 'added'} successfully!`);
         resetForm();
         setShowForm(false);
         fetchInventory();
       } else {
-        setError(result.error || `Failed to ${isEditing ? 'update' : 'add'} product`);
+        setError(result?.error || `Failed to ${isEditing ? 'update' : 'add'} product`);
       }
     } catch (err) {
-      setError(`Failed to ${isEditing ? 'update' : 'add'} product. Please try again.`);
+      console.error(`Product ${isEditing ? 'update' : 'add'} error:`, err);
+      if (err.message.includes('401')) {
+        onLogout && onLogout();
+        return;
+      }
+      setError(`Failed to ${isEditing ? 'update' : 'add'} product: ${err.message}`);
     }
   };
 
@@ -292,28 +294,24 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
 
     try {
       setError('');
-      const res = await apiCall(`/api/inventory/${batchId}`, {
+      const result = await apiCallJSON(`/api/inventory/${batchId}`, {
         method: "DELETE",
         headers: getAuthHeaders()
       });
 
-      if (!res.ok) {
-        if (res.status === 401) {
-          onLogout && onLogout();
-          return;
-        }
-        throw new Error(`Server error: ${res.status}`);
-      }
-
-      const result = await res.json();
-      if (result.success) {
+      if (result && result.success) {
         alert("Product deleted successfully!");
         fetchInventory();
       } else {
-        setError(result.error || "Failed to delete product");
+        setError(result?.error || "Failed to delete product");
       }
     } catch (err) {
-      setError("Failed to delete product. Please try again.");
+      console.error('Delete product error:', err);
+      if (err.message.includes('401')) {
+        onLogout && onLogout();
+        return;
+      }
+      setError(`Failed to delete product: ${err.message}`);
     }
   };
 
@@ -344,23 +342,13 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
       }
 
       setError('');
-      const res = await apiCall(`/api/inventory/sell/${batchId}`, {
+      const data = await apiCallJSON(`/api/inventory/sell/${batchId}`, {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify({ quantity }),
       });
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          onLogout && onLogout();
-          return;
-        }
-        throw new Error(`Server error: ${res.status}`);
-      }
-
-      const data = await res.json();
       
-      if (data.success) {
+      if (data && data.success) {
         const saleValue = (quantity * (batchItem?.price || 0)).toFixed(2);
         alert(`${quantity} ${batchItem.unit || 'units'} of ${batchItem.product_name} sold successfully! Sale Value: Rs ${saleValue}`);
         fetchInventory();
@@ -370,10 +358,15 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
           handleNavigation('billing');
         }
       } else {
-        setError(data.error || 'Failed to sell product');
+        setError(data?.error || 'Failed to sell product');
       }
     } catch (err) {
-      setError("Failed to sell product. Please check server connection.");
+      console.error('Sell product error:', err);
+      if (err.message.includes('401')) {
+        onLogout && onLogout();
+        return;
+      }
+      setError(`Failed to sell product: ${err.message}`);
     }
   };
 
