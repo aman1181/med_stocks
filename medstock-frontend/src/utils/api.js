@@ -15,12 +15,15 @@ export const apiCall = async (endpoint, options = {}) => {
     headers: {
       'Content-Type': 'application/json',
       ...options.headers
-    }
+    },
+    credentials: 'include'  // Important for CORS with credentials
   };
   
+  // Merge options properly - method should come from options
   const finalOptions = { ...defaultOptions, ...options };
   
   console.log(`🌐 API Call: ${finalOptions.method || 'GET'} ${url}`);
+  console.log(`📤 Request options:`, finalOptions);
   
   try {
     const response = await fetch(url, finalOptions);
