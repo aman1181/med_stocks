@@ -1,0 +1,18 @@
+              🏥 MEDSTOCKS PHARMACY
+         ================================
+           Bill No: BILL-1756125333111
+           Date: 25/8/2025, 6:05:33 pm
+                 Customer: cluth
+                Phone: 5555555555
+               Doctor: Dr. Dr.jhony
+==================================================
+Item                      Qty     Price     Total
+--------------------------------------------------
+Amoxicillin 250mg           8     50.00    400.00
+--------------------------------------------------
+                                 Subtotal: ₹400.00
+                              Grand Total: ₹400.00
+                                     Payment: CASH
+
+           Thank you for your business!
+                 Visit again! 🙏

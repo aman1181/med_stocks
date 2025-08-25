@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell
+} from 'recharts';
 import { HomeIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
 // Simple Toast component
 function Toast({ message, onClose }) {
@@ -71,6 +74,17 @@ const useAuth = () => {
 
 
 export default function Reports({ setCurrentScreen, user, onLogout }) {
+  // Section selector state
+  const reportSections = [
+    { key: 'daily', label: 'Daily Sales Overview' },
+    { key: 'weekly', label: 'Weekly Sales Performance' },
+    { key: 'monthly', label: 'Monthly Sales Summary' },
+    { key: 'doctorWise', label: 'Doctor Wise Sales Analysis' },
+    { key: 'vendorWise', label: 'Vendor Performance Report' },
+    { key: 'stock', label: 'Current Stock Levels' },
+    { key: 'expiry', label: 'Expiry Alert (Next 30 Days)' }
+  ];
+  const [selectedSection, setSelectedSection] = useState('daily');
   // Toast state for success messages
   const [toastMsg, setToastMsg] = useState("");
   // Always get the latest user from localStorage, not from props
@@ -442,6 +456,21 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
       </div>
 
       <div className="p-6">
+        {/* Section selector dropdown */}
+        <div className="mb-8 flex flex-col sm:flex-row gap-4 items-center justify-between">
+          <div className="flex gap-2 items-center">
+            <span className="text-gray-700 font-medium">Select Report:</span>
+            <select
+              value={selectedSection}
+              onChange={e => setSelectedSection(e.target.value)}
+              className="py-2 px-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white"
+            >
+              {reportSections.map(sec => (
+                <option key={sec.key} value={sec.key}>{sec.label}</option>
+              ))}
+            </select>
+          </div>
+        </div>
         {error && (
           <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
             <div className="flex items-center">
@@ -458,28 +487,179 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
         )}
 
         {/* Enhanced Business Summary */}
-        {canViewFinancials && (
-          <div className="mb-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-xl shadow-lg">
-            <h3 className="text-xl font-bold mb-4">Today's Business Summary</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div className="text-center bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-3xl font-bold">{dailySales.sales || 0}</div>
-                <div className="text-sm opacity-90">Items Sold</div>
-              </div>
-              <div className="text-center bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-3xl font-bold">{dailySales.transactions || 0}</div>
-                <div className="text-sm opacity-90">Transactions</div>
-              </div>
-              <div className="text-center bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-3xl font-bold">Rs {(dailySales.revenue || 0).toFixed(2)}</div>
-                <div className="text-sm opacity-90">Revenue</div>
-              </div>
-              <div className="text-center bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-3xl font-bold">{stock.length}</div>
-                <div className="text-sm opacity-90">Products</div>
-              </div>
+        {/* Only show selected report section with graph and table */}
+        {selectedSection === 'daily' && (
+          <>
+            {/* Professional BarChart for Daily Sales */}
+            <div className="mb-6 bg-white rounded-xl shadow p-6">
+              <h3 className="text-lg font-bold mb-4 text-blue-700">Daily Sales Graph</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={[dailySales]} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="sales" fill="#2563eb" name="Items Sold" />
+                  <Bar dataKey="revenue" fill="#22c55e" name="Revenue" />
+                  <Bar dataKey="transactions" fill="#a21caf" name="Transactions" />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
-          </div>
+            {/* Table below graph */}
+            <Section
+              title="Daily Sales Overview"
+              data={[dailySales]}
+              columns={["sales", "revenue", "transactions", "date"]}
+              isDaily={true}
+              requiresFinancialAccess={true}
+            />
+          </>
+        )}
+        {selectedSection === 'weekly' && (
+          <>
+            <div className="mb-6 bg-white rounded-xl shadow p-6">
+              <h3 className="text-lg font-bold mb-4 text-blue-700">Weekly Sales Graph</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={weeklySales} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="sale_date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="revenue" stroke="#22c55e" name="Revenue" />
+                  <Line type="monotone" dataKey="quantity" stroke="#2563eb" name="Quantity" />
+                  <Line type="monotone" dataKey="transactions" stroke="#a21caf" name="Transactions" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+            <Section
+              title="Weekly Sales Performance"
+              data={weeklySales}
+              columns={["sale_date", "transactions", "quantity", "revenue"]}
+              requiresFinancialAccess={true}
+            />
+          </>
+        )}
+        {selectedSection === 'monthly' && (
+          <>
+            <div className="mb-6 bg-white rounded-xl shadow p-6">
+              <h3 className="text-lg font-bold mb-4 text-blue-700">Monthly Sales Graph</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={monthlySales} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="revenue" stroke="#22c55e" name="Revenue" />
+                  <Line type="monotone" dataKey="quantity" stroke="#2563eb" name="Quantity" />
+                  <Line type="monotone" dataKey="transactions" stroke="#a21caf" name="Transactions" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+            <Section
+              title="Monthly Sales Summary"
+              data={monthlySales}
+              columns={["month", "transactions", "quantity", "revenue"]}
+              requiresFinancialAccess={true}
+            />
+          </>
+        )}
+        {selectedSection === 'doctorWise' && (
+          <>
+            <div className="mb-6 bg-white rounded-xl shadow p-6">
+              <h3 className="text-lg font-bold mb-4 text-blue-700">Doctor Wise Sales Graph</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={doctorWise} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="doctor_name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="prescriptions" fill="#2563eb" name="Prescriptions" />
+                  <Bar dataKey="total_value" fill="#22c55e" name="Total Value" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <Section
+              title="Doctor Wise Sales Analysis"
+              data={doctorWise}
+              columns={["doctor_name", "prescriptions", "total_value"]}
+              requiresFinancialAccess={true}
+            />
+          </>
+        )}
+        {selectedSection === 'vendorWise' && (
+          <>
+            <div className="mb-6 bg-white rounded-xl shadow p-6">
+              <h3 className="text-lg font-bold mb-4 text-blue-700">Vendor Performance Graph</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={vendorWise} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="vendor_name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="total_products" fill="#2563eb" name="Total Products" />
+                  <Bar dataKey="total_stock" fill="#a21caf" name="Total Stock" />
+                  <Bar dataKey="stock_value" fill="#22c55e" name="Stock Value" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <Section
+              title="Vendor Performance Report"
+              data={vendorWise}
+              columns={["vendor_name", "contact", "total_products", "total_stock", "stock_value"]}
+              requiresFinancialAccess={true}
+            />
+          </>
+        )}
+        {selectedSection === 'stock' && (
+          <>
+            <div className="mb-6 bg-white rounded-xl shadow p-6">
+              <h3 className="text-lg font-bold mb-4 text-blue-700">Current Stock Levels Graph</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={stock} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="product_name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="qty" fill="#2563eb" name="Quantity" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <Section
+              title="Current Stock Levels"
+              data={stock}
+              columns={["product_name", "unit", "vendor_name", "batch_no", "qty", "stock_status"]}
+              requiresStockAccess={true}
+            />
+          </>
+        )}
+        {selectedSection === 'expiry' && (
+          <>
+            <div className="mb-6 bg-white rounded-xl shadow p-6">
+              <h3 className="text-lg font-bold mb-4 text-blue-700">Expiry Alert Graph</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={expiry} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="product_name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="qty" fill="#f59e42" name="Quantity" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <Section
+              title="Expiry Alert (Next 30 Days)"
+              data={expiry}
+              columns={["product_name", "vendor_name", "batch_no", "qty", "expiry_date", "expiry_status"]}
+              requiresStockAccess={true}
+            />
+          </>
         )}
 
         <Section

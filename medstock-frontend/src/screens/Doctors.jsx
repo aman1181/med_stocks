@@ -1,22 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
-function Toast({ message, onClose }) {
-  useEffect(() => {
-    if (!message) return;
-    const timer = setTimeout(() => {
-      onClose();
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, [message, onClose]);
-  if (!message) return null;
-  return (
-    <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slide-in">
-      <span className="font-semibold">Success:</span>
-      <span>{message}</span>
-      <button onClick={onClose} className="ml-2 text-white hover:text-gray-200 font-bold">×</button>
-    </div>
-  );
-}
+import { Toast, useToast } from '../components/ToastContext.jsx';
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { API, apiCall } from '../utils/api';
 
@@ -73,8 +56,12 @@ const formatDate = (dateString) => {
 };
 
 const Doctors = ({ user, onLogout }) => {
+  // Specialization filter and sorting state
+  const [selectedSpecialization, setSelectedSpecialization] = useState('All');
+  // Removed sorting state
   // Toast state
   const [toastMsg, setToastMsg] = useState("");
+  const { showToast } = useToast();
   const { isAudit, canCreate, canUpdate, canDelete } = useAuth();
   
   const [doctors, setDoctors] = useState([]);
@@ -185,9 +172,9 @@ const Doctors = ({ user, onLogout }) => {
 
       setNewDoctor({ name: "", specialization: "" });
       setShowForm(false);
-      fetchDoctors();
-      alert("Doctor added successfully!");
   setToastMsg('Doctor added successfully!');
+  showToast('Doctor added successfully!');
+  setTimeout(() => fetchDoctors(), 4000);
     } catch (err) {
       setError("Error adding doctor. Please try again.");
     }
@@ -219,9 +206,9 @@ const Doctors = ({ user, onLogout }) => {
       }
 
       setEditingDoctor(null);
-      fetchDoctors();
-      alert("Doctor updated successfully!");
   setToastMsg('Doctor updated successfully!');
+  showToast('Doctor updated successfully!');
+  setTimeout(() => fetchDoctors(), 4000);
     } catch (err) {
       setError("Error updating doctor. Please try again.");
     }
@@ -246,17 +233,25 @@ const Doctors = ({ user, onLogout }) => {
       }
 
       fetchDoctors();
-      alert("Doctor deleted successfully!");
   setToastMsg('Doctor deleted successfully!');
+  showToast('Doctor deleted successfully!');
+  setTimeout(() => fetchDoctors(), 4000);
     } catch (err) {
       setError("Error deleting doctor. Please try again.");
     }
   };
 
-  const filteredDoctors = doctors.filter((doctor) =>
-    doctor.name?.toLowerCase().includes(search.toLowerCase()) ||
-    (doctor.specialization && doctor.specialization.toLowerCase().includes(search.toLowerCase()))
+  // Get unique specializations for filter dropdown
+  const specializations = ['All', ...Array.from(new Set(doctors.map(d => d.specialization).filter(Boolean)))];
+
+  // Filter by search and specialization
+  let filteredDoctors = doctors.filter((doctor) =>
+    (doctor.name?.toLowerCase().includes(search.toLowerCase()) ||
+    (doctor.specialization && doctor.specialization.toLowerCase().includes(search.toLowerCase()))) &&
+    (selectedSpecialization === 'All' || doctor.specialization === selectedSpecialization)
   );
+
+  // Removed sorting logic
 
   const resetForm = () => {
     setEditingDoctor(null);
@@ -267,10 +262,10 @@ const Doctors = ({ user, onLogout }) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-  <Toast message={toastMsg} onClose={() => setToastMsg("")} />
+  <Toast />
       <div className="bg-white shadow border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-gradient-to-r from-blue-50 via-white to-green-50 rounded-b-xl shadow-sm p-4">
             <div>
               <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Doctors Management</h1>
               <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">
@@ -278,21 +273,35 @@ const Doctors = ({ user, onLogout }) => {
                 {isAudit && <span className="text-blue-600 block sm:inline"> • Read-only access</span>}
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+              <div className="flex flex-col items-start">
+                <label className="text-xs font-semibold text-gray-600 mb-1 ml-1">Specialization</label>
+                <select
+                  value={selectedSpecialization}
+                  onChange={e => setSelectedSpecialization(e.target.value)}
+                  className="border border-gray-300 rounded-lg px-2 py-1 text-sm bg-white shadow-sm min-w-[140px]"
+                >
+                  {specializations.map(spec => (
+                    <option key={spec} value={spec}>{spec}</option>
+                  ))}
+                </select>
+              </div>
+              {/* Removed sort by controls */}
               <div className="bg-blue-100 px-3 sm:px-4 py-2 rounded-lg w-full sm:w-auto text-center">
                 <span className="text-blue-800 font-semibold text-sm sm:text-base">{doctors.length} Doctors</span>
               </div>
               {canCreate && (
-                <button
-                  onClick={() => {
-                    resetForm();
-                    setShowForm(!showForm);
-                  }}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 rounded-lg transition-colors shadow flex items-center justify-center space-x-2 w-full sm:w-auto text-sm sm:text-base"
-                >
-                  <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5" />
-                  <span>{showForm ? 'Cancel' : 'Add Doctor'}</span>
-                </button>
+                  <button
+                    onClick={() => {
+                      resetForm();
+                      setShowForm(!showForm);
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 rounded-lg transition-colors shadow flex items-center justify-center space-x-2 w-full sm:w-auto text-sm sm:text-base"
+                  >
+                    {/* Only show Plus icon when adding, not when cancelling */}
+                    {!showForm && <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5" />}
+                    <span>{showForm ? 'Cancel' : 'Add Doctor'}</span>
+                  </button>
               )}
             </div>
           </div>
@@ -348,57 +357,62 @@ const Doctors = ({ user, onLogout }) => {
         )}
 
         {(showForm || editingDoctor) && canCreate && (
-          <div className="bg-white rounded-lg shadow border border-gray-200 p-6 mb-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
-              {editingDoctor ? 'Edit Doctor' : 'Add New Doctor'}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Doctor Name *
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter doctor name"
-                  value={editingDoctor ? editingDoctor.name || "" : newDoctor.name}
-                  onChange={(e) =>
-                    editingDoctor
-                      ? setEditingDoctor({ ...editingDoctor, name: e.target.value })
-                      : setNewDoctor({ ...newDoctor, name: e.target.value })
-                  }
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            {/* Modal backdrop */}
+            <div className="absolute inset-0 bg-blue-300 bg-opacity-40" onClick={resetForm}></div>
+            {/* Modal form */}
+            <div className="relative bg-white rounded-lg shadow border border-gray-200 p-6 mb-8 w-full max-w-xl mx-auto" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">
+                {editingDoctor ? 'Edit Doctor' : 'Add New Doctor'}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Doctor Name *
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Enter doctor name"
+                    value={editingDoctor ? editingDoctor.name || "" : newDoctor.name}
+                    onChange={(e) =>
+                      editingDoctor
+                        ? setEditingDoctor({ ...editingDoctor, name: e.target.value })
+                        : setNewDoctor({ ...newDoctor, name: e.target.value })
+                    }
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Specialization
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g., Cardiology, Pediatrics"
+                    value={editingDoctor ? editingDoctor.specialization || "" : newDoctor.specialization}
+                    onChange={(e) =>
+                      editingDoctor
+                        ? setEditingDoctor({ ...editingDoctor, specialization: e.target.value })
+                        : setNewDoctor({ ...newDoctor, specialization: e.target.value })
+                    }
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Specialization
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g., Cardiology, Pediatrics"
-                  value={editingDoctor ? editingDoctor.specialization || "" : newDoctor.specialization}
-                  onChange={(e) =>
-                    editingDoctor
-                      ? setEditingDoctor({ ...editingDoctor, specialization: e.target.value })
-                      : setNewDoctor({ ...newDoctor, specialization: e.target.value })
-                  }
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+              <div className="flex justify-end space-x-3 mt-6">
+                <button
+                  onClick={resetForm}
+                  className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={editingDoctor ? handleUpdateDoctor : handleAddDoctor}
+                  className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors shadow"
+                >
+                  {editingDoctor ? 'Update Doctor' : 'Add Doctor'}
+                </button>
               </div>
-            </div>
-            <div className="flex justify-end space-x-3 mt-6">
-              <button
-                onClick={resetForm}
-                className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={editingDoctor ? handleUpdateDoctor : handleAddDoctor}
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors shadow"
-              >
-                {editingDoctor ? 'Update Doctor' : 'Add Doctor'}
-              </button>
             </div>
           </div>
         )}

@@ -1,22 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
-function Toast({ message, onClose }) {
-  useEffect(() => {
-    if (!message) return;
-    const timer = setTimeout(() => {
-      onClose();
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, [message, onClose]);
-  if (!message) return null;
-  return (
-    <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slide-in">
-      <span className="font-semibold">Success:</span>
-      <span>{message}</span>
-      <button onClick={onClose} className="ml-2 text-white hover:text-gray-200 font-bold">×</button>
-    </div>
-  );
-}
+import { Toast, useToast } from '../components/ToastContext.jsx';
 import { PlusIcon, MagnifyingGlassIcon, PencilIcon, TrashIcon, PhoneIcon, MapPinIcon } from '@heroicons/react/24/solid';
 import { API, apiCall } from '../utils/api';
 
@@ -73,17 +56,21 @@ const formatDate = (dateString) => {
 };
 
 const Vendors = ({ user, onLogout }) => {
+  // Toast context
   const { isAudit, canCreate, canUpdate, canDelete } = useAuth();
   
   const [vendors, setVendors] = useState([]);
   const [loading, setLoading] = useState(true);
-  // Toast state
-  const [toastMsg, setToastMsg] = useState("");
+  const { showToast } = useToast();
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [newVendor, setNewVendor] = useState({ name: "", contact: "", address: "" });
   const [editingVendor, setEditingVendor] = useState(null);
   const [error, setError] = useState("");
+  // Address filter and sorting
+  const [addressFilter, setAddressFilter] = useState("");
+  // Removed sorting state
+  // Remove sortOrder, always descending
 
   const getAuthToken = () => {
     const directToken = localStorage.getItem('token');
@@ -211,10 +198,9 @@ const Vendors = ({ user, onLogout }) => {
 
       const result = await res.json();
       if (result.success) {
-        alert("Vendor added successfully!");
-  setToastMsg('Vendor added successfully!');
-        resetForm();
-        fetchVendors();
+  showToast('Vendor added successfully!');
+  resetForm();
+  setTimeout(() => fetchVendors(), 4000);
       } else {
         setError(result.error || "Failed to add vendor");
       }
@@ -251,10 +237,9 @@ const Vendors = ({ user, onLogout }) => {
 
       const result = await res.json();
       if (result.success) {
-        alert("Vendor updated successfully!");
-  setToastMsg('Vendor updated successfully!');
-        resetForm();
-        fetchVendors();
+  showToast('Vendor updated successfully!');
+  resetForm();
+  setTimeout(() => fetchVendors(), 4000);
       } else {
         setError(result.error || "Failed to update vendor");
       }
@@ -283,8 +268,8 @@ const Vendors = ({ user, onLogout }) => {
 
       const result = await res.json();
       if (result.success) {
-        alert("Vendor deleted successfully!");
-        fetchVendors();
+  showToast("Vendor deleted successfully!");
+  setTimeout(() => fetchVendors(), 4000);
       } else {
         setError(result.error || "Failed to delete vendor");
       }
@@ -299,11 +284,19 @@ const Vendors = ({ user, onLogout }) => {
     setError("");
   };
 
-  const filteredVendors = vendors.filter((vendor) =>
-    (vendor.name || '').toLowerCase().includes(search.toLowerCase()) ||
-    (vendor.contact || '').toLowerCase().includes(search.toLowerCase()) ||
-    (vendor.address || '').toLowerCase().includes(search.toLowerCase())
-  );
+  // Get unique addresses for filter dropdown
+  const addressOptions = Array.from(new Set(vendors.map(v => v.address).filter(Boolean)));
+
+  // Filter vendors by search and address
+  let filteredVendors = vendors.filter((vendor) => {
+    const matchesSearch = (vendor.name || '').toLowerCase().includes(search.toLowerCase()) ||
+      (vendor.contact || '').toLowerCase().includes(search.toLowerCase()) ||
+      (vendor.address || '').toLowerCase().includes(search.toLowerCase());
+    const matchesAddress = addressFilter ? vendor.address === addressFilter : true;
+    return matchesSearch && matchesAddress;
+  });
+
+  // Removed sorting logic
 
   if (loading) {
     return (
@@ -312,12 +305,14 @@ const Vendors = ({ user, onLogout }) => {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading vendors...</p>
         </div>
+        <Toast />
       </div>
     );
   }
 
   return (
     <div className="p-4 sm:p-6">
+      <Toast />
       <div className="mb-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
@@ -328,17 +323,17 @@ const Vendors = ({ user, onLogout }) => {
             </p>
           </div>
           {canCreate && (
-            <button
-              onClick={() => {
-                resetForm();
-                setShowForm(!showForm);
-                <Toast message={toastMsg} onClose={() => setToastMsg("")} />
-              }}
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg shadow transition-colors text-sm sm:text-base w-full sm:w-auto justify-center"
-            >
-              <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5" />
-              {showForm ? 'Cancel' : 'Add Vendor'}
-            </button>
+                  <button
+                    onClick={() => {
+                      resetForm();
+                      setShowForm(!showForm);
+                    }}
+                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg shadow transition-colors text-sm sm:text-base w-full sm:w-auto justify-center"
+                  >
+                    {/* Only show Plus icon when adding, not when cancelling */}
+                    {!showForm && <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5" />}
+                    {showForm ? 'Cancel' : 'Add Vendor'}
+                  </button>
           )}
         </div>
       </div>
@@ -358,7 +353,7 @@ const Vendors = ({ user, onLogout }) => {
       )}
 
       <div className="mb-6 grid grid-cols-1 lg:grid-cols-4 gap-4">
-        <div className="lg:col-span-3 relative">
+        <div className="lg:col-span-2 relative">
           <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
             type="text"
@@ -368,11 +363,25 @@ const Vendors = ({ user, onLogout }) => {
             className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
           />
         </div>
+        <div className="lg:col-span-1">
+          <select
+            value={addressFilter}
+            onChange={e => setAddressFilter(e.target.value)}
+            className="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base bg-white"
+          >
+            <option value="">All Addresses</option>
+            {addressOptions.map(addr => (
+              <option key={addr} value={addr}>{addr}</option>
+            ))}
+          </select>
+        </div>
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-3 sm:p-4 rounded-lg text-center text-white">
-          <div className="text-xl sm:text-2xl font-bold">{vendors.length}</div>
-          <div className="text-xs sm:text-sm opacity-90">Total Vendors</div>
+          <div className="text-xl sm:text-2xl font-bold">{filteredVendors.length}</div>
+          <div className="text-xs sm:text-sm opacity-90">Filtered Vendors</div>
         </div>
       </div>
+
+  {/* Removed sorting controls */}
 
       {error && (
         <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
@@ -390,98 +399,99 @@ const Vendors = ({ user, onLogout }) => {
       )}
 
       {showForm && canCreate && (
-        <div className="mb-8 bg-white p-4 sm:p-6 rounded-lg shadow-md border">
-          <h2 className="text-lg font-semibold mb-4 text-gray-800 flex items-center gap-2">
-            {editingVendor ? (
-              <>
-                <PencilIcon className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
-                Edit Vendor
-              </>
-            ) : (
-              <>
-                <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
-                Add New Vendor
-              </>
-            )}
-          </h2>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Vendor Name *
-              </label>
-              <input
-                type="text"
-                placeholder="Enter vendor name"
-                value={editingVendor ? (editingVendor.name || '') : (newVendor.name || '')}
-                onChange={(e) =>
-                  editingVendor
-                    ? setEditingVendor({ ...editingVendor, name: e.target.value })
-                    : setNewVendor({ ...newVendor, name: e.target.value })
-                }
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Contact Number
-              </label>
-              <input
-                type="tel"
-                placeholder="Enter phone number"
-                value={editingVendor ? (editingVendor.contact || '') : (newVendor.contact || '')}
-                onChange={(e) =>
-                  editingVendor
-                    ? setEditingVendor({ ...editingVendor, contact: e.target.value })
-                    : setNewVendor({ ...newVendor, contact: e.target.value })
-                }
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Address
-              </label>
-              <input
-                type="text"
-                placeholder="Enter address"
-                value={editingVendor ? (editingVendor.address || '') : (newVendor.address || '')}
-                onChange={(e) =>
-                  editingVendor
-                    ? setEditingVendor({ ...editingVendor, address: e.target.value })
-                    : setNewVendor({ ...newVendor, address: e.target.value })
-                }
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-          </div>
-          
-          <div className="flex gap-3 mt-6">
-            <button
-              onClick={editingVendor ? handleUpdateVendor : handleAddVendor}
-              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg font-medium transition-colors flex items-center gap-2"
-            >
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* Modal backdrop */}
+          <div className="absolute inset-0 bg-blue-300 bg-opacity-40" onClick={resetForm}></div>
+          {/* Modal form */}
+          <div className="relative bg-white p-4 sm:p-6 rounded-lg shadow-md border w-full max-w-2xl mx-auto" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+            <h2 className="text-lg font-semibold mb-4 text-gray-800 flex items-center gap-2">
               {editingVendor ? (
                 <>
-                  <PencilIcon className="h-4 w-4" />
-                  Update Vendor
+                  <PencilIcon className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+                  Edit Vendor
                 </>
               ) : (
                 <>
-                  <PlusIcon className="h-4 w-4" />
-                  Save Vendor
+                  <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
+                  Add New Vendor
                 </>
               )}
-            </button>
-            <button
-              onClick={resetForm}
-              className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-6 rounded-lg font-medium transition-colors"
-            >
-              Cancel
-            </button>
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Vendor Name *
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter vendor name"
+                  value={editingVendor ? (editingVendor.name || '') : (newVendor.name || '')}
+                  onChange={(e) =>
+                    editingVendor
+                      ? setEditingVendor({ ...editingVendor, name: e.target.value })
+                      : setNewVendor({ ...newVendor, name: e.target.value })
+                  }
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Contact Number
+                </label>
+                <input
+                  type="tel"
+                  placeholder="Enter phone number"
+                  value={editingVendor ? (editingVendor.contact || '') : (newVendor.contact || '')}
+                  onChange={(e) =>
+                    editingVendor
+                      ? setEditingVendor({ ...editingVendor, contact: e.target.value })
+                      : setNewVendor({ ...newVendor, contact: e.target.value })
+                  }
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Address
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter address"
+                  value={editingVendor ? (editingVendor.address || '') : (newVendor.address || '')}
+                  onChange={(e) =>
+                    editingVendor
+                      ? setEditingVendor({ ...editingVendor, address: e.target.value })
+                      : setNewVendor({ ...newVendor, address: e.target.value })
+                  }
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+            </div>
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={editingVendor ? handleUpdateVendor : handleAddVendor}
+                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg font-medium transition-colors flex items-center gap-2"
+              >
+                {editingVendor ? (
+                  <>
+                    <PencilIcon className="h-4 w-4" />
+                    Update Vendor
+                  </>
+                ) : (
+                  <>
+                    <PlusIcon className="h-4 w-4" />
+                    Save Vendor
+                  </>
+                )}
+              </button>
+              <button
+                onClick={resetForm}
+                className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-6 rounded-lg font-medium transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}

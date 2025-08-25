@@ -261,57 +261,31 @@ exports.getDoctorWiseSales = (req, res) => {
       userAgent: req.get('User-Agent')
     }, 'Doctor-wise sales report requested');
 
-    // Check if bills table exists, fallback to event log
-    const billsTableExists = db.get("SELECT name FROM sqlite_master WHERE type='table' AND name='bills'");
-    
-    let rows = [];
-    
-    if (billsTableExists) {
-      // Use bills table if available
-      rows = db.all(`
-        SELECT 
-          COALESCE(d.name, 'Walk-in Customer') as doctor_name,
-          COUNT(b.uuid) as prescriptions,
-          COALESCE(SUM(b.total_amount), 0) as total_value
-        FROM bills b
-        LEFT JOIN doctors d ON b.doctor_id = d.uuid
-        GROUP BY d.uuid, d.name
-        ORDER BY total_value DESC
-      `);
-    } else {
-      // Fallback to event log
-      const billEvents = db.all(`
-        SELECT * FROM events 
-        WHERE type = 'BILL_CREATED' 
-        ORDER BY timestamp DESC
-      `);
-      
-      const doctorData = {};
-      
-      billEvents.forEach(event => {
-        try {
-          const billData = JSON.parse(event.payload);
-          const doctorKey = billData.doctorName || 'Walk-in Customer';
-          
-          if (!doctorData[doctorKey]) {
-            doctorData[doctorKey] = {
-              doctor_name: doctorKey,
-              prescriptions: 0,
-              total_value: 0
-            };
-          }
-          
-          doctorData[doctorKey].prescriptions += 1;
-          doctorData[doctorKey].total_value += billData.totalAmount || 0;
-        } catch (parseErr) {
-          console.warn("Could not parse doctor bill event:", parseErr.message);
+    // Always use event log for doctor-wise sales
+    const billEvents = db.all(`
+      SELECT * FROM events 
+      WHERE type = 'BILL_CREATED' 
+      ORDER BY timestamp DESC
+    `);
+    const doctorData = {};
+    billEvents.forEach(event => {
+      try {
+        const billData = JSON.parse(event.payload);
+        const doctorKey = billData.doctorName || 'Walk-in Customer';
+        if (!doctorData[doctorKey]) {
+          doctorData[doctorKey] = {
+            doctor_name: doctorKey,
+            prescriptions: 0,
+            total_value: 0
+          };
         }
-      });
-      
-      rows = Object.values(doctorData).sort((a, b) => 
-        b.total_value - a.total_value
-      );
-    }
+        doctorData[doctorKey].prescriptions += 1;
+        doctorData[doctorKey].total_value += billData.totalAmount || 0;
+      } catch (parseErr) {
+        console.warn("Could not parse doctor bill event:", parseErr.message);
+      }
+    });
+    const rows = Object.values(doctorData).sort((a, b) => b.total_value - a.total_value);
     
     // Log successful report generation
     logEvent(Events.REPORT_GENERATED, {

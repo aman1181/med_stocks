@@ -6,7 +6,7 @@ function Toast({ message, onClose }) {
     if (!message) return;
     const timer = setTimeout(() => {
       onClose();
-    }, 3000);
+    }, 4000);
     return () => clearTimeout(timer);
   }, [message, onClose]);
   if (!message) return null;
@@ -222,8 +222,8 @@ const UserManagement = ({ onLogout }) => {
 
   setShowAddUserModal(false);
   setNewUser({ username: '', password: '', role: 'pharmacist' });
-  setToastMsg('User added successfully!');
-  await fetchUsers();
+    setToastMsg('User added successfully!');
+    setTimeout(() => fetchUsers(), 4000);
 
     } catch (err) {
       console.error('❌ Error in handleAddUser:', err);
@@ -284,8 +284,8 @@ const UserManagement = ({ onLogout }) => {
       console.log('✅ User updated successfully:', responseData);
   setShowEditUserModal(false);
   setEditingUser(null);
-  setToastMsg('User updated successfully!');
-  await fetchUsers();
+    setToastMsg('User updated successfully!');
+    setTimeout(() => fetchUsers(), 4000);
 
     } catch (err) {
       console.error('❌ Error updating user:', err);
@@ -318,8 +318,8 @@ const UserManagement = ({ onLogout }) => {
       });
 
       console.log('✅ User deleted successfully:', responseData);
-  setToastMsg('User deleted successfully!');
-  await fetchUsers();
+    setToastMsg('User deleted successfully!');
+    setTimeout(() => fetchUsers(), 4000);
 
     } catch (err) {
       console.error('❌ Error deleting user:', err);

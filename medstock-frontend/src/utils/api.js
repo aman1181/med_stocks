@@ -63,8 +63,10 @@ export const apiCall = async (endpoint, options = {}) => {
   // Debug the inputs
   console.log('🔍 apiCall inputs:', { endpoint, API });
 
-  // Ensure endpoint starts with / but doesn't duplicate it
-  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  // Ensure endpoint starts with / but doesn't duplicate or double it
+  let cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  // Remove any accidental double slashes
+  cleanEndpoint = cleanEndpoint.replace(/\/\/+/, '/');
   const url = `${API}${cleanEndpoint}`;
 
   // Debug the final URL

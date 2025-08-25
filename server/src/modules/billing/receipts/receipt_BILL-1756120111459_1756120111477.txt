@@ -1,0 +1,17 @@
+              🏥 MEDSTOCKS PHARMACY
+         ================================
+           Bill No: BILL-1756120111459
+           Date: 25/8/2025, 4:38:31 pm
+                 Customer: nayak
+                 Phone: 887799554
+==================================================
+Item                      Qty     Price     Total
+--------------------------------------------------
+Paracetamol 500 mg          1     15.00     15.00
+--------------------------------------------------
+                                  Subtotal: ₹15.00
+                               Grand Total: ₹15.00
+                                     Payment: CASH
+
+           Thank you for your business!
+                 Visit again! 🙏

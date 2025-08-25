@@ -1,25 +1,6 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-
-// Toast component for success popups
-
-function Toast({ message, onClose }) {
-  useEffect(() => {
-    if (!message) return;
-    const timer = setTimeout(() => {
-      onClose();
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, [message, onClose]);
-  if (!message) return null;
-  return (
-    <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-slide-in">
-      <span className="font-semibold">Success:</span>
-      <span>{message}</span>
-      <button onClick={onClose} className="ml-2 text-white hover:text-gray-200 font-bold">×</button>
-    </div>
-  );
-}
+import { Toast, useToast } from '../components/ToastContext.jsx';
 import { PlusIcon, PrinterIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
 import { API, apiCall } from '../utils/api';
@@ -71,11 +52,15 @@ const useAuth = () => {
 };
 
 const Billing = ({ user, onLogout }) => {
-  // Toast state
-  const [toastMsg, setToastMsg] = useState("");
+  const { showToast } = useToast();
   const { isAudit, canCreate, currentUserRole } = useAuth();
 
   const [bills, setBills] = useState([]);
+  // Filter and sort controls
+  const [paymentFilter, setPaymentFilter] = useState("");
+  const [vendorFilter, setVendorFilter] = useState("");
+  const [sortField, setSortField] = useState("created_at");
+    // Remove sortOrder, always descending
   const [inventory, setInventory] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [vendors, setVendors] = useState([]);
@@ -364,6 +349,11 @@ const Billing = ({ user, onLogout }) => {
       return;
     }
 
+    if (!currentBill.doctor_id) {
+      setError("Doctor selection is required");
+      return;
+    }
+
     if (currentBill.items.length === 0) {
       setError("Please add at least one item to the bill");
       return;
@@ -402,8 +392,7 @@ const Billing = ({ user, onLogout }) => {
 
       const result = await res.json();
       if (result.success) {
-        alert(`Bill generated successfully! Total Amount: Rs ${totals.total}`);
-  setToastMsg('Bill generated successfully!'); // Show toast message
+        showToast(`Bill generated successfully! Total Amount: Rs ${totals.total}`);
         resetForm();
         setShowForm(false);
         fetchBills();
@@ -676,15 +665,60 @@ const Billing = ({ user, onLogout }) => {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading billing data...</p>
         </div>
-        <Toast message={toastMsg} onClose={() => setToastMsg("")} />
+        <Toast />
       </div>
     );
   }
+
+  // Get unique payment methods and vendors for dropdowns
+  const paymentOptions = Array.from(new Set(bills.map(b => b.payment_method || "cash")));
+  const vendorOptions = Array.from(new Set(
+    bills.flatMap(b => {
+      try {
+        const items = typeof b.items === 'string' ? JSON.parse(b.items || '[]') : b.items || [];
+        return items.map(i => i.vendor_name).filter(Boolean);
+      } catch { return []; }
+    })
+  ));
+
+  // Filter bills by payment and vendor
+  let filteredBills = bills.filter(bill => {
+    const matchesPayment = paymentFilter ? (bill.payment_method || "cash") === paymentFilter : true;
+    let matchesVendor = true;
+    if (vendorFilter) {
+      try {
+        const items = typeof bill.items === 'string' ? JSON.parse(bill.items || '[]') : bill.items || [];
+        matchesVendor = items.some(i => i.vendor_name === vendorFilter);
+      } catch { matchesVendor = false; }
+    }
+    return matchesPayment && matchesVendor;
+  });
+
+  // Sort bills
+  filteredBills = filteredBills.sort((a, b) => {
+    let valA = a[sortField] || "";
+    let valB = b[sortField] || "";
+    if (sortField === "total") {
+      valA = parseFloat(valA) || 0;
+      valB = parseFloat(valB) || 0;
+    } else if (sortField === "created_at") {
+      valA = new Date(valA).getTime();
+      valB = new Date(valB).getTime();
+    } else if (typeof valA === "string" && typeof valB === "string") {
+      valA = valA.toLowerCase();
+      valB = valB.toLowerCase();
+    }
+    // Always descending
+    if (valA < valB) return 1;
+    if (valA > valB) return -1;
+    return 0;
+  });
 
   const totals = calculateTotals();
 
   return (
     <div className="p-4 sm:p-6">
+      <Toast />
       <div className="mb-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
@@ -702,7 +736,7 @@ const Billing = ({ user, onLogout }) => {
               }}
               className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg shadow transition-colors text-sm sm:text-base w-full sm:w-auto justify-center"
             >
-              <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+              {!showForm && <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5" />}
               {showForm ? 'Cancel' : 'New Bill'}
             </button>
           )}
@@ -789,13 +823,14 @@ const Billing = ({ user, onLogout }) => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Doctor (Optional)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Doctor *</label>
               <select
                 value={currentBill.doctor_id}
                 onChange={(e) => setCurrentBill(prev => ({ ...prev, doctor_id: e.target.value }))}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                required
               >
-                <option value="">Walk-in Customer</option>
+                <option value="">Select Doctor</option>
                 {doctors.map(doctor => (
                   <option key={doctor.uuid} value={doctor.uuid}>
                     {doctor.name} - {doctor.specialization}
@@ -984,7 +1019,42 @@ const Billing = ({ user, onLogout }) => {
 
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="p-4 bg-gray-50 border-b">
-          <h2 className="text-lg font-semibold text-gray-800">Bills History</h2>
+          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+            <h2 className="text-lg font-semibold text-gray-800">Bills History</h2>
+            <div className="flex gap-2 items-center">
+              <select
+                value={paymentFilter}
+                onChange={e => setPaymentFilter(e.target.value)}
+                className="py-2 px-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white"
+              >
+                <option value="">All Payments</option>
+                {paymentOptions.map(opt => (
+                  <option key={opt} value={opt}>{opt.toUpperCase()}</option>
+                ))}
+              </select>
+              <select
+                value={vendorFilter}
+                onChange={e => setVendorFilter(e.target.value)}
+                className="py-2 px-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white"
+              >
+                <option value="">All Vendors</option>
+                {vendorOptions.map(opt => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
+              <span className="text-gray-700 font-medium ml-2">Sort by:</span>
+              <select
+                value={sortField}
+                onChange={e => setSortField(e.target.value)}
+                className="py-2 px-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white"
+              >
+                <option value="created_at">Date</option>
+                <option value="total">Total</option>
+                <option value="payment_method">Payment</option>
+                <option value="vendor">Vendor</option>
+              </select>
+            </div>
+          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -1002,8 +1072,8 @@ const Billing = ({ user, onLogout }) => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {bills.length > 0 ? (
-                bills.map((bill, index) => {
+              {filteredBills.length > 0 ? (
+                filteredBills.map((bill, index) => {
                   const items = typeof bill.items === 'string' ? JSON.parse(bill.items || '[]') : [];
                   const vendorsInBill = getVendorsFromBill(bill.items);
                   const doctorName = getDoctorName(bill.doctor_id);
