@@ -4023,3 +4023,19 @@
 2025-08-28T11:16:30.572Z - REPORT_GENERATED - Vendor-wise sales report generated: 3 vendors - {"type":"vendor_wise_sales","vendorCount":3,"status":"success"}
 2025-08-28T11:16:30.621Z - REPORT_GENERATED - Stock report generated: 4 products - {"type":"stock_report","productCount":4,"stockStats":{"Out of Stock":1,"Low Stock":1,"In Stock":2},"status":"success"}
 2025-08-28T11:16:30.664Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-28T11:28:51.641Z - REPORT_GENERATED - Daily sales report generated: 22 transactions, ₹13710 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":22,"revenue":13710,"sales":172,"status":"success"}
+2025-08-28T11:28:51.690Z - REPORT_GENERATED - Weekly sales report generated: 1 weeks - {"type":"weekly_sales","weekCount":1,"status":"success"}
+2025-08-28T11:28:51.733Z - REPORT_GENERATED - Monthly sales report generated: 1 months - {"type":"monthly_sales","monthCount":1,"status":"success"}
+2025-08-28T11:28:51.792Z - REPORT_GENERATED - Doctor-wise sales report generated: 3 doctors - {"type":"doctor_wise_sales","doctorCount":3,"status":"success"}
+2025-08-28T11:28:51.823Z - REPORT_GENERATED - Vendor-wise sales report generated: 3 vendors - {"type":"vendor_wise_sales","vendorCount":3,"status":"success"}
+2025-08-28T11:28:51.850Z - REPORT_GENERATED - Stock report generated: 4 products - {"type":"stock_report","productCount":4,"stockStats":{"Out of Stock":1,"Low Stock":1,"In Stock":2},"status":"success"}
+2025-08-28T11:28:51.887Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-28T11:28:59.671Z - REPORT_GENERATED - Daily sales report generated: 22 transactions, ₹13710 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":22,"revenue":13710,"sales":172,"status":"success"}
+2025-08-28T11:29:30.324Z - REPORT_GENERATED - Daily sales report generated: 22 transactions, ₹13710 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":22,"revenue":13710,"sales":172,"status":"success"}
+2025-08-28T11:30:00.327Z - REPORT_GENERATED - Daily sales report generated: 22 transactions, ₹13710 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":22,"revenue":13710,"sales":172,"status":"success"}
+2025-08-28T11:30:30.311Z - REPORT_GENERATED - Daily sales report generated: 22 transactions, ₹13710 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":22,"revenue":13710,"sales":172,"status":"success"}
+2025-08-28T11:31:00.319Z - REPORT_GENERATED - Daily sales report generated: 22 transactions, ₹13710 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":22,"revenue":13710,"sales":172,"status":"success"}
+2025-08-28T11:31:30.321Z - REPORT_GENERATED - Daily sales report generated: 22 transactions, ₹13710 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":22,"revenue":13710,"sales":172,"status":"success"}
+2025-08-28T11:32:00.316Z - REPORT_GENERATED - Daily sales report generated: 22 transactions, ₹13710 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":22,"revenue":13710,"sales":172,"status":"success"}
+2025-08-28T11:32:11.242Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-28T11:32:11.343Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}

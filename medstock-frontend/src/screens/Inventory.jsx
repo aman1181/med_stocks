@@ -355,58 +355,33 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
   };
 
   const handleSell = async (batchId) => {
-    try {
-      const batchItem = inventory.find(item => item.batch_id === batchId);
-      if (!batchItem) {
-  showToast('Product not found');
-        return;
-      }
-
-      if (batchItem.qty <= 0) {
-  showToast('This product is out of stock');
-        return;
-      }
-
-      const maxQty = batchItem.qty;
-      const quantity = parseInt(prompt(`Enter quantity to sell (Max: ${maxQty}):`), 10);
-
-      if (!quantity || quantity <= 0) {
-  showToast("Invalid quantity");
-        return;
-      }
-
-      if (quantity > maxQty) {
-  showToast(`Cannot sell ${quantity} items. Only ${maxQty} available.`);
-        return;
-      }
-
-      setError('');
-      const data = await apiCall(`/api/inventory/sell/${batchId}`, {
-        method: "POST",
-        headers: getAuthHeaders(),
-        body: JSON.stringify({ quantity }),
-      });
-      
-      if (data && data.success) {
-  const saleValue = (quantity * (batchItem?.price || 0)).toFixed(2);
-  showToast(`${quantity} ${batchItem.unit || 'units'} of ${batchItem.product_name} sold successfully! Sale Value: Rs ${saleValue}`);
-  setTimeout(() => fetchInventory(), 4000);
-        
-        const confirmBill = window.confirm("Do you want to go to billing section for this sale?");
-        if (confirmBill) {
-          handleNavigation('billing');
+    // Find the product and batch by batchId
+    let foundProduct = null;
+    let foundBatch = null;
+    for (const item of inventory) {
+      if (Array.isArray(item.batches)) {
+        const batch = item.batches.find(b => b.batch_id === batchId);
+        if (batch) {
+          foundProduct = item;
+          foundBatch = batch;
+          break;
         }
-      } else {
-        setError(data?.error || 'Failed to sell product');
+      } else if (item.batch_id === batchId) {
+        foundProduct = item;
+        foundBatch = item;
+        break;
       }
-    } catch (err) {
-      console.error('Sell product error:', err);
-      if (err.message.includes('401')) {
-        onLogout && onLogout();
-        return;
-      }
-      setError(`Failed to sell product: ${err.message}`);
     }
+    if (!foundProduct || !foundBatch) {
+      showToast('Product not found');
+      return;
+    }
+    if (foundBatch.qty <= 0) {
+      showToast('This product is out of stock');
+      return;
+    }
+    // Pass product and batch info via navigation state
+    navigate('/billing/new', { state: { product: foundProduct, batch: foundBatch } });
   };
 
   if (loading) {

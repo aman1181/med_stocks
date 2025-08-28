@@ -431,14 +431,6 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
       <div className="bg-white shadow-sm border-b">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 gap-4">
           <div className="flex items-center gap-2 sm:gap-4">
-            <button
-              onClick={() => handleNavigation('dashboard')}
-              className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors text-sm sm:text-base"
-            >
-              <HomeIcon className="h-4 w-4 sm:h-5 sm:w-5" />
-              Dashboard
-            </button>
-            <span className="text-gray-400">/</span>
             <h1 className="text-lg sm:text-xl font-bold text-blue-700">
               Reports & Analytics
               {isAudit && <span className="text-blue-600 text-sm font-normal block sm:inline"> • Audit Access</span>}
