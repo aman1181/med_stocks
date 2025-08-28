@@ -24,6 +24,7 @@ const CreateBill = () => {
   const [showProductDropdown, setShowProductDropdown] = useState(false);
   const [filteredInventory, setFilteredInventory] = useState([]);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // Fetch doctors
   useEffect(() => {
@@ -196,6 +197,7 @@ const CreateBill = () => {
 
   // Generate bill
   const generateBill = async () => {
+    if (loading) return;
     if (!currentBill.customer_name.trim()) {
       setError("Customer name is required");
       return;
@@ -208,6 +210,7 @@ const CreateBill = () => {
       setError("Please add at least one item to the bill");
       return;
     }
+    setLoading(true);
     try {
       setError('');
       const totals = calculateTotals();
@@ -258,6 +261,8 @@ const CreateBill = () => {
       }
     } catch (err) {
       setError("Failed to generate bill. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 

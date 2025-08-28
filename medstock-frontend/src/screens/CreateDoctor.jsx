@@ -39,6 +39,7 @@ const CreateDoctor = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
     let errors = {};
     if (!name.trim()) {
       errors.name = 'Doctor name is required';
@@ -55,6 +56,7 @@ const CreateDoctor = () => {
       setError('Please fix the errors in the form');
       return;
     }
+    setLoading(true);
     try {
       setError('');
       await apiCall('/api/doctors', {
@@ -66,6 +68,8 @@ const CreateDoctor = () => {
       navigate('/doctors');
     } catch (err) {
       setError('Error adding doctor. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
