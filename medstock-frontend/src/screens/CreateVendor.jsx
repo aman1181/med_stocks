@@ -12,6 +12,7 @@ export default function CreateVendor({ user, onLogout }) {
   const navigate = useNavigate();
   const { showToast } = useToast();
 
+  const [fieldErrors, setFieldErrors] = useState({});
   function validateFields() {
     const errors = {};
     if (!name.trim()) {
@@ -39,7 +40,6 @@ export default function CreateVendor({ user, onLogout }) {
       setError('Please fix the errors in the form');
       return;
     }
-  const [fieldErrors, setFieldErrors] = useState({});
     setLoading(true);
     try {
       const res = await apiCall('/api/vendors', {
