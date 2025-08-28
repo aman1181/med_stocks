@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Toast, useToast } from '../components/ToastContext.jsx';
 import { PlusIcon, MagnifyingGlassIcon, PencilIcon, TrashIcon, PhoneIcon, MapPinIcon } from '@heroicons/react/24/solid';
 import { API, apiCall } from '../utils/api';
@@ -56,6 +57,7 @@ const formatDate = (dateString) => {
 };
 
 const Vendors = ({ user, onLogout }) => {
+  const navigate = useNavigate();
   // Toast context
   const { isAudit, canCreate, canUpdate, canDelete } = useAuth();
   
@@ -119,22 +121,11 @@ const Vendors = ({ user, onLogout }) => {
       }
       
       console.log('📡 Making API call to /api/vendors...');
-      const res = await apiCall('/api/vendors', {
+      const data = await apiCall('/api/vendors', {
         headers: getAuthHeaders()
       });
-
-      console.log('📄 Response status:', res.status);
-      if (!res.ok) {
-        if (res.status === 401) {
-          onLogout();
-          return;
-        }
-        throw new Error(`Server error: ${res.status}`);
-      }
-
-      const data = await res.json();
       console.log('📦 Received data:', data);
-      
+
       let vendorsList = [];
       if (Array.isArray(data)) {
         vendorsList = data;
@@ -143,11 +134,20 @@ const Vendors = ({ user, onLogout }) => {
       } else if (data.vendors && Array.isArray(data.vendors)) {
         vendorsList = data.vendors;
       }
-      
-      const validVendors = vendorsList.filter(v => v.uuid && v.name);
+
+      // Map backend fields to frontend expected fields
+      const mappedVendors = vendorsList.map(v => ({
+        ...v,
+        contact: v.contact || v.phone || v.contact_person || "",
+        address: v.address || "",
+        created_at: v.createdAt || v.created_at,
+        updated_at: v.updatedAt || v.updated_at
+      }));
+
+      const validVendors = mappedVendors.filter(v => (v.uuid || v._id || v.id) && v.name);
       console.log('✅ Valid vendors found:', validVendors.length);
       setVendors(validVendors);
-      
+
     } catch (err) {
       console.error('❌ Error in fetchVendors:', err);
       setError("Failed to fetch vendors. Please check server connection.");
@@ -183,7 +183,7 @@ const Vendors = ({ user, onLogout }) => {
         headers: getAuthHeaders(),
         body: JSON.stringify({
           name: newVendor.name.trim(),
-          contact: newVendor.contact.trim(),
+          phone: newVendor.contact.trim(),
           address: newVendor.address.trim()
         }),
       });
@@ -198,9 +198,21 @@ const Vendors = ({ user, onLogout }) => {
 
       const result = await res.json();
       if (result.success) {
-  showToast('Vendor added successfully!');
-  resetForm();
-  setTimeout(() => fetchVendors(), 4000);
+        showToast('Vendor added successfully!');
+        setVendors(prev => [
+          {
+            ...newVendor,
+            contact: newVendor.contact,
+            address: newVendor.address,
+            phone: newVendor.contact,
+            name: newVendor.name,
+            uuid: result.id || undefined,
+            _id: result.vendor?._id || undefined
+          },
+          ...prev
+        ]);
+        resetForm();
+        setShowForm(false);
       } else {
         setError(result.error || "Failed to add vendor");
       }
@@ -217,12 +229,12 @@ const Vendors = ({ user, onLogout }) => {
 
     try {
       setError("");
-      const res = await apiCall(`/api/vendors/${editingVendor.uuid}`, {
+      const res = await apiCall(`/api/vendors/${editingVendor.uuid || editingVendor._id || editingVendor.id}`, {
         method: "PUT",
         headers: getAuthHeaders(),
         body: JSON.stringify({
           name: editingVendor.name.trim(),
-          contact: editingVendor.contact.trim(),
+          phone: editingVendor.contact.trim(),
           address: editingVendor.address.trim()
         }),
       });
@@ -258,20 +270,12 @@ const Vendors = ({ user, onLogout }) => {
         headers: getAuthHeaders()
       });
 
-      if (!res.ok) {
-        if (res.status === 401) {
-          onLogout();
-          return;
-        }
-        throw new Error(`Server error: ${res.status}`);
-      }
-
-      const result = await res.json();
-      if (result.success) {
-  showToast("Vendor deleted successfully!");
-  setTimeout(() => fetchVendors(), 4000);
+      if (res && res.success) {
+        showToast("Vendor deleted successfully!");
+        resetForm();
+        setTimeout(() => fetchVendors(), 4000);
       } else {
-        setError(result.error || "Failed to delete vendor");
+        setError(res?.error || "Failed to delete vendor");
       }
     } catch (err) {
       setError("Failed to delete vendor. Please try again.");
@@ -323,17 +327,13 @@ const Vendors = ({ user, onLogout }) => {
             </p>
           </div>
           {canCreate && (
-                  <button
-                    onClick={() => {
-                      resetForm();
-                      setShowForm(!showForm);
-                    }}
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg shadow transition-colors text-sm sm:text-base w-full sm:w-auto justify-center"
-                  >
-                    {/* Only show Plus icon when adding, not when cancelling */}
-                    {!showForm && <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5" />}
-                    {showForm ? 'Cancel' : 'Add Vendor'}
-                  </button>
+            <button
+              onClick={() => navigate('/vendors/create')}
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg shadow transition-colors text-sm sm:text-base w-full sm:w-auto justify-center"
+            >
+              <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+              Add Vendor
+            </button>
           )}
         </div>
       </div>
@@ -353,14 +353,17 @@ const Vendors = ({ user, onLogout }) => {
       )}
 
       <div className="mb-6 grid grid-cols-1 lg:grid-cols-4 gap-4">
-        <div className="lg:col-span-2 relative">
-          <MagnifyingGlassIcon className="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        <div className="lg:col-span-2 relative flex items-center">
+          <span className="absolute left-3 flex items-center h-full pointer-events-none">
+            <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" style={{ marginTop: '2px' }} />
+          </span>
           <input
             type="text"
             placeholder="Search vendors by name, contact, or address..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+            style={{ boxSizing: 'border-box' }}
           />
         </div>
         <div className="lg:col-span-1">
@@ -376,8 +379,14 @@ const Vendors = ({ user, onLogout }) => {
           </select>
         </div>
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-3 sm:p-4 rounded-lg text-center text-white">
-          <div className="text-xl sm:text-2xl font-bold">{filteredVendors.length}</div>
-          <div className="text-xs sm:text-sm opacity-90">Filtered Vendors</div>
+          <div className="text-xl sm:text-2xl font-bold">
+            {(search || addressFilter) ? filteredVendors.length : vendors.length}
+          </div>
+          <div className="text-xs sm:text-sm opacity-90">
+            {(search || addressFilter)
+              ? `Filtered Vendors`
+              : `Total Vendors`}
+          </div>
         </div>
       </div>
 
@@ -500,7 +509,7 @@ const Vendors = ({ user, onLogout }) => {
         {filteredVendors.length > 0 ? (
           filteredVendors.map((vendor, index) => (
             <div
-              key={vendor.uuid || `vendor-${index}`}
+              key={vendor.vendor_id || `vendor-${index}`}
               className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-all duration-200 hover:scale-105"
             >
               <div className="flex justify-between items-start mb-4">
@@ -509,13 +518,15 @@ const Vendors = ({ user, onLogout }) => {
                     {vendor.name}
                   </h2>
                   <div className="text-xs text-gray-500">
-                    ID: {vendor.uuid?.substring(0, 8)}...
+                    {(vendor.uuid || vendor._id || vendor.id) ? (
+                      <>ID: {(vendor.uuid || vendor._id || vendor.id).substring(0, 8)}...</>
+                    ) : null}
                   </div>
                 </div>
                 <div className="flex gap-2">
                   {canUpdate && (
                     <button
-                      onClick={() => startEdit(vendor)}
+                      onClick={() => navigate(`/vendors/update/${vendor.vendor_id}`)}
                       className="p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
                       title="Edit vendor"
                     >
@@ -524,7 +535,7 @@ const Vendors = ({ user, onLogout }) => {
                   )}
                   {canDelete && (
                     <button
-                      onClick={() => handleDeleteVendor(vendor.uuid, vendor.name)}
+                      onClick={() => handleDeleteVendor(vendor.uuid || vendor._id || vendor.id, vendor.name)}
                       className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
                       title="Delete vendor"
                     >
@@ -538,7 +549,7 @@ const Vendors = ({ user, onLogout }) => {
                 <div className="flex items-center gap-2">
                   <PhoneIcon className="h-4 w-4 text-green-600 flex-shrink-0" />
                   <span className="font-medium text-gray-700">Contact:</span>
-                  <span className="text-gray-600">{vendor.contact || "N/A"}</span>
+                  <span className="text-gray-600">{vendor.contact || vendor.phone || vendor.contact_person || "N/A"}</span>
                 </div>
                 
                 <div className="flex items-start gap-2">

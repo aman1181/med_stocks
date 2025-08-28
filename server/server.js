@@ -4,27 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const dbService = require("./src/modules/services/dbServices");
-
-// init DB and admin
-dbService.initDB();
-try {
-  const existingAdmin = dbService.get("SELECT * FROM users WHERE username = ?", ["admin"]);
-  if (!existingAdmin) {
-    const { v4: uuidv4 } = require("uuid");
-    const bcrypt = require('bcryptjs');
-    const ts = new Date().toISOString();
-    const hashedPassword = bcrypt.hashSync("admin123", 10);
-    
-    dbService.run(
-      `INSERT INTO users (uuid, username, password, role, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [uuidv4(), "admin", hashedPassword, "admin", ts, ts]
-    );
-    console.log("✅ Created default admin: admin / admin123");
-  }
-} catch (err) {
-  console.log("❌ Auth setup failed:", err.message);
-}
+// Mongoose connection is handled in dbServices.js
 
 const app = express();
 

@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { logEvent, Events } = require('../services/eventServices');
-const db = require('../services/dbServices');
+
+const User = require('../auth/userModel');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'medstock-secret-key-2024';
 
@@ -74,22 +75,30 @@ const authenticateToken = (req, res, next) => {
     const decoded = jwt.verify(token, JWT_SECRET);
     console.log('🔑 Decoded JWT payload:', decoded);
     const userId = decoded.id || decoded.uuid;
-    const user = db.get('SELECT uuid, username, role FROM users WHERE uuid = ?', [userId]);
-    console.log('👤 User lookup result:', user);
-    if (!user) {
-      console.error('❌ User not found for token:', userId);
-      return res.status(401).json({
-        error: 'User not found',
+    User.findById(userId).select('username role').then(user => {
+      console.log('👤 User lookup result:', user);
+      if (!user) {
+        console.error('❌ User not found for token:', userId);
+        return res.status(401).json({
+          error: 'User not found',
+          success: false,
+          code: 'USER_NOT_FOUND'
+        });
+      }
+      req.user = {
+        id: user._id.toString(),
+        username: user.username,
+        role: user.role
+      };
+      next();
+    }).catch(err => {
+      console.error('❌ Error during user lookup:', err.message);
+      return res.status(500).json({
+        error: 'User lookup failed',
         success: false,
-        code: 'USER_NOT_FOUND'
+        code: 'USER_LOOKUP_ERROR'
       });
-    }
-    req.user = {
-      id: user.uuid,
-      username: user.username,
-      role: user.role
-    };
-    next();
+    });
   } catch (err) {
     if (err.name === 'TokenExpiredError') {
       console.error('❌ Token expired');
@@ -108,8 +117,6 @@ const authenticateToken = (req, res, next) => {
   }
 };
 
-// ✅ REMOVE DUPLICATE: Keep only ONE audit check function
-// Remove the duplicate `blockAuditWrites` and keep this one:
 const authorizeWithAuditCheck = (req, res, next) => {
   const userRole = req.user?.role;
   
@@ -280,8 +287,6 @@ module.exports = {
   authenticateToken,
   authorize,
   authorizeWithAuditCheck,       
-  // REMOVED: blockAuditWrites (duplicate of authorizeWithAuditCheck)
-  // REMOVED: optionalAuth (not used)
   hasPermission,
   getUserPermissions,
   isAdmin,

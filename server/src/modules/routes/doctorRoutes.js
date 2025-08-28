@@ -11,6 +11,7 @@ const {
 
 //  UPDATED: Doctor CRUD with audit restrictions
 router.get("/", authenticateToken, doctorController.getDoctors);
+router.get("/:id", authenticateToken, doctorController.getDoctorById);
 router.post("/", authenticateToken, authorizeWithAuditCheck, doctorController.addDoctor);
 router.put("/:id", authenticateToken, authorizeWithAuditCheck, doctorController.updateDoctor);
 router.delete("/:id", authenticateToken, authorizeWithAuditCheck, doctorController.deleteDoctor);

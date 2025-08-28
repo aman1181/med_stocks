@@ -11,6 +11,7 @@ const {
 
 //  Vendor CRUD Routes with audit restrictions
 router.get("/", authenticateToken, vendorController.getVendors);
+router.get("/:id", authenticateToken, vendorController.getVendorById);
 router.post("/", authenticateToken, authorizeWithAuditCheck, vendorController.addVendor);
 router.put("/:id", authenticateToken, authorizeWithAuditCheck, vendorController.updateVendor);
 router.delete("/:id", authenticateToken, authorizeWithAuditCheck, vendorController.deleteVendor);

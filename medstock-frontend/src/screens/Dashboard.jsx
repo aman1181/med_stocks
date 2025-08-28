@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { API, apiCall, apiCallJSON } from '../utils/api';
+import { API, apiCall } from '../utils/api';
 import { 
   ChartBarIcon, 
   CubeIcon, 
@@ -128,20 +128,30 @@ const Dashboard = ({ user, onLogout }) => {
       const inventoryResponse = await apiCall('/api/inventory', { 
         headers: getAuthHeaders() 
       });
-      
       let inventory = [];
-      if (inventoryResponse.ok) {
-        inventory = await inventoryResponse.json();
-        if (!Array.isArray(inventory)) {
-          inventory = [];
-        }
-      } else if (inventoryResponse.status === 401) {
+      if (Array.isArray(inventoryResponse)) {
+        inventory = inventoryResponse;
+      } else if (inventoryResponse && Array.isArray(inventoryResponse.inventory)) {
+        inventory = inventoryResponse.inventory;
+      } else if (inventoryResponse && Array.isArray(inventoryResponse.items)) {
+        inventory = inventoryResponse.items;
+      } else if (inventoryResponse && inventoryResponse.status === 401) {
         onLogout && onLogout();
         return;
       }
 
-      const totalStock = inventory.reduce((sum, item) => sum + (parseInt(item.qty) || 0), 0);
-      const lowStockItems = inventory.filter(item => (parseInt(item.qty) || 0) <= 10).length;
+      // Sum all batch quantities for total stock
+      let totalStock = 0;
+      let lowStockItems = 0;
+      inventory.forEach(item => {
+        if (Array.isArray(item.batches)) {
+          item.batches.forEach(batch => {
+            const qty = parseInt(batch.qty) || 0;
+            totalStock += qty;
+            if (qty <= 10) lowStockItems++;
+          });
+        }
+      });
 
       let salesCount = 0;
       let revenue = 0;
@@ -150,35 +160,37 @@ const Dashboard = ({ user, onLogout }) => {
       if (canViewFinancials) {
         try {
           // Try daily sales endpoint first
-          const dailySalesResponse = await apiCall('/api/reports/sales/daily', { 
-            headers: getAuthHeaders() 
-          });
-          
-          if (dailySalesResponse.ok) {
-            const dailyData = await dailySalesResponse.json();
-            salesCount = dailyData.sales || dailyData.transactions || 0;
-            revenue = dailyData.revenue || 0;
+          const dailySalesResponse = await apiCall('/api/reports/sales/daily', { headers: getAuthHeaders() });
+          console.log('[Dashboard] Daily Sales API response:', dailySalesResponse);
+          const todayStr = new Date().toISOString().split('T')[0];
+          if (dailySalesResponse && dailySalesResponse.date === todayStr) {
+            salesCount = dailySalesResponse.transactions || 0;
+            revenue = dailySalesResponse.revenue || 0;
+            console.log('[Dashboard] Using daily sales API for stats:', { salesCount, revenue });
           } else {
-            // Fallback to billing endpoint
-            const billsResponse = await apiCall('/api/billing', { 
-              headers: getAuthHeaders() 
-            });
-            
-            if (billsResponse.ok) {
-              const billsData = await billsResponse.json();
-              const bills = Array.isArray(billsData) ? billsData : (billsData.bills || []);
-              
-              const today = new Date().toDateString();
-              const todaysBills = bills.filter(bill => 
-                new Date(bill.created_at).toDateString() === today
-              );
-              
+            // Fallback to daily-from-logs endpoint
+            const logsResponse = await apiCall('/api/reports/sales/daily-from-logs', { headers: getAuthHeaders() });
+            console.log('[Dashboard] Daily Sales from Logs API response:', logsResponse);
+            if (logsResponse && logsResponse.date === todayStr) {
+              salesCount = logsResponse.transactions || 0;
+              revenue = logsResponse.revenue || 0;
+              console.log('[Dashboard] Using logs API for stats:', { salesCount, revenue });
+            } else {
+              // Fallback to billing endpoint, use parsed JSON directly
+              const billsResponse = await apiCall('/api/billing', { headers: getAuthHeaders() });
+              console.log('[Dashboard] Billing API response:', billsResponse);
+              const bills = Array.isArray(billsResponse) ? billsResponse : (billsResponse.bills || []);
+              const todaysBills = bills.filter(bill => {
+                const billDate = bill.date ? new Date(bill.date).toISOString().split('T')[0] : '';
+                return billDate === todayStr;
+              });
               salesCount = todaysBills.length;
-              revenue = todaysBills.reduce((sum, bill) => sum + parseFloat(bill.total || 0), 0);
+              revenue = todaysBills.reduce((sum, bill) => sum + parseFloat(bill.total_amount || 0), 0);
+              console.log('[Dashboard] Using billing API fallback for stats:', { salesCount, revenue, todaysBills });
             }
           }
         } catch (err) {
-          // Silent fail for financial data
+          console.error('[Dashboard] Financial stats error:', err);
         }
       }
 
@@ -188,7 +200,7 @@ const Dashboard = ({ user, onLogout }) => {
           change: Math.floor(Math.random() * 20) - 10 
         },
         revenue: { 
-          value: revenue.toFixed(2),
+          value: Number(revenue).toFixed(2),
           change: Math.floor(Math.random() * 30) - 15 
         },
         stock: { 
@@ -199,6 +211,12 @@ const Dashboard = ({ user, onLogout }) => {
           value: lowStockItems, 
           change: Math.floor(Math.random() * 10) - 5 
         }
+      });
+      console.log('[Dashboard] Stats set:', {
+        sales: salesCount,
+        revenue: Number(revenue).toFixed(2),
+        stock: totalStock,
+        lowStock: lowStockItems
       });
 
       setLastUpdate(new Date());
@@ -272,6 +290,31 @@ const Dashboard = ({ user, onLogout }) => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Sales Overview Header and Daily Summary Card */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <ChartBarIcon className="h-7 w-7 text-blue-600" />
+            Sales Overview
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="bg-gradient-to-r from-blue-500 to-blue-400 text-white rounded-xl p-4 shadow flex flex-col items-center justify-center">
+              <div className="text-lg font-bold">{canViewFinancials ? stats.sales.value : 'N/A'}</div>
+              <div className="text-xs opacity-90">Today's Sales</div>
+            </div>
+            <div className="bg-gradient-to-r from-green-500 to-green-400 text-white rounded-xl p-4 shadow flex flex-col items-center justify-center">
+              <div className="text-lg font-bold">Rs {canViewFinancials ? stats.revenue.value : 'N/A'}</div>
+              <div className="text-xs opacity-90">Today's Revenue</div>
+            </div>
+            <div className="bg-gradient-to-r from-purple-500 to-purple-400 text-white rounded-xl p-4 shadow flex flex-col items-center justify-center">
+              <div className="text-lg font-bold">{stats.stock.value}</div>
+              <div className="text-xs opacity-90">Total Stock</div>
+            </div>
+            <div className="bg-gradient-to-r from-red-500 to-red-400 text-white rounded-xl p-4 shadow flex flex-col items-center justify-center">
+              <div className="text-lg font-bold">{stats.lowStock.value}</div>
+              <div className="text-xs opacity-90">Low Stock</div>
+            </div>
+          </div>
+        </div>
         
         {error && (
           <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">

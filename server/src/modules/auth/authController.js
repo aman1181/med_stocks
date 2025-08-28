@@ -1,8 +1,9 @@
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
-const db = require('../services/dbServices');
 const { logEvent, Events } = require('../services/eventServices');
+const User = require('./userModel');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'medstock-secret-key-2024';
 const SALT_ROUNDS = 10;
@@ -11,101 +12,71 @@ const SALT_ROUNDS = 10;
 const VALID_ROLES = ['admin', 'pharmacist', 'audit'];
 
 // --- Helper function: Create user ---
-function createUser(username, password, role = 'pharmacist') {
-    try {
-        // Validate role
-        if (!VALID_ROLES.includes(role)) {
-            throw new Error(`Invalid role: ${role}. Valid roles: ${VALID_ROLES.join(', ')}`);
-        }
-
-        // Check if user exists
-        const existingUser = db.get('SELECT * FROM users WHERE username = ?', [username]);
-        if (existingUser) {
-            throw new Error('Username already exists');
-        }
-
-        const id = uuidv4();
-        const hash = bcrypt.hashSync(password, SALT_ROUNDS);
-        const ts = new Date().toISOString();
-
-        db.run(
-            `INSERT INTO users (uuid, username, password, role, created_at, updated_at) 
-             VALUES(?, ?, ?, ?, ?, ?)`,
-            [id, username, hash, role, ts, ts]
-        );
-
-        // Log user creation
-        logEvent(Events.USER_LOGIN, {
-            action: 'user_created',
-            userId: id,
-            username,
-            role,
-            timestamp: ts
-        }, `User created: ${username} with role ${role}`);
-
-        return { uuid: id, username, role, created_at: ts };
-    } catch (error) {
-        logEvent(Events.SYSTEM_ERROR, {
-            error: 'User creation failed',
-            username,
-            role,
-            details: error.message
-        }, `Failed to create user: ${username}`);
-        throw error;
+async function createUser(username, password, role = 'pharmacist') {
+    // Validate role
+    if (!VALID_ROLES.includes(role)) {
+        throw new Error(`Invalid role: ${role}. Valid roles: ${VALID_ROLES.join(', ')}`);
     }
+    // Check if user exists
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+        throw new Error('Username already exists');
+    }
+    const hash = await bcrypt.hash(password, SALT_ROUNDS);
+    const user = new User({
+        username,
+        password: hash,
+        role,
+        status: 'active'
+    });
+    await user.save();
+    logEvent(Events.USER_LOGIN, {
+        action: 'user_created',
+        userId: user._id,
+        username,
+        role,
+        timestamp: new Date().toISOString()
+    }, `User created: ${username} with role ${role}`);
+    return user;
 }
 
 // --- Helper function: Verify user ---
-function verifyUser(username, password) {
-    try {
-        const user = db.get(`SELECT * FROM users WHERE username = ?`, [username]);
-        if (!user) {
-            logEvent(Events.USER_LOGIN, {
-                action: 'login_failed',
-                username,
-                reason: 'user_not_found'
-            }, `Login failed - user not found: ${username}`);
-            return null;
-        }
-
-        const ok = bcrypt.compareSync(password, user.password);
-        if (!ok) {
-            logEvent(Events.USER_LOGIN, {
-                action: 'login_failed',
-                userId: user.uuid,
-                username,
-                reason: 'invalid_password'
-            }, `Login failed - invalid password: ${username}`);
-            return null;
-        }
-
-        // Remove password before returning
-        const { password: _, ...userWithoutPassword } = user;
-        
+async function verifyUser(username, password) {
+    const user = await User.findOne({ username });
+    if (!user) {
         logEvent(Events.USER_LOGIN, {
-            action: 'user_verified',
-            userId: user.uuid,
-            username: user.username,
-            role: user.role
-        }, `User verified successfully: ${username}`);
-
-        return userWithoutPassword;
-    } catch (error) {
-        logEvent(Events.SYSTEM_ERROR, {
-            error: 'User verification failed',
+            action: 'login_failed',
             username,
-            details: error.message
-        }, `User verification error: ${username}`);
+            reason: 'user_not_found'
+        }, `Login failed - user not found: ${username}`);
         return null;
     }
+    const ok = await bcrypt.compare(password, user.password);
+    if (!ok) {
+        logEvent(Events.USER_LOGIN, {
+            action: 'login_failed',
+            userId: user._id,
+            username,
+            reason: 'invalid_password'
+        }, `Login failed - invalid password: ${username}`);
+        return null;
+    }
+    // Remove password before returning
+    const userObj = user.toObject();
+    delete userObj.password;
+    logEvent(Events.USER_LOGIN, {
+        action: 'user_verified',
+        userId: user._id,
+        username: user.username,
+        role: user.role
+    }, `User verified successfully: ${username}`);
+    return userObj;
 }
 
 // --- API: User registration ---
 exports.register = async (req, res) => {
     try {
         const { username, password, role = 'pharmacist' } = req.body;
-
-        // Log registration attempt
         logEvent(Events.USER_LOGIN, {
             action: 'register_attempt',
             username,
@@ -113,75 +84,46 @@ exports.register = async (req, res) => {
             ip: req.ip,
             userAgent: req.get('User-Agent')
         }, `Registration attempt: ${username} as ${role}`);
-
-        // Validation
         if (!username || !password) {
-            return res.status(400).json({ 
-                error: 'Username and password are required',
-                success: false 
-            });
+            return res.status(400).json({ error: 'Username and password are required', success: false });
         }
-
         if (username.length < 3) {
-            return res.status(400).json({ 
-                error: 'Username must be at least 3 characters long',
-                success: false 
-            });
+            return res.status(400).json({ error: 'Username must be at least 3 characters long', success: false });
         }
-
         if (password.length < 6) {
-            return res.status(400).json({ 
-                error: 'Password must be at least 6 characters long',
-                success: false 
-            });
+            return res.status(400).json({ error: 'Password must be at least 6 characters long', success: false });
         }
-
         if (!VALID_ROLES.includes(role)) {
-            return res.status(400).json({ 
-                error: 'Invalid role', 
-                validRoles: VALID_ROLES,
-                success: false 
-            });
+            return res.status(400).json({ error: 'Invalid role', validRoles: VALID_ROLES, success: false });
         }
-
-        // Create user
-        const newUser = createUser(username, password, role);
-
-        // Log successful registration
+        const newUser = await createUser(username, password, role);
         logEvent(Events.USER_LOGIN, {
             action: 'register_success',
-            userId: newUser.uuid,
+            userId: newUser._id,
             username: newUser.username,
             role: newUser.role,
             ip: req.ip,
             userAgent: req.get('User-Agent')
         }, `User registered successfully: ${username} as ${role}`);
-
         res.status(201).json({
             success: true,
             message: 'User created successfully',
             user: {
-                id: newUser.uuid,
+                id: newUser._id,
                 username: newUser.username,
                 role: newUser.role,
-                createdAt: newUser.created_at
+                createdAt: newUser.createdAt
             }
         });
-
     } catch (error) {
         console.error('Registration error:', error);
-        
         logEvent(Events.SYSTEM_ERROR, {
             error: 'Registration failed',
             username: req.body.username,
             details: error.message,
             ip: req.ip
         }, `Registration system error: ${req.body.username}`);
-
-        res.status(500).json({ 
-            error: error.message || 'Registration failed',
-            success: false 
-        });
+        res.status(500).json({ error: error.message || 'Registration failed', success: false });
     }
 };
 
@@ -189,129 +131,88 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const { username, password } = req.body;
-
-        // Log login attempt
         logEvent(Events.USER_LOGIN, {
             action: 'login_attempt',
             username,
             ip: req.ip,
             userAgent: req.get('User-Agent')
         }, `Login attempt: ${username}`);
-
-        // Validation
         if (!username || !password) {
-            return res.status(400).json({ 
-                error: 'Username and password are required',
-                success: false 
-            });
+            return res.status(400).json({ error: 'Username and password are required', success: false });
         }
-
-        // Verify user
-        const user = verifyUser(username, password);
+        const user = await verifyUser(username, password);
         if (!user) {
-            return res.status(401).json({ 
-                error: 'Invalid username or password',
-                success: false 
-            });
+            return res.status(401).json({ error: 'Invalid username or password', success: false });
         }
-
-        // Generate JWT token
         const token = jwt.sign(
-            { 
-                id: user.uuid, 
-                username: user.username, 
-                role: user.role 
-            },
+            { id: user._id, username: user.username, role: user.role },
             JWT_SECRET,
             { expiresIn: '24h' }
         );
-
-        // Log successful login
         logEvent(Events.USER_LOGIN, {
             action: 'login_success',
-            userId: user.uuid,
+            userId: user._id,
             username: user.username,
             role: user.role,
             ip: req.ip,
             userAgent: req.get('User-Agent'),
             tokenGenerated: true
         }, `User logged in successfully: ${username} (${user.role})`);
-
         res.json({
             success: true,
             message: 'Login successful',
             token,
             user: {
-                id: user.uuid,
+                id: user._id,
                 username: user.username,
                 role: user.role,
-                createdAt: user.created_at
+                createdAt: user.createdAt
             }
         });
-
     } catch (error) {
         console.error('Login error:', error);
-        
         logEvent(Events.SYSTEM_ERROR, {
             error: 'Login failed',
             username: req.body.username,
             details: error.message,
             ip: req.ip
         }, `Login system error: ${req.body.username}`);
-
-        res.status(500).json({ 
-            error: 'Login failed',
-            success: false 
-        });
+        res.status(500).json({ error: 'Login failed', success: false });
     }
 };
 
 // --- API: Get current user ---
-exports.getCurrentUser = (req, res) => {
+exports.getCurrentUser = async (req, res) => {
     try {
-        const user = db.get(
-            'SELECT uuid, username, role, created_at, updated_at FROM users WHERE uuid = ?', 
-            [req.user.id]
-        );
-        
+        const user = await User.findById(req.user.id).select('-password');
         if (!user) {
-            return res.status(404).json({ 
-                error: 'User not found',
-                success: false 
-            });
+            return res.status(404).json({ error: 'User not found', success: false });
         }
-
         logEvent(Events.USER_LOGIN, {
             action: 'user_profile_accessed',
-            userId: user.uuid,
+            userId: user._id,
             username: user.username,
             role: user.role,
             ip: req.ip
         }, `User profile accessed: ${user.username}`);
-
         res.json({
             success: true,
             user: {
-                id: user.uuid,
+                id: user._id,
                 username: user.username,
                 role: user.role,
-                createdAt: user.created_at,
-                updatedAt: user.updated_at
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt
             }
         });
     } catch (error) {
         console.error('Get current user error:', error);
-        
         logEvent(Events.SYSTEM_ERROR, {
             error: 'Get current user failed',
             userId: req.user?.id,
             details: error.message
         }, 'Get current user system error');
-
-        res.status(500).json({ 
-            error: 'Failed to get user data',
-            success: false 
-        });
+        res.status(500).json({ error: 'Failed to get user data', success: false });
     }
 };
 
@@ -349,19 +250,9 @@ exports.logout = (req, res) => {
 
 // --- API: Get all users (admin only) ---
 // Replace your current getAllUsers function with this:
-exports.getAllUsers = (req, res) => {
+exports.getAllUsers = async (req, res) => {
     try {
-        console.log('📡 GET /api/auth/users called by:', req.user?.username, '(Role:', req.user?.role, ')');
-        
-        const users = db.all(`
-            SELECT uuid, username, role, created_at, updated_at 
-            FROM users 
-            ORDER BY created_at DESC
-        `);
-
-        console.log(`👥 Found ${users.length} users in database`);
-
-        // Log users fetch
+        const users = await User.find().select('-password').sort({ createdAt: -1 });
         logEvent(Events.REPORT_GENERATED, {
             type: 'users_list',
             userCount: users.length,
@@ -369,147 +260,96 @@ exports.getAllUsers = (req, res) => {
             requestedById: req.user?.id,
             ip: req.ip || req.connection?.remoteAddress
         }, `Users list fetched by ${req.user?.username}: ${users.length} users`);
-
-        // ✅ Return array directly to match frontend expectations
         const formattedUsers = users.map(user => ({
-            id: user.uuid,
+            id: user._id,
             username: user.username,
             role: user.role,
-            created_at: user.created_at, // Keep original field name for frontend
-            updated_at: user.updated_at
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt
         }));
-
-        console.log('✅ Returning users:', formattedUsers.length);
-        res.json(formattedUsers); // Return array directly, not wrapped in object
-
+        res.json(formattedUsers);
     } catch (error) {
         console.error('❌ Get all users error:', error);
-        
         logEvent(Events.SYSTEM_ERROR, {
             error: 'Get all users failed',
             requestedBy: req.user?.username,
             details: error.message
         }, 'Get all users system error');
-
-        res.status(500).json({ 
-            error: 'Failed to fetch users',
-            success: false 
-        });
+        res.status(500).json({ error: 'Failed to fetch users', success: false });
     }
 };
 
 
 // ✅ ADD THIS NEW FUNCTION after getAllUsers
-exports.updateUser = (req, res) => {
+exports.updateUser = async (req, res) => {
     try {
-        const { id } = req.params; // Get ID from URL params
+        const { id } = req.params;
         const { username, password, role } = req.body;
 
-        console.log('🔄 Updating user:', { id, username, role, hasPassword: !!password });
-
         // Validation
-        if (!username || !role) {
-            return res.status(400).json({ 
-                error: 'Username and role are required',
-                success: false 
-            });
+        if (username && username.length < 3) {
+            return res.status(400).json({ error: 'Username must be at least 3 characters long', success: false });
+        }
+        if (role && !VALID_ROLES.includes(role)) {
+            return res.status(400).json({ error: 'Invalid role', validRoles: VALID_ROLES, success: false });
         }
 
-        if (username.length < 3) {
-            return res.status(400).json({ 
-                error: 'Username must be at least 3 characters long',
-                success: false 
-            });
-        }
-
-        if (!VALID_ROLES.includes(role)) {
-            return res.status(400).json({ 
-                error: 'Invalid role', 
-                validRoles: VALID_ROLES,
-                success: false 
-            });
-        }
-
-        // Get current user data
-        const user = db.get('SELECT * FROM users WHERE uuid = ?', [id]);
+        // Find user
+        const user = await User.findById(id);
         if (!user) {
-            return res.status(404).json({ 
-                error: 'User not found',
-                success: false 
-            });
+            return res.status(404).json({ error: 'User not found', success: false });
         }
-
         // Don't allow changing admin username or demoting admin
-        if (user.role === 'admin' && role !== 'admin') {
-            return res.status(400).json({ 
-                error: 'Cannot change admin role',
-                success: false 
-            });
+        if (user.role === 'admin' && role && role !== 'admin') {
+            return res.status(400).json({ error: 'Cannot change admin role', success: false });
         }
 
-        // Build update query
-        let updateQuery = 'UPDATE users SET username = ?, role = ?, updated_at = ?';
-        let params = [username, role, new Date().toISOString()];
-
-        // Add password if provided
+        // Build update object
+        const updateObj = {};
+        if (username) updateObj.username = username;
+        if (role) updateObj.role = role;
         if (password && password.trim().length >= 6) {
-            const hash = bcrypt.hashSync(password.trim(), SALT_ROUNDS);
-            updateQuery += ', password = ?';
-            params.splice(2, 0, hash); // Insert after role
+            updateObj.password = await bcrypt.hash(password.trim(), SALT_ROUNDS);
         }
 
-        updateQuery += ' WHERE uuid = ?';
-        params.push(id);
-
-        // Execute update
-        const result = db.run(updateQuery, params);
-
-        if (result.changes === 0) {
-            return res.status(404).json({ 
-                error: 'User not found or no changes made',
-                success: false 
-            });
+        const updatedUser = await User.findByIdAndUpdate(id, updateObj, { new: true });
+        if (!updatedUser) {
+            return res.status(404).json({ error: 'User not found or no changes made', success: false });
         }
 
-        // Log user update
         logEvent(Events.USER_LOGIN, {
             action: 'user_updated',
             targetUserId: id,
-            targetUsername: username,
+            targetUsername: updatedUser.username,
             oldRole: user.role,
-            newRole: role,
+            newRole: updatedUser.role,
             updatedBy: req.user?.username,
             updatedById: req.user?.id,
             passwordChanged: !!(password && password.trim()),
             ip: req.ip
-        }, `User updated by ${req.user?.username}: ${username} (${user.role} → ${role})`);
+        }, `User updated by ${req.user?.username}: ${updatedUser.username} (${user.role} → ${updatedUser.role})`);
 
-        console.log('✅ User updated successfully:', username);
+        console.log('✅ User updated successfully:', updatedUser.username);
 
         res.json({
             success: true,
             message: 'User updated successfully',
             user: {
-                id: id,
-                username: username,
-                role: role,
-                updatedAt: new Date().toISOString()
+                id: updatedUser._id,
+                username: updatedUser.username,
+                role: updatedUser.role,
+                updatedAt: updatedUser.updatedAt
             }
         });
     } catch (error) {
         console.error('❌ Update user error:', error);
-        
         logEvent(Events.SYSTEM_ERROR, {
             error: 'Update user failed',
             targetUserId: req.params.id,
             updatedBy: req.user?.username,
             details: error.message
         }, 'Update user system error');
-
-        res.status(500).json({ 
-            error: 'Failed to update user',
-            success: false 
-        });
+        res.status(500).json({ error: 'Failed to update user', success: false });
     }
 };
 

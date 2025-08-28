@@ -1,10 +1,21 @@
-const db = require("../services/dbServices");
-const { v4: uuidv4 } = require("uuid");
+const Doctor = require('./doctorModel');
 
-// Get all doctors
-exports.getDoctors = (req, res) => {
+// Get doctor by ID
+exports.getDoctorById = async (req, res) => {
   try {
-    const doctors = db.all(`SELECT * FROM doctors`);
+    const { id } = req.params;
+    const doctor = await Doctor.findById(id);
+    if (!doctor) return res.status(404).json({ error: "Doctor not found" });
+    res.json(doctor);
+  } catch (err) {
+    console.error("Get doctor by ID error:", err);
+    res.status(500).json({ error: "Failed to fetch doctor" });
+  }
+};
+// Get all doctors
+exports.getDoctors = async (req, res) => {
+  try {
+    const doctors = await Doctor.find();
     res.json(doctors);
   } catch (err) {
     console.error("Get doctors error:", err);
@@ -13,19 +24,15 @@ exports.getDoctors = (req, res) => {
 };
 
 // Add doctor
-exports.addDoctor = (req, res) => {
+exports.addDoctor = async (req, res) => {
   try {
-    const { name, specialization } = req.body;
+    const { name, specialization, phone, email } = req.body;
     if (!name) return res.status(400).json({ error: "Name is required" });
 
-    const id = uuidv4();
-    db.run(
-      `INSERT INTO doctors (uuid, name, specialization, created_at, updated_at) 
-       VALUES (?, ?, ?, datetime('now'), datetime('now'))`,
-      [id, name, specialization || ""]
-    );
+    const doctor = new Doctor({ name, specialization, phone, email });
+    await doctor.save();
 
-    res.json({ success: true, id });
+    res.json({ success: true, id: doctor._id });
   } catch (err) {
     console.error("Add doctor error:", err);
     res.status(500).json({ error: "Failed to add doctor" });
@@ -33,16 +40,12 @@ exports.addDoctor = (req, res) => {
 };
 
 // Update doctor
-exports.updateDoctor = (req, res) => {
+exports.updateDoctor = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, specialization } = req.body;
+    const { name, specialization, phone, email } = req.body;
 
-    db.run(
-      `UPDATE doctors SET name=?, specialization=?, updated_at=datetime('now') WHERE uuid=?`,
-      [name, specialization, id]
-    );
-
+    await Doctor.findByIdAndUpdate(id, { name, specialization, phone, email });
     res.json({ success: true });
   } catch (err) {
     console.error("Update doctor error:", err);
@@ -51,10 +54,10 @@ exports.updateDoctor = (req, res) => {
 };
 
 // Delete doctor
-exports.deleteDoctor = (req, res) => {
+exports.deleteDoctor = async (req, res) => {
   try {
     const { id } = req.params;
-    db.run(`DELETE FROM doctors WHERE uuid=?`, [id]);
+    await Doctor.findByIdAndDelete(id);
     res.json({ success: true });
   } catch (err) {
     console.error("Delete doctor error:", err);
@@ -62,18 +65,16 @@ exports.deleteDoctor = (req, res) => {
   }
 };
 
-// Get doctor sales
-exports.getDoctorSales = (req, res) => {
+// Get all sales (bills) for a doctor
+const Bill = require('../billing/billModel');
+exports.getDoctorSales = async (req, res) => {
   try {
     const { id } = req.params;
-    const sales = db.all(
-      `SELECT bills.uuid as bill_id, bills.bill_no, bills.date, bills.total_amount, bills.discount
-       FROM bills WHERE bills.doctor_id = ? ORDER BY date DESC`,
-      [id]
-    );
-    res.json(sales);
+    // Find all bills for this doctor
+    const bills = await Bill.find({ doctor: id });
+    res.json({ success: true, doctorId: id, sales: bills });
   } catch (err) {
     console.error("Get doctor sales error:", err);
-    res.status(500).json({ error: "Failed to fetch sales" });
+    res.status(500).json({ error: "Failed to fetch doctor sales" });
   }
 };

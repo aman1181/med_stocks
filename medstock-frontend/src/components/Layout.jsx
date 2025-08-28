@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Sidebar from './Sidebar';
+import { Outlet } from 'react-router-dom';
 
-const Layout = ({ children, user, onLogout }) => {
+const Layout = ({ user, onLogout }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -32,7 +33,7 @@ const Layout = ({ children, user, onLogout }) => {
 
         {/* Page Content */}
         <main className="flex-1 overflow-x-hidden overflow-y-auto">
-          {children}
+          <Outlet />
         </main>
       </div>
     </div>

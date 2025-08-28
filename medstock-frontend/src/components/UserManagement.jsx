@@ -19,7 +19,7 @@ function Toast({ message, onClose }) {
   );
 }
 // (removed duplicate import)
-import { apiCallJSON } from '../utils/api';
+import { API, apiCall } from '../utils/api';
 
 const useAuth = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -136,7 +136,7 @@ const UserManagement = ({ onLogout }) => {
       console.log('🔄 Starting fetchUsers...');
       console.log('🔑 Token found:', !!token);
 
-      const data = await apiCallJSON('/api/auth/users', {
+      const data = await apiCall('/api/auth/users', {
         method: 'GET',
         headers: headers
       });
@@ -212,7 +212,7 @@ const UserManagement = ({ onLogout }) => {
       console.log('📤 Sending user data:', { ...userData, password: '[HIDDEN]' });
       console.log('📡 Making API call to /api/auth/register...');
 
-      const responseData = await apiCallJSON('/api/auth/register', {
+      const responseData = await apiCall('/api/auth/register', {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(userData)
@@ -275,7 +275,7 @@ const UserManagement = ({ onLogout }) => {
         updateData.password = editingUser.password;
       }
 
-      const responseData = await apiCallJSON(`/api/auth/users/${editingUser.id}`, {
+      const responseData = await apiCall(`/api/auth/users/${editingUser.id}`, {
         method: 'PUT',
         headers: headers,
         body: JSON.stringify(updateData)
@@ -312,7 +312,7 @@ const UserManagement = ({ onLogout }) => {
         'Content-Type': 'application/json'
       };
 
-      const responseData = await apiCallJSON(`/api/auth/users/${userId}`, {
+      const responseData = await apiCall(`/api/auth/users/${userId}`, {
         method: 'DELETE',
         headers: headers
       });

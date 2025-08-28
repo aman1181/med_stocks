@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { Toast, useToast } from '../components/ToastContext.jsx';
 import { PlusIcon, MagnifyingGlassIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
-import { API, apiCall, apiCallJSON } from '../utils/api';
+import { API, apiCall } from '../utils/api';
 
 
 
@@ -57,8 +58,9 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
   const [selectedVendor, setSelectedVendor] = useState(null);
   const [sortField, setSortField] = useState('product_name');
   const [sortOrder, setSortOrder] = useState('asc');
-  const [showAddProductModal, setShowAddProductModal] = useState(false);
+  // Removed showAddProductModal state
   const { isAudit, canCreate, canUpdate, canDelete, canSell } = useAuth();
+  const navigate = useNavigate();
   const { showToast } = useToast();
 
 
@@ -73,7 +75,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
-    name: '',
+    product_name: '',
     unit: '',
     tax: '',
     vendor_id: '',
@@ -160,7 +162,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
         return;
       }
       
-      const data = await apiCallJSON('/api/inventory', {
+      const data = await apiCall('/api/inventory', {
         headers: getAuthHeaders()
       });
       
@@ -183,7 +185,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
       const token = getAuthToken();
       if (!token) return;
       
-      const data = await apiCallJSON('/api/vendors', {
+      const data = await apiCall('/api/vendors', {
         headers: getAuthHeaders()
       });
       
@@ -212,7 +214,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
 
   const resetForm = () => {
     setFormData({
-      name: '',
+      product_name: '',
       unit: '',
       tax: '',
       vendor_id: '',
@@ -236,25 +238,26 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
   };
 
   const handleSubmit = async (e) => {
+  console.log('📝 FormData before submit:', formData);
   e.preventDefault();
   // Example: setToastMsg('Inventory updated successfully!'); after successful inventory action
     
-    if (!formData.name?.trim() || !formData.vendor_id || !formData.batch_no?.trim()) {
+    if (!formData.product_name?.trim() || !formData.vendor_id || !formData.batch_no?.trim()) {
       setError("Product name, vendor, and batch number are required");
       return;
     }
 
     try {
       setError('');
-      const endpoint = isEditing 
+      const endpoint = isEditing
         ? `/api/inventory/${editId}`
         : `/api/inventory`;
-      
       const method = isEditing ? "PUT" : "POST";
-      
       console.log(`📦 ${isEditing ? 'Updating' : 'Adding'} product:`, {
         endpoint,
         method,
+        product_id: editId,
+        batch_id: formData.batch_id,
         data: {
           ...formData,
           qty: parseInt(formData.qty) || 0,
@@ -263,8 +266,17 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
           tax: parseFloat(formData.tax) || 0
         }
       });
+      if (!isEditing) {
+        console.log('🟢 Add Product Request Data:', {
+          ...formData,
+          qty: parseInt(formData.qty) || 0,
+          cost: parseFloat(formData.cost) || 0,
+          price: parseFloat(formData.price) || 0,
+          tax: parseFloat(formData.tax) || 0
+        });
+      }
       
-      const result = await apiCallJSON(endpoint, {
+      const result = await apiCall(endpoint, {
         method,
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -300,7 +312,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
 
   const handleEdit = (item) => {
     setFormData({
-      name: item.product_name || '',
+      product_name: item.product_name || '',
       unit: item.unit || '',
       tax: item.tax || '',
       vendor_id: item.vendor_id || '',
@@ -321,7 +333,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
 
     try {
       setError('');
-      const result = await apiCallJSON(`/api/inventory/${batchId}`, {
+      const result = await apiCall(`/api/inventory/${batchId}`, {
         method: "DELETE",
         headers: getAuthHeaders()
       });
@@ -369,7 +381,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
       }
 
       setError('');
-      const data = await apiCallJSON(`/api/inventory/sell/${batchId}`, {
+      const data = await apiCall(`/api/inventory/sell/${batchId}`, {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify({ quantity }),
@@ -474,11 +486,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
         </div>
         {canCreate && (
           <button
-            onClick={() => {
-              resetForm();
-              setIsEditing(false);
-              setShowAddProductModal(true);
-            }}
+            onClick={() => navigate('/inventory/add')}
             className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-3 sm:px-4 py-2 rounded-lg shadow transition-colors text-sm sm:text-base w-full sm:w-auto justify-center"
           >
             <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -486,78 +494,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
           </button>
         )}
       </div>
-      {showAddProductModal && canCreate && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
-          <div className="absolute inset-0 bg-blue-300 bg-opacity-50" onClick={() => setShowAddProductModal(false)} />
-          <div className="relative bg-white rounded-2xl shadow-2xl border border-gray-200 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-xl xl:max-w-lg" style={{ width: '100%', maxWidth: '480px', maxHeight: '80vh', overflow: 'hidden', boxSizing: 'border-box' }}>
-            <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100">
-              <h3 className="text-lg sm:text-xl font-bold text-gray-900">Add New Product</h3>
-              <button type="button" className="text-gray-400 hover:text-gray-600 focus:outline-none" onClick={() => setShowAddProductModal(false)} aria-label="Close">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-              </button>
-            </div>
-            <div className="p-3 sm:p-4 overflow-y-auto" style={{maxHeight: 'calc(80vh - 48px)'}}>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
-                  <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Enter product name" required />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Vendor</label>
-                  <Autocomplete
-                    options={vendors}
-                    getOptionLabel={option => option.name || ''}
-                    value={vendors.find(v => v.uuid === formData.vendor_id) || null}
-                    onChange={(event, newValue) => {
-                      setFormData(prev => ({
-                        ...prev,
-                        vendor_id: newValue ? newValue.uuid : ''
-                      }));
-                    }}
-                    renderInput={params => (
-                      <TextField
-                        {...params}
-                        label="Search or select vendor"
-                        variant="outlined"
-                        required
-                      />
-                    )}
-                    isOptionEqualToValue={(option, value) => option.uuid === value.uuid}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Batch Number</label>
-                  <input type="text" name="batch_no" value={formData.batch_no} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Enter batch number" required />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Unit</label>
-                  <input type="text" name="unit" value={formData.unit} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Unit (e.g., tablets, ml)" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
-                  <input type="number" name="qty" value={formData.qty} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Enter quantity" required />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Cost</label>
-                  <input type="number" name="cost" value={formData.cost} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Enter cost" required />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
-                  <input type="number" name="price" value={formData.price} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" placeholder="Enter price" required />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Expiry Date</label>
-                  <input type="date" name="expiry_date" value={formData.expiry_date} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500" />
-                </div>
-                <div className="flex space-x-3 pt-4">
-                  <button type="button" onClick={() => { setShowAddProductModal(false); resetForm(); }} className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg font-semibold">Cancel</button>
-                  <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold">Add Product</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
+  {/* Removed Add Product Modal. Navigation now handled by useNavigate. */}
       {isAudit && (
         <div className="mb-6 bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg">
           <div className="flex items-start">
@@ -609,18 +546,19 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
                 <div className="grid grid-cols-1 gap-4 mb-4">
                   <div>
                     <h5 className="font-semibold text-green-700 mb-1">Product Name</h5>
-                    <input type="text" name="name" placeholder="Product Name *" value={formData.name} onChange={handleInputChange} className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm sm:text-base w-full" required />
+                    <input type="text" name="product_name" placeholder="Product Name *" value={formData.product_name} onChange={handleInputChange} className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm sm:text-base w-full" required />
                   </div>
                   <div>
                     <h5 className="font-semibold text-green-700 mb-1">Vendor</h5>
                     <Autocomplete
                       options={vendors}
                       getOptionLabel={option => option.name || ''}
-                      value={vendors.find(v => v.uuid === formData.vendor_id) || null}
+                      value={vendors.find(v => v.vendor_id === formData.vendor_id) || null}
                       onChange={(event, newValue) => {
                         setFormData(prev => ({
                           ...prev,
-                          vendor_id: newValue ? newValue.uuid : ''
+                          vendor_id: newValue ? newValue.vendor_id : '',
+                          vendor_name: newValue ? newValue.name : ''
                         }));
                       }}
                       renderInput={params => (
@@ -631,7 +569,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
                           required
                         />
                       )}
-                      isOptionEqualToValue={(option, value) => option.uuid === value.uuid}
+                      isOptionEqualToValue={(option, value) => option.vendor_id === value.vendor_id}
                       sx={{ width: '100%' }}
                     />
                   </div>
@@ -659,11 +597,12 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
                     <h5 className="font-semibold text-green-700 mb-1">Expiry Date</h5>
                     <input type="date" name="expiry_date" placeholder="Expiry Date" value={formData.expiry_date} onChange={handleInputChange} className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm sm:text-base w-full" />
                   </div>
-                  <div>
-                    <h5 className="font-semibold text-green-700 mb-1">Tax Rate (%)</h5>
-                    <input type="number" name="tax" placeholder="Tax Rate (%)" value={formData.tax} onChange={handleInputChange} className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm sm:text-base w-full" min="0" max="100" step="0.01" />
-                  </div>
                 </div>
+                {error && (
+                  <div className="mb-2 bg-red-100 border border-red-300 text-red-700 px-3 py-2 rounded">
+                    {error}
+                  </div>
+                )}
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button type="submit" className="bg-green-600 hover:bg-green-700 text-white py-2 px-6 rounded-lg font-medium transition-colors text-sm sm:text-base">{isEditing ? 'Update Product' : 'Save Product'}</button>
                   <button type="button" onClick={() => { resetForm(); setShowForm(false); }} className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-6 rounded-lg font-medium transition-colors text-sm sm:text-base">Cancel</button>
@@ -684,6 +623,7 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Batch</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cost Price</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expiry</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -691,38 +631,42 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredInventory.length > 0 ? (
-                filteredInventory.map((item, index) => (
-                  <tr key={item.batch_id || `item-${index}`} className={`hover:bg-gray-50 ${isExpired(item.expiry_date) ? 'bg-red-50' : item.qty <= LOW_STOCK_LIMIT ? 'bg-yellow-50' : ''}`}>
-                    <td className="px-4 py-4 whitespace-nowrap">
-                      <div>
-                        <div className="text-sm font-medium text-gray-900">{item.product_name}</div>
-                        <div className="text-sm text-gray-500">ID: {item.product_id}</div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">{item.vendor_name || 'N/A'}</td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">{item.batch_no}</td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900"><span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">{item.unit || 'N/A'}</span></td>
-                    <td className="px-4 py-4 whitespace-nowrap"><span className={`text-sm font-medium ${item.qty <= 0 ? 'text-red-600' : item.qty <= LOW_STOCK_LIMIT ? 'text-yellow-600' : 'text-green-600'}`}>{item.qty}</span></td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">Rs {item.price}</td>
-                    <td className="px-4 py-4 whitespace-nowrap"><span className={`text-sm ${isExpired(item.expiry_date) ? 'text-red-600 font-medium' : 'text-gray-900'}`}>{item.expiry_date ? new Date(item.expiry_date).toLocaleDateString() : 'N/A'}</span></td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex gap-2">
-                        {canSell && (
-                          <button onClick={() => handleSell(item.batch_id)} disabled={item.qty <= 0} className={`px-3 py-1 rounded text-xs ${item.qty <= 0 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}>Sell</button>
-                        )}
-                        {canUpdate && (
-                          <button onClick={() => handleEdit(item)} className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-xs">Edit</button>
-                        )}
-                        {canDelete && (
-                          <button onClick={() => handleDelete(item.batch_id, item.product_name)} className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs">Delete</button>
-                        )}
-                        {isAudit && (
-                          <span className="text-gray-400 text-xs px-2 py-1 bg-gray-100 rounded">View Only</span>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                filteredInventory.map((item, index) => {
+                  const batch = Array.isArray(item.batches) && item.batches.length > 0 ? item.batches[0] : {};
+                  return (
+                    <tr key={batch.batch_id || `item-${index}`} className={`hover:bg-gray-50 ${batch.expiry_date && isExpired(batch.expiry_date) ? 'bg-red-50' : batch.qty <= LOW_STOCK_LIMIT ? 'bg-yellow-50' : ''}`}>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <div>
+                          <div className="text-sm font-medium text-gray-900">{item.product_name}</div>
+                          <div className="text-sm text-gray-500">ID: {item.product_id}</div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">{item.vendor_name || 'N/A'}</td>
+                      <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">{batch.batch_no || 'N/A'}</td>
+                      <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900"><span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">{item.unit || 'N/A'}</span></td>
+                      <td className="px-4 py-4 whitespace-nowrap"><span className={`text-sm font-medium ${batch.qty <= 0 ? 'text-red-600' : batch.qty <= LOW_STOCK_LIMIT ? 'text-yellow-600' : 'text-green-600'}`}>{batch.qty ?? 'N/A'}</span></td>
+                      <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">Rs {batch.cost ?? 'N/A'}</td>
+                      <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">Rs {batch.price ?? 'N/A'}</td>
+                      <td className="px-4 py-4 whitespace-nowrap"><span className={`text-sm ${batch.expiry_date && isExpired(batch.expiry_date) ? 'text-red-600 font-medium' : 'text-gray-900'}`}>{batch.expiry_date ? new Date(batch.expiry_date).toLocaleDateString() : 'N/A'}</span></td>
+                      <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex gap-2">
+                          {canSell && (
+                            <button onClick={() => handleSell(batch.batch_id)} disabled={batch.qty <= 0} className={`px-3 py-1 rounded text-xs ${batch.qty <= 0 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}>Sell</button>
+                          )}
+                          {canUpdate && (
+                            <button onClick={() => navigate(`/inventory/edit/${item.product_id}`)} className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-xs">Edit</button>
+                          )}
+                          {canDelete && (
+                            <button onClick={() => handleDelete(item.product_id, item.product_name)} className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs">Delete</button>
+                          )}
+                          {isAudit && (
+                            <span className="text-gray-400 text-xs px-2 py-1 bg-gray-100 rounded">View Only</span>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
                   <td colSpan="8" className="px-4 py-12 text-center text-gray-500">
@@ -747,7 +691,8 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
                     </div>
                     <div className="flex flex-col items-end">
                       <span className={`text-sm font-medium ${item.qty <= 0 ? 'text-red-600' : item.qty <= LOW_STOCK_LIMIT ? 'text-yellow-600' : 'text-green-600'}`}>Qty: {item.qty}</span>
-                      <span className="text-sm text-gray-900">Rs {item.price}</span>
+                      <span className="text-sm text-gray-900">Rs {Array.isArray(item.batches) && item.batches[0] ? item.batches[0].cost : 'N/A'}</span>
+                      <span className="text-sm text-gray-900">Rs {Array.isArray(item.batches) && item.batches[0] ? item.batches[0].price : 'N/A'}</span>
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 mb-3">
@@ -761,10 +706,10 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
                       <button onClick={() => handleSell(item.batch_id)} disabled={item.qty <= 0} className={`px-3 py-1 rounded text-xs flex-1 sm:flex-none ${item.qty <= 0 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}>Sell</button>
                     )}
                     {canUpdate && (
-                      <button onClick={() => handleEdit(item)} className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-xs flex-1 sm:flex-none">Edit</button>
+                      <button onClick={() => navigate(`/inventory/edit/${item.product_id}`)} className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-xs flex-1 sm:flex-none">Edit</button>
                     )}
                     {canDelete && (
-                      <button onClick={() => handleDelete(item.batch_id, item.product_name)} className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs flex-1 sm:flex-none">Delete</button>
+                      <button onClick={() => handleDelete(item.product_id, item.product_name)} className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs flex-1 sm:flex-none">Delete</button>
                     )}
                     {isAudit && (
                       <span className="text-gray-400 text-xs px-2 py-1 bg-gray-100 rounded flex-1 text-center">View Only</span>

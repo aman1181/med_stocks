@@ -1,41 +1,25 @@
-const db = require("../services/dbServices");
-const { v4: uuidv4 } = require("uuid");
+// --- GET single product by product_id (API endpoint) ---
+exports.getProductById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Inventory.findOne({ product_id: id });
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    res.json(product);
+  } catch (err) {
+    console.error("Get product by id error:", err);
+    res.status(500).json({ error: "Failed to fetch product", details: err.message });
+  }
+};
 const { logEvent, Events } = require("../services/eventServices");
-
+const Inventory = require("./inventoryModel");
 const LOW_STOCK_LIMIT = 10;
 
 // --- GET all inventory (API endpoint) ---
-exports.getInventory = (req, res) => {
+exports.getInventory = async (req, res) => {
   try {
-    const inventory = db.all(`
-      SELECT 
-        p.uuid AS product_id,
-        p.name AS product_name,
-        p.unit,
-        p.tax,
-        p.vendor_id,
-        v.name AS vendor_name,
-        b.uuid AS batch_id,
-        b.batch_no,
-        b.qty,
-        b.cost,
-        b.price,
-        b.expiry_date,
-        b.created_at,
-        b.updated_at
-      FROM products p
-      LEFT JOIN vendors v ON p.vendor_id = v.uuid
-      LEFT JOIN batches b ON p.uuid = b.product_id
-      ORDER BY 
-        CASE 
-          WHEN b.expiry_date IS NOT NULL AND DATE(b.expiry_date) < DATE('now') THEN 0
-          ELSE 1
-        END,
-        b.expiry_date ASC,
-        b.qty ASC
-    `);
-    
-    console.log("Fetched inventory:", inventory.length);
+    const inventory = await Inventory.find();
     res.json(inventory);
   } catch (err) {
     console.error("Get inventory error:", err);
@@ -44,50 +28,47 @@ exports.getInventory = (req, res) => {
 };
 
 // --- ADD new product + batch (API endpoint) ---
-exports.addProduct = (req, res) => {
+exports.addProduct = async (req, res) => {
   try {
-    const { name, unit, tax, vendor_id, batch_no, expiry_date, qty, cost, price } = req.body;
-    console.log("Adding product:", { name, unit, tax, vendor_id, batch_no, qty, cost, price });
-
-    if (!name || !qty || !cost || !price) {
-      return res.status(400).json({ error: "Name, quantity, cost, and price are required" });
+    const { product_name, unit, tax, vendor_id, vendor_name, batch_no, expiry_date, qty, cost, price } = req.body;
+    if (!product_name || !qty || !cost || !price) {
+      return res.status(400).json({ error: "Product name, quantity, cost, and price are required" });
     }
-
-    const productId = uuidv4();
-    const batchId = uuidv4();
-    const ts = new Date().toISOString();
-
-    // Insert product
-    db.run(
-      `INSERT INTO products (uuid, name, unit, tax, vendor_id, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [productId, name.trim(), unit?.trim() || '', parseFloat(tax) || 0, vendor_id || null, ts, ts]
-    );
-
-    // Insert batch
-    db.run(
-      `INSERT INTO batches (uuid, product_id, batch_no, expiry_date, qty, cost, price, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [batchId, productId, batch_no?.trim() || '', expiry_date || null, parseInt(qty), parseFloat(cost), parseFloat(price), ts, ts]
-    );
-
-    // ✅ Enhanced event logging
+    const batchId = require('uuid').v4();
+    const batch = {
+      batch_id: batchId,
+      batch_no,
+      qty,
+      cost,
+      price,
+      expiry_date,
+      created_at: new Date(),
+      updated_at: new Date()
+    };
+    const inventory = new Inventory({
+      product_id: require('uuid').v4(),
+      product_name,
+      unit,
+      tax,
+      vendor_id,
+      vendor_name,
+      batches: [batch]
+    });
+    await inventory.save();
     logEvent({
       type: Events.PRODUCT_ADDED,
       payload: {
-        product_id: productId,
+        product_id: inventory.product_id,
         batch_id: batchId,
-        name: name,
-        batch_no: batch_no,
-        qty: parseInt(qty),
-        cost: parseFloat(cost),
-        price: parseFloat(price)
+        name: product_name,
+        batch_no,
+        qty,
+        cost,
+        price
       },
-      timestamp: ts
+      timestamp: new Date().toISOString()
     });
-
-    console.log("Product added successfully:", { productId, batchId });
-    res.json({ success: true, productId, batchId });
+    res.json({ success: true, productId: inventory.product_id, batchId });
   } catch (err) {
     console.error("Add product error:", err);
     res.status(500).json({ error: "Failed to add product", details: err.message });
@@ -95,68 +76,57 @@ exports.addProduct = (req, res) => {
 };
 
 // --- UPDATE product + batch (API endpoint) ---
-exports.updateProduct = (req, res) => {
+exports.updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, unit, tax, vendor_id, batch_id, batch_no, expiry_date, qty, cost, price } = req.body;
-    console.log("Updating product:", { id, name, batch_id, qty });
-
-    if (!name || !qty || !cost || !price) {
-      return res.status(400).json({ error: "Name, quantity, cost, and price are required" });
+    const { product_name, unit, tax, vendor_id, vendor_name, batch_id, batch_no, expiry_date, qty, cost, price } = req.body;
+    console.log("[updateProduct] Incoming data:", { id, product_name, unit, tax, vendor_id, vendor_name, batch_id, batch_no, expiry_date, qty, cost, price });
+    if (!product_name || !qty || !cost || !price) {
+      console.log("[updateProduct] Missing required fields");
+      return res.status(400).json({ error: "Product name, quantity, cost, and price are required" });
     }
-
-    const ts = new Date().toISOString();
-
-    // Get old data for logging
-    const oldProduct = db.get('SELECT * FROM products WHERE uuid = ?', [id]);
-    const oldBatch = batch_id ? db.get('SELECT * FROM batches WHERE uuid = ?', [batch_id]) : null;
-
-    if (!oldProduct) {
+    const inventory = await Inventory.findOne({ product_id: id });
+    if (!inventory) {
+      console.log(`[updateProduct] Product not found for product_id: ${id}`);
       return res.status(404).json({ error: "Product not found" });
     }
-
-    // Update product
-    const productResult = db.run(
-      `UPDATE products
-       SET name=?, unit=?, tax=?, vendor_id=?, updated_at=?
-       WHERE uuid=?`,
-      [name.trim(), unit?.trim() || '', parseFloat(tax) || 0, vendor_id || null, ts, id]
-    );
-
+    // Update product fields
+    inventory.product_name = product_name;
+    inventory.unit = unit;
+    inventory.tax = tax;
+    inventory.vendor_id = vendor_id;
+    inventory.vendor_name = vendor_name;
     // Update batch if batch_id provided
+    let oldBatch = null;
     if (batch_id) {
-      const batchResult = db.run(
-        `UPDATE batches
-         SET batch_no=?, expiry_date=?, qty=?, cost=?, price=?, updated_at=?
-         WHERE uuid=?`,
-        [batch_no?.trim() || '', expiry_date || null, parseInt(qty), parseFloat(cost), parseFloat(price), ts, batch_id]
-      );
-
-      if (batchResult.changes === 0) {
+      const batch = inventory.batches.find(b => b.batch_id === batch_id);
+      console.log(`[updateProduct] Batch lookup for batch_id: ${batch_id}`, batch ? "FOUND" : "NOT FOUND", batch);
+      if (!batch) {
+        console.log(`[updateProduct] Batch not found for batch_id: ${batch_id}`);
         return res.status(404).json({ error: "Batch not found" });
       }
+      oldBatch = { ...batch };
+      batch.batch_no = batch_no;
+      batch.expiry_date = expiry_date;
+      batch.qty = qty;
+      batch.cost = cost;
+      batch.price = price;
+      batch.updated_at = new Date();
+    } else {
+      console.log("[updateProduct] No batch_id provided, batch update skipped.");
     }
-
-    // ✅ Enhanced event logging
+    await inventory.save();
     logEvent({
       type: Events.PRODUCT_UPDATED,
       payload: {
         product_id: id,
-        batch_id: batch_id,
-        name: name,
-        old_data: {
-          name: oldProduct?.name,
-          qty: oldBatch?.qty
-        },
-        new_data: {
-          name: name,
-          qty: parseInt(qty)
-        }
+        batch_id,
+        name: product_name,
+        old_data: oldBatch,
+        new_data: { name: product_name, qty }
       },
-      timestamp: ts
+      timestamp: new Date().toISOString()
     });
-
-    console.log("Product updated successfully:", { id, changes: productResult.changes });
     res.json({ success: true });
   } catch (err) {
     console.error("Update product error:", err);
@@ -165,41 +135,30 @@ exports.updateProduct = (req, res) => {
 };
 
 // --- DELETE product + batches (API endpoint) ---
-exports.deleteProduct = (req, res) => {
+exports.deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("Deleting product:", id);
-
-    // Get product details before deletion for logging
-    const productInfo = db.get('SELECT * FROM products WHERE uuid = ?', [id]);
-    if (!productInfo) {
+    const inventory = await Inventory.findOne({ product_id: id });
+    if (!inventory) {
       return res.status(404).json({ error: "Product not found" });
     }
-
-    const batchesInfo = db.all('SELECT * FROM batches WHERE product_id = ?', [id]);
-
-    // Delete batches first (foreign key constraint)
-    const batchResult = db.run(`DELETE FROM batches WHERE product_id=?`, [id]);
-    const productResult = db.run(`DELETE FROM products WHERE uuid=?`, [id]);
-
-    // ✅ Enhanced event logging
+    const batchesInfo = inventory.batches || [];
+    await Inventory.deleteOne({ product_id: id });
     logEvent({
       type: Events.PRODUCT_DELETED,
       payload: {
         product_id: id,
-        name: productInfo?.name || 'Unknown',
+        name: inventory.product_name || 'Unknown',
         deleted_batches: batchesInfo.length,
         batches: batchesInfo.map(b => ({
-          batch_id: b.uuid,
+          batch_id: b.batch_id,
           batch_no: b.batch_no,
           qty: b.qty
         }))
       },
       timestamp: new Date().toISOString()
     });
-
-    console.log("Product deleted successfully:", { id, batches_deleted: batchResult.changes });
-    res.json({ success: true, deletedBatches: batchResult.changes });
+    res.json({ success: true, deletedBatches: batchesInfo.length });
   } catch (err) {
     console.error("Delete product error:", err);
     res.status(500).json({ error: "Failed to delete product", details: err.message });
@@ -207,92 +166,71 @@ exports.deleteProduct = (req, res) => {
 };
 
 // --- SELL product (reduce qty + event log) (API endpoint) ---
-exports.sellProduct = (req, res) => {
+exports.sellProduct = async (req, res) => {
   try {
     const { batchId } = req.params;
     const { quantity } = req.body;
-    console.log("Selling product:", { batchId, quantity });
-
     if (!quantity || quantity <= 0) {
       return res.status(400).json({ error: "Valid quantity is required" });
     }
-
-    const batch = db.get(`SELECT * FROM batches WHERE uuid=?`, [batchId]);
+    // Find inventory containing the batch
+    const inventory = await Inventory.findOne({ 'batches.batch_id': batchId });
+    if (!inventory) {
+      return res.status(404).json({ error: "Batch not found" });
+    }
+    const batch = inventory.batches.find(b => b.batch_id === batchId);
     if (!batch) {
       return res.status(404).json({ error: "Batch not found" });
     }
-
-    if (batch.qty < parseInt(quantity)) {
+    if (batch.qty < quantity) {
       return res.status(400).json({ error: "Not enough stock available" });
     }
-
-    // Get product name for logging
-    const product = db.get('SELECT name FROM products WHERE uuid = ?', [batch.product_id]);
-
-    // Update stock
-    const updateResult = db.run(`UPDATE batches SET qty = qty - ? WHERE uuid=?`, [parseInt(quantity), batchId]);
-
-    // Fetch updated stock
-    const updatedBatch = db.get(
-      `SELECT qty, expiry_date, product_id FROM batches WHERE uuid=?`,
-      [batchId]
-    );
-
+    batch.qty -= quantity;
+    batch.updated_at = new Date();
+    await inventory.save();
     const ts = new Date().toISOString();
-
     // Low stock event
-    if (updatedBatch.qty <= LOW_STOCK_LIMIT) {
+    if (batch.qty <= LOW_STOCK_LIMIT) {
       logEvent({
         type: Events.STOCK_LOW,
         payload: {
-          product_id: updatedBatch.product_id,
+          product_id: inventory.product_id,
           batch_id: batchId,
-          product_name: product?.name,
-          remaining_qty: updatedBatch.qty,
+          product_name: inventory.product_name,
+          remaining_qty: batch.qty,
           threshold: LOW_STOCK_LIMIT
         },
         timestamp: ts
       });
     }
-
     // Expired stock event
-    if (
-      updatedBatch.expiry_date &&
-      new Date(updatedBatch.expiry_date) < new Date()
-    ) {
+    if (batch.expiry_date && new Date(batch.expiry_date) < new Date()) {
       logEvent({
         type: 'stock.expired',
         payload: {
-          product_id: updatedBatch.product_id,
+          product_id: inventory.product_id,
           batch_id: batchId,
-          product_name: product?.name,
-          expiry_date: updatedBatch.expiry_date
+          product_name: inventory.product_name,
+          expiry_date: batch.expiry_date
         },
         timestamp: ts
       });
     }
-
-    // ✅ Enhanced sell event logging
+    // Sell event
     logEvent({
       type: Events.PRODUCT_SOLD,
       payload: {
         batch_id: batchId,
-        product_id: batch.product_id,
-        product_name: product?.name,
+        product_id: inventory.product_id,
+        product_name: inventory.product_name,
         batch_no: batch.batch_no,
-        quantity_sold: parseInt(quantity),
-        remaining_qty: updatedBatch.qty,
-        sale_value: (parseInt(quantity) * parseFloat(batch.price)).toFixed(2)
+        quantity_sold: quantity,
+        remaining_qty: batch.qty,
+        sale_value: (quantity * batch.price).toFixed(2)
       },
       timestamp: ts
     });
-
-    console.log("Product sold successfully:", { batchId, quantity, remaining: updatedBatch.qty });
-    res.json({ 
-      success: true, 
-      remaining_qty: updatedBatch.qty,
-      sale_value: (parseInt(quantity) * parseFloat(batch.price)).toFixed(2)
-    });
+    res.json({ success: true, remaining_qty: batch.qty, sale_value: (quantity * batch.price).toFixed(2) });
   } catch (err) {
     console.error("Sell product error:", err);
     res.status(500).json({ error: "Failed to sell product", details: err.message });
@@ -300,37 +238,11 @@ exports.sellProduct = (req, res) => {
 };
 
 // --- Helper functions (for internal use) ---
-function getInventory() {
-  return db.all(`
-    SELECT 
-      p.uuid AS product_id,
-      p.name AS product_name,
-      p.unit,
-      p.tax,
-      v.name AS vendor_name,
-      b.uuid AS batch_id,
-      b.batch_no,
-      b.qty,
-      b.cost,
-      b.price,
-      b.expiry_date
-    FROM products p
-    LEFT JOIN vendors v ON p.vendor_id = v.uuid
-    LEFT JOIN batches b ON p.uuid = b.product_id
-    ORDER BY 
-      CASE 
-        WHEN b.expiry_date IS NOT NULL AND DATE(b.expiry_date) < DATE('now') THEN 0
-        ELSE 1
-      END,
-      b.expiry_date ASC
-  `);
-}
-
 module.exports = {
   getInventory: exports.getInventory,
   addProduct: exports.addProduct,
   updateProduct: exports.updateProduct,
   deleteProduct: exports.deleteProduct,
-  sellProduct: exports.sellProduct,
-  getInventoryData: getInventory // Helper function
+  sellProduct: exports.sellProduct
+  ,getProductById: exports.getProductById
 };

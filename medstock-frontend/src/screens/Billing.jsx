@@ -1,3 +1,4 @@
+console.log('Billing page loaded');
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Toast, useToast } from '../components/ToastContext.jsx';
@@ -27,8 +28,7 @@ const useAuth = () => {
         setCurrentUser(null);
         setCurrentUserRole('');
       }
-    };
-
+  }
     getUserInfo();
   }, []);
 
@@ -54,6 +54,7 @@ const useAuth = () => {
 const Billing = ({ user, onLogout }) => {
   const { showToast } = useToast();
   const { isAudit, canCreate, currentUserRole } = useAuth();
+  const navigate = useNavigate();
 
   const [bills, setBills] = useState([]);
   // Filter and sort controls
@@ -114,32 +115,20 @@ const Billing = ({ user, onLogout }) => {
     };
   };
 
+  // Fetch bills from API
   const fetchBills = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      setError('');
-      
       const token = getAuthToken();
-      
       if (!token) {
-        setError('No authentication token found. Please login again.');
+        setBills([]);
+        setLoading(false);
         return;
       }
-      
       const res = await apiCall('/api/billing', {
         headers: getAuthHeaders()
       });
-      
-      if (!res.ok) {
-        if (res.status === 401) {
-          onLogout();
-          return;
-        }
-        throw new Error(`Server error: ${res.status}`);
-      }
-      
-      const data = await res.json();
-      
+      const data = await res.json ? await res.json() : res;
       if (data.success) {
         setBills(data.bills || []);
       } else {
@@ -157,15 +146,37 @@ const Billing = ({ user, onLogout }) => {
     try {
       const token = getAuthToken();
       if (!token) return;
-      
-      const res = await apiCall('/api/inventory', {
+      const data = await apiCall('/api/inventory', {
         headers: getAuthHeaders()
       });
-      
-      if (!res.ok) throw new Error(`Server error: ${res.status}`);
-      
-      const data = await res.json();
-      const availableItems = Array.isArray(data) ? data.filter(item => item.qty > 0) : [];
+      let items = [];
+      if (Array.isArray(data)) {
+        items = data;
+      } else if (data.success && Array.isArray(data.inventory)) {
+        items = data.inventory;
+      } else if (Array.isArray(data.items)) {
+        items = data.items;
+      }
+      // Flatten batches for selection
+      let batchItems = [];
+      items.forEach(product => {
+        if (Array.isArray(product.batches)) {
+          product.batches.forEach(batch => {
+            batchItems.push({
+              product_id: product.product_id,
+              product_name: product.product_name,
+              unit: product.unit,
+              vendor_name: product.vendor_name,
+              batch_id: batch.batch_id,
+              qty: batch.qty,
+              price: batch.price,
+              expiry_date: batch.expiry_date
+            });
+          });
+        }
+      });
+      const availableItems = batchItems.filter(item => item.qty > 0);
+  // ...removed unnecessary console.log...
       setInventory(availableItems);
     } catch (err) {
       setInventory([]);
@@ -176,52 +187,24 @@ const Billing = ({ user, onLogout }) => {
     try {
       const token = getAuthToken();
       if (!token) return;
-      
-      const res = await apiCall('/api/doctors', {
+      const data = await apiCall('/api/doctors', {
         headers: getAuthHeaders()
       });
-      
-      if (!res.ok) throw new Error(`Server error: ${res.status}`);
-      
-      const data = await res.json();
-      setDoctors(Array.isArray(data) ? data : []);
+      let doctorsList = [];
+      if (Array.isArray(data)) {
+        doctorsList = data;
+      } else if (data.success && Array.isArray(data.doctors)) {
+        doctorsList = data.doctors;
+      } else if (Array.isArray(data.items)) {
+        doctorsList = data.items;
+      }
+  // ...removed unnecessary console.log...
+      setDoctors(doctorsList);
     } catch (err) {
       setDoctors([]);
     }
   };
 
-  const fetchVendors = async () => {
-    try {
-      const token = getAuthToken();
-      if (!token) return;
-      
-      const res = await apiCall('/api/vendors', {
-        headers: getAuthHeaders()
-      });
-      
-      if (!res.ok) throw new Error(`Server error: ${res.status}`);
-      
-      const data = await res.json();
-      setVendors(Array.isArray(data) ? data : []);
-    } catch (err) {
-      setVendors([]);
-    }
-  };
-
-  // Filter products based on search
-  const filterProducts = (searchTerm) => {
-    if (!searchTerm.trim()) {
-      setFilteredInventory(inventory);
-      return;
-    }
-    
-    const filtered = inventory.filter(item => 
-      item.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.vendor_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.batch_id.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredInventory(filtered);
-  };
 
   // Handle product search input
   const handleProductSearch = (value) => {
@@ -247,7 +230,7 @@ const Billing = ({ user, onLogout }) => {
       fetchBills();
       fetchInventory();
       fetchDoctors();
-      fetchVendors();
+  // fetchVendors();
     }
   }, [user]);
 
@@ -273,36 +256,35 @@ const Billing = ({ user, onLogout }) => {
       return;
     }
 
+    // Find the correct batch from inventory
     const product = inventory.find(item => item.batch_id === selectedProduct);
     if (!product) {
       setError("Product not found");
       return;
     }
-
-    if (selectedQuantity <= 0 || selectedQuantity > product.qty) {
-      setError(`Invalid quantity. Available: ${product.qty}`);
+    // Use batch qty for validation
+    const batchQty = product.qty;
+    if (selectedQuantity <= 0 || selectedQuantity > batchQty) {
+      setError(`Invalid quantity. Available: ${batchQty}`);
       return;
     }
-
+    // Check if item already exists in bill (by batch_id)
     const existingItemIndex = currentBill.items.findIndex(item => item.batch_id === selectedProduct);
-    
     if (existingItemIndex >= 0) {
       const updatedItems = [...currentBill.items];
       const newQuantity = updatedItems[existingItemIndex].quantity + selectedQuantity;
-      
-      if (newQuantity > product.qty) {
-        setError(`Total quantity would exceed available stock (${product.qty})`);
+      if (newQuantity > batchQty) {
+        setError(`Total quantity would exceed available stock (${batchQty})`);
         return;
       }
-      
       updatedItems[existingItemIndex].quantity = newQuantity;
       updatedItems[existingItemIndex].total = newQuantity * product.price;
-      
       setCurrentBill(prev => ({ ...prev, items: updatedItems }));
     } else {
+      // Always send product_id and batch_id for backend
       const newItem = {
-        batch_id: product.batch_id,
         product_id: product.product_id,
+        batch_id: product.batch_id,
         product_name: product.product_name,
         unit: product.unit,
         price: product.price,
@@ -310,7 +292,6 @@ const Billing = ({ user, onLogout }) => {
         vendor_name: product.vendor_name,
         total: selectedQuantity * product.price
       };
-      
       setCurrentBill(prev => ({
         ...prev,
         items: [...prev.items, newItem]
@@ -362,9 +343,18 @@ const Billing = ({ user, onLogout }) => {
     try {
       setError('');
       const totals = calculateTotals();
-      
       const selectedDoctor = doctors.find(doc => doc.uuid === currentBill.doctor_id);
-      
+      // Ensure all items have product_id and batch_id
+      const billItems = currentBill.items.map(item => ({
+        product_id: item.product_id,
+        batch_id: item.batch_id,
+        product_name: item.product_name,
+        unit: item.unit,
+        price: item.price,
+        quantity: item.quantity,
+        vendor_name: item.vendor_name,
+        total: item.total
+      }));
       const billData = {
         customer_name: currentBill.customer_name.trim(),
         customer_phone: currentBill.customer_phone.trim(),
@@ -373,32 +363,26 @@ const Billing = ({ user, onLogout }) => {
         payment_method: currentBill.payment_method,
         discount: currentBill.discount,
         total_amount: parseFloat(totals.total),
-        items: currentBill.items
+        items: billItems
       };
+  // ...removed unnecessary console.log...
 
-      const res = await apiCall('/api/billing', {
+      const response = await apiCall('/api/billing', {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify(billData),
       });
+  // ...removed unnecessary console.log...
 
-      if (!res.ok) {
-        if (res.status === 401) {
-          onLogout();
-          return;
-        }
-        throw new Error(`Server error: ${res.status}`);
-      }
-
-      const result = await res.json();
-      if (result.success) {
+      // If using custom apiCall that returns parsed JSON directly
+      if (response.success) {
         showToast(`Bill generated successfully! Total Amount: Rs ${totals.total}`);
         resetForm();
         setShowForm(false);
         fetchBills();
         fetchInventory();
       } else {
-        setError(result.error || "Failed to generate bill");
+        setError(response.error || "Failed to generate bill");
       }
     } catch (err) {
       setError("Failed to generate bill. Please try again.");
@@ -431,28 +415,27 @@ const Billing = ({ user, onLogout }) => {
   const printBill = React.useCallback((bill) => {
     const billKey = `${bill.bill_no || bill.bill_id}`;
     
-    console.log(`Print request for bill: ${billKey}`);
-    console.log('Current printing bills:', Array.from(printingBills));
     
     // Check if already printing
     if (printingBills.has(billKey)) {
-      console.log(`Bill ${billKey} is already being printed, ignoring request`);
       return;
     }
     
     // Add to printing set
     setPrintingBills(prev => new Set(prev).add(billKey));
-    console.log(`Added ${billKey} to printing set`);
     
     try {
-      const doctorName = getDoctorName(bill.doctor_id);
-      const billItems = typeof bill.items === 'string' ? JSON.parse(bill.items) : bill.items || [];
+  // Doctor name logic
+  const doctorName = bill.doctor?.name ? bill.doctor.name : (bill.doctor_id ? getDoctorName(bill.doctor_id) : 'Walk-in');
+  // Items and vendors
+  const billItems = typeof bill.items === 'string' ? JSON.parse(bill.items) : bill.items || [];
+  // Date logic
+  const billDate = bill.date ? new Date(bill.date).toLocaleDateString() : (bill.createdAt ? new Date(bill.createdAt).toLocaleDateString() : 'N/A');
       
       // Create unique window
       const timestamp = Date.now();
       const windowName = `medstock_bill_${billKey}_${timestamp}`;
       
-      console.log(`Opening print window: ${windowName}`);
       const printWindow = window.open('', windowName, 'width=800,height=600,scrollbars=yes');
       
       if (!printWindow) {
@@ -525,7 +508,7 @@ const Billing = ({ user, onLogout }) => {
           </div>
           
           <div class="bill-info">
-            <p><strong>Date:</strong> ${new Date(bill.created_at).toLocaleDateString()}</p>
+            <p><strong>Date:</strong> ${billDate}</p>
             <p><strong>Customer:</strong> ${bill.customer_name}</p>
             <p><strong>Phone:</strong> ${bill.customer_phone || 'N/A'}</p>
             <p><strong>Doctor:</strong> ${doctorName}</p>
@@ -558,9 +541,9 @@ const Billing = ({ user, onLogout }) => {
           </table>
           
           <div class="total-section">
-            <p><strong>Subtotal: Rs ${bill.total || 0}</strong></p>
-            ${bill.discount > 0 ? `<p>Discount (${bill.discount}%): -Rs ${((bill.total || 0) * (bill.discount || 0) / 100).toFixed(2)}</p>` : ''}
-            <h3>Total: Rs ${bill.total || 0}</h3>
+            <p><strong>Subtotal: Rs ${bill.total_amount || 0}</strong></p>
+            ${bill.discount > 0 ? `<p>Discount (${bill.discount}%): -Rs ${((bill.total_amount || 0) * (bill.discount || 0) / 100).toFixed(2)}</p>` : ''}
+            <h3>Total: Rs ${bill.total_amount || 0}</h3>
           </div>
           
           <div class="footer">
@@ -571,34 +554,28 @@ const Billing = ({ user, onLogout }) => {
           <script>
             let printExecuted = false;
             
-            console.log('Print window script loaded for bill: ${billKey}');
             
             function executePrint() {
               if (printExecuted) {
-                console.log('Print already executed, skipping');
                 return;
               }
               
               printExecuted = true;
-              console.log('Executing print for bill: ${billKey}');
               
               setTimeout(() => {
                 window.print();
                 
                 // Clean up after print
                 setTimeout(() => {
-                  console.log('Cleaning up for bill: ${billKey}');
                   try {
                     if (window.opener && window.opener.setPrintingBills) {
                       window.opener.setPrintingBills(prev => {
                         const newSet = new Set(prev);
                         newSet.delete('${billKey}');
-                        console.log('Removed ${billKey} from parent printing set');
                         return newSet;
                       });
                     }
                   } catch(e) {
-                    console.log('Could not access parent window for cleanup');
                   }
                   window.close();
                 }, 2000);
@@ -623,7 +600,6 @@ const Billing = ({ user, onLogout }) => {
                   });
                 }
               } catch(e) {
-                console.log('Could not clean up on beforeunload');
               }
             });
           </script>
@@ -633,7 +609,6 @@ const Billing = ({ user, onLogout }) => {
       printWindow.document.write(printContent);
       printWindow.document.close();
       
-      console.log(`Print window content written for ${billKey}`);
       
     } catch (error) {
       console.error('Error in printBill:', error);
@@ -648,7 +623,6 @@ const Billing = ({ user, onLogout }) => {
     setTimeout(() => {
       setPrintingBills(prev => {
         if (prev.has(billKey)) {
-          console.log(`Fallback cleanup for ${billKey}`);
           const newSet = new Set(prev);
           newSet.delete(billKey);
           return newSet;
@@ -660,10 +634,10 @@ const Billing = ({ user, onLogout }) => {
 
   if (loading) {
     return (
-      <div className="p-6 flex items-center justify-center">
-        <div className="text-center">
+      <div className="p-2 sm:p-4 flex items-center justify-center min-h-[40vh] w-full">
+        <div className="text-center w-full">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading billing data...</p>
+          <p className="text-gray-600 text-base sm:text-lg">Loading billing data...</p>
         </div>
         <Toast />
       </div>
@@ -717,7 +691,7 @@ const Billing = ({ user, onLogout }) => {
   const totals = calculateTotals();
 
   return (
-    <div className="p-4 sm:p-6">
+  <div className="p-2 sm:p-4 md:p-6 max-w-full w-full mx-auto">
       <Toast />
       <div className="mb-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -730,14 +704,11 @@ const Billing = ({ user, onLogout }) => {
           </div>
           {canCreate && (
             <button
-              onClick={() => {
-                resetForm();
-                setShowForm(!showForm);
-              }}
+              onClick={() => navigate('/billing/new')}
               className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 rounded-lg shadow transition-colors text-sm sm:text-base w-full sm:w-auto justify-center"
             >
-              {!showForm && <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5" />}
-              {showForm ? 'Cancel' : 'New Bill'}
+              <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+              New Bill
             </button>
           )}
         </div>
@@ -758,22 +729,22 @@ const Billing = ({ user, onLogout }) => {
       )}
 
       <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-green-50 p-3 sm:p-4 rounded-lg text-center border border-green-200">
+  <div className="bg-green-50 p-2 sm:p-3 md:p-4 rounded-lg text-center border border-green-200 flex flex-col items-center justify-center">
           <div className="text-xl sm:text-2xl font-bold text-green-600">{bills.length}</div>
           <div className="text-xs sm:text-sm text-green-800">Total Bills</div>
         </div>
-        <div className="bg-blue-50 p-3 sm:p-4 rounded-lg text-center border border-blue-200">
+  <div className="bg-blue-50 p-2 sm:p-3 md:p-4 rounded-lg text-center border border-blue-200 flex flex-col items-center justify-center">
           <div className="text-xl sm:text-2xl font-bold text-blue-600">
-            Rs {bills.reduce((sum, bill) => sum + parseFloat(bill.total || 0), 0).toFixed(2)}
+            Rs {bills.reduce((sum, bill) => sum + parseFloat(bill.total_amount || 0), 0).toFixed(2)}
           </div>
           <div className="text-xs sm:text-sm text-blue-800">Total Revenue</div>
         </div>
-        <div className="bg-purple-50 p-3 sm:p-4 rounded-lg text-center border border-purple-200">
+  <div className="bg-purple-50 p-2 sm:p-3 md:p-4 rounded-lg text-center border border-purple-200 flex flex-col items-center justify-center">
           <div className="text-xl sm:text-2xl font-bold text-purple-600">{doctors.length}</div>
           <div className="text-xs sm:text-sm text-purple-800">Active Doctors</div>
         </div>
-        <div className="bg-orange-50 p-3 sm:p-4 rounded-lg text-center border border-orange-200">
-          <div className="text-xl sm:text-2xl font-bold text-orange-600">{vendors.length}</div>
+  <div className="bg-orange-50 p-2 sm:p-3 md:p-4 rounded-lg text-center border border-orange-200 flex flex-col items-center justify-center">
+          <div className="text-xl sm:text-2xl font-bold text-orange-600">{vendorOptions.length}</div>
           <div className="text-xs sm:text-sm text-orange-800">Active Vendors</div>
         </div>
       </div>
@@ -832,7 +803,7 @@ const Billing = ({ user, onLogout }) => {
               >
                 <option value="">Select Doctor</option>
                 {doctors.map(doctor => (
-                  <option key={doctor.uuid} value={doctor.uuid}>
+                  <option key={doctor._id} value={doctor._id}>
                     {doctor.name} - {doctor.specialization}
                   </option>
                 ))}
@@ -1074,10 +1045,14 @@ const Billing = ({ user, onLogout }) => {
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredBills.length > 0 ? (
                 filteredBills.map((bill, index) => {
-                  const items = typeof bill.items === 'string' ? JSON.parse(bill.items || '[]') : [];
-                  const vendorsInBill = getVendorsFromBill(bill.items);
-                  const doctorName = getDoctorName(bill.doctor_id);
-                  
+                  const items = typeof bill.items === 'string' ? JSON.parse(bill.items || '[]') : bill.items || [];
+                  // Vendors logic: get unique vendor names from items
+                  const vendorsInBill = items.length > 0 ? [...new Set(items.map(i => i.vendor_name).filter(Boolean))].join(', ') : 'N/A';
+                  // Doctor logic: show doctor name if available, else 'Walk-in'
+                  const doctorName = bill.doctor?.name ? bill.doctor.name : (bill.doctor ? 'Unknown Doctor' : 'Walk-in');
+                  // Date logic: use bill.date if available, else createdAt
+                  const billDate = bill.date ? new Date(bill.date).toLocaleDateString() : (bill.createdAt ? new Date(bill.createdAt).toLocaleDateString() : 'N/A');
+
                   return (
                     <tr key={bill.bill_id || `bill-${index}`} className="hover:bg-gray-50">
                       <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
@@ -1100,13 +1075,13 @@ const Billing = ({ user, onLogout }) => {
                         </div>
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {new Date(bill.created_at).toLocaleDateString()}
+                        {billDate}
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
                         {items.length} items
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-green-600">
-                        Rs {bill.total}
+                        Rs {bill.total_amount}
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap">
                         <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
@@ -1144,6 +1119,6 @@ const Billing = ({ user, onLogout }) => {
       </div>
     </div>
   );
-};
 
-export default Billing; 
+}
+export default Billing;

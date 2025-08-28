@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Toast, useToast } from '../components/ToastContext.jsx';
+import { useNavigate } from 'react-router-dom';
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { API, apiCall } from '../utils/api';
 
@@ -56,6 +57,7 @@ const formatDate = (dateString) => {
 };
 
 const Doctors = ({ user, onLogout }) => {
+  const navigate = useNavigate();
   // Specialization filter and sorting state
   const [selectedSpecialization, setSelectedSpecialization] = useState('All');
   // Removed sorting state
@@ -116,22 +118,21 @@ const Doctors = ({ user, onLogout }) => {
         return;
       }
 
-      const res = await apiCall('/api/doctors', {
+      const data = await apiCall('/api/doctors', {
         headers: getAuthHeaders()
       });
-      
-      if (!res.ok) {
-        if (res.status === 401) {
-          onLogout();
-          return;
-        }
-        throw new Error(`Server error: ${res.status}`);
-      }
-      
-      const data = await res.json();
-      const validDoctors = Array.isArray(data) ? data.filter(d => d.uuid) : [];
-      setDoctors(validDoctors);
+      console.log('API /api/doctors response:', data);
+      // Support both array and object with doctors property
+      const doctorList = Array.isArray(data) ? data : (Array.isArray(data?.doctors) ? data.doctors : []);
+      console.log('doctorList after mapping:', doctorList);
+      const validDoctors = doctorList.filter(d => d._id);
+      console.log('validDoctors:', validDoctors);
+      setDoctors(validDoctors.map(d => ({ ...d, id: d._id })));
+      setTimeout(() => {
+        console.log('Doctors state after setDoctors:', validDoctors.map(d => ({ ...d, id: d._id })));
+      }, 500);
     } catch (err) {
+      console.error('Error in fetchDoctors:', err);
       setError("Failed to fetch doctors. Please check server connection.");
       setDoctors([]);
     } finally {
@@ -153,7 +154,7 @@ const Doctors = ({ user, onLogout }) => {
 
     try {
       setError('');
-      const res = await apiCall('/api/doctors', {
+      await apiCall('/api/doctors', {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -161,20 +162,11 @@ const Doctors = ({ user, onLogout }) => {
           specialization: newDoctor.specialization.trim() || null
         }),
       });
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          onLogout();
-          return;
-        }
-        throw new Error("Failed to add doctor");
-      }
-
       setNewDoctor({ name: "", specialization: "" });
       setShowForm(false);
-  setToastMsg('Doctor added successfully!');
-  showToast('Doctor added successfully!');
-  setTimeout(() => fetchDoctors(), 4000);
+      setToastMsg('Doctor added successfully!');
+      showToast('Doctor added successfully!');
+      setTimeout(() => fetchDoctors(), 4000);
     } catch (err) {
       setError("Error adding doctor. Please try again.");
     }
@@ -188,7 +180,7 @@ const Doctors = ({ user, onLogout }) => {
 
     try {
       setError('');
-      const res = await apiCall(`/api/doctors/${editingDoctor.uuid}`, {
+      await apiCall(`/api/doctors/${editingDoctor._id || editingDoctor.id}`, {
         method: "PUT",
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -196,19 +188,10 @@ const Doctors = ({ user, onLogout }) => {
           specialization: editingDoctor.specialization?.trim() || null
         }),
       });
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          onLogout();
-          return;
-        }
-        throw new Error("Failed to update doctor");
-      }
-
       setEditingDoctor(null);
-  setToastMsg('Doctor updated successfully!');
-  showToast('Doctor updated successfully!');
-  setTimeout(() => fetchDoctors(), 4000);
+      setToastMsg('Doctor updated successfully!');
+      showToast('Doctor updated successfully!');
+      setTimeout(() => fetchDoctors(), 4000);
     } catch (err) {
       setError("Error updating doctor. Please try again.");
     }
@@ -219,23 +202,14 @@ const Doctors = ({ user, onLogout }) => {
 
     try {
       setError('');
-      const res = await apiCall(`/api/doctors/${id}`, { 
+      await apiCall(`/api/doctors/${id}`, { 
         method: "DELETE",
         headers: getAuthHeaders()
       });
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          onLogout();
-          return;
-        }
-        throw new Error("Failed to delete doctor");
-      }
-
       fetchDoctors();
-  setToastMsg('Doctor deleted successfully!');
-  showToast('Doctor deleted successfully!');
-  setTimeout(() => fetchDoctors(), 4000);
+      setToastMsg('Doctor deleted successfully!');
+      showToast('Doctor deleted successfully!');
+      setTimeout(() => fetchDoctors(), 4000);
     } catch (err) {
       setError("Error deleting doctor. Please try again.");
     }
@@ -250,6 +224,7 @@ const Doctors = ({ user, onLogout }) => {
     (doctor.specialization && doctor.specialization.toLowerCase().includes(search.toLowerCase()))) &&
     (selectedSpecialization === 'All' || doctor.specialization === selectedSpecialization)
   );
+  console.log('filteredDoctors:', filteredDoctors);
 
   // Removed sorting logic
 
@@ -291,17 +266,13 @@ const Doctors = ({ user, onLogout }) => {
                 <span className="text-blue-800 font-semibold text-sm sm:text-base">{doctors.length} Doctors</span>
               </div>
               {canCreate && (
-                  <button
-                    onClick={() => {
-                      resetForm();
-                      setShowForm(!showForm);
-                    }}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 rounded-lg transition-colors shadow flex items-center justify-center space-x-2 w-full sm:w-auto text-sm sm:text-base"
-                  >
-                    {/* Only show Plus icon when adding, not when cancelling */}
-                    {!showForm && <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5" />}
-                    <span>{showForm ? 'Cancel' : 'Add Doctor'}</span>
-                  </button>
+                <button
+                  onClick={() => navigate('/doctors/create')}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 rounded-lg transition-colors shadow flex items-center justify-center space-x-2 w-full sm:w-auto text-sm sm:text-base"
+                >
+                  <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <span>Add Doctor</span>
+                </button>
               )}
             </div>
           </div>
@@ -428,7 +399,7 @@ const Doctors = ({ user, onLogout }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredDoctors.map((doctor) => (
                   <div
-                    key={doctor.uuid}
+                    key={doctor._id || doctor.id}
                     className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow border border-gray-100 overflow-hidden"
                   >
                     <div className="bg-blue-500 p-4 text-white">
@@ -442,16 +413,16 @@ const Doctors = ({ user, onLogout }) => {
                       <div className="space-y-2 text-sm text-gray-600">
                         <div className="flex items-center">
                           <span className="w-16 text-gray-500">Created:</span>
-                          <span className="font-medium">{formatDate(doctor.created_at)}</span>
+                            <span className="font-medium">{formatDate(doctor.createdAt)}</span>
                         </div>
                         <div className="flex items-center">
                           <span className="w-16 text-gray-500">Updated:</span>
-                          <span className="font-medium">{formatDate(doctor.updated_at)}</span>
+                            <span className="font-medium">{formatDate(doctor.updatedAt)}</span>
                         </div>
                         <div className="flex items-center">
                           <span className="w-16 text-gray-500">ID:</span>
                           <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">
-                            {doctor.uuid?.slice(0, 8)}...
+                            {(doctor._id || doctor.id)?.slice(0, 8)}...
                           </span>
                         </div>
                       </div>
@@ -459,7 +430,7 @@ const Doctors = ({ user, onLogout }) => {
                       <div className="flex space-x-2 mt-4">
                         {canUpdate && (
                           <button
-                            onClick={() => setEditingDoctor(doctor)}
+                            onClick={() => navigate(`/doctors/update/${doctor._id || doctor.id}`)}
                             className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition-colors shadow text-sm font-medium flex items-center justify-center space-x-1"
                           >
                             <PencilIcon className="h-4 w-4" />
@@ -468,7 +439,7 @@ const Doctors = ({ user, onLogout }) => {
                         )}
                         {canDelete && (
                           <button
-                            onClick={() => handleDeleteDoctor(doctor.uuid)}
+                            onClick={() => handleDeleteDoctor(doctor._id || doctor.id)}
                             className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg transition-colors shadow text-sm font-medium flex items-center justify-center space-x-1"
                           >
                             <TrashIcon className="h-4 w-4" />
@@ -489,7 +460,7 @@ const Doctors = ({ user, onLogout }) => {
                 </p>
                 {!search && canCreate && (
                   <button
-                    onClick={() => setShowForm(true)}
+                    onClick={() => navigate('/doctors/create')}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors shadow flex items-center space-x-2 mx-auto"
                   >
                     <PlusIcon className="h-5 w-5" />
@@ -505,4 +476,4 @@ const Doctors = ({ user, onLogout }) => {
   );
 };
 
-export default Doctors;
+export default Doctors;   

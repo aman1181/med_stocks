@@ -10,10 +10,7 @@ const { authenticateToken, isAdmin, authorizeWithAuditCheck, authorize, validate
 console.log('✅ Auth controller and middleware loaded');
 
 // --- PUBLIC ROUTES ---
-router.post('/login', (req, res) => {
-  console.log('📡 POST /api/auth/login called for:', req.body.username);
-  authController.login(req, res);
-});
+router.post('/login', authController.login);
 
 router.get('/health', (req, res) => {
   res.json({
@@ -29,20 +26,11 @@ router.get('/health', (req, res) => {
 });
 
 // --- PROTECTED ROUTES ---
-router.get('/me', authenticateToken, (req, res) => {
-  console.log('📡 GET /api/auth/me called by:', req.user?.username);
-  authController.getCurrentUser(req, res);
-});
+router.get('/me', authenticateToken, authController.getCurrentUser);
 
-router.post('/logout', authenticateToken, (req, res) => {
-  console.log('📡 POST /api/auth/logout called by:', req.user?.username);
-  authController.logout(req, res);
-});
+router.post('/logout', authenticateToken, authController.logout);
 
-router.get('/permissions', authenticateToken, (req, res) => {
-  console.log('📡 GET /api/auth/permissions called by:', req.user?.username);
-  validatePermission(req, res);
-});
+router.get('/permissions', authenticateToken, validatePermission);
 
 router.get('/refresh', authenticateToken, (req, res) => {
   try {
@@ -75,39 +63,23 @@ router.get('/refresh', authenticateToken, (req, res) => {
 });
 
 // --- ADMIN ROUTES ---
-router.get('/users', authenticateToken, authorizeWithAuditCheck, (req, res) => {
-  console.log('👥 GET /api/auth/users called by:', req.user?.username, '(Role:', req.user?.role, ')');
-  console.log('🔍 User object:', req.user);
-  authController.getAllUsers(req, res);
-});
+router.get('/users', authenticateToken, authorizeWithAuditCheck, authController.getAllUsers);
 
-router.post('/register', authenticateToken, isAdmin, (req, res) => {
-  console.log('➕ POST /api/auth/register called by admin:', req.user?.username);
-  authController.register(req, res);
-});
+router.post('/register', authenticateToken, isAdmin, authController.register);
 
+// GET single user by ID (admin only, not implemented)
 router.get('/users/:id', authenticateToken, authorizeWithAuditCheck, (req, res) => {
-  console.log('👤 GET /api/auth/users/:id called by:', req.user?.username);
   res.status(501).json({
     success: false,
     error: 'Get single user not implemented yet'
   });
 });
 
-router.put('/users/:id', authenticateToken, authorizeWithAuditCheck, (req, res) => {
-  console.log('✏️ PUT /api/auth/users/:id called by:', req.user?.username);
-  authController.updateUser(req, res);
-});
+router.put('/users/:id', authenticateToken, authorizeWithAuditCheck, authController.updateUser);
 
-router.delete('/users/:id', authenticateToken, authorizeWithAuditCheck, (req, res) => {
-  console.log('🗑️ DELETE /api/auth/users/:id called by:', req.user?.username);
-  authController.deleteUser(req, res);
-});
+router.delete('/users/:id', authenticateToken, authorizeWithAuditCheck, authController.deleteUser);
 
-router.put('/users/:id/role', authenticateToken, authorizeWithAuditCheck, (req, res) => {
-  console.log('🔄 PUT /api/auth/users/:id/role called by:', req.user?.username);
-  authController.updateUser(req, res);
-});
+router.put('/users/:id/role', authenticateToken, authorizeWithAuditCheck, authController.updateUserRole);
 
 // ✅ Debug endpoints
 router.get('/debug/token', authenticateToken, (req, res) => {

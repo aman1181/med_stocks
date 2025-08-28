@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
 import { API, apiCall } from '../utils/api'
+import { useNavigate } from 'react-router-dom'
 
 export default function Login({ onLogin }){
+  const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const navigate = useNavigate();
 
   async function handleSubmit(e){
     e.preventDefault()
@@ -14,23 +17,14 @@ export default function Login({ onLogin }){
     
     try {
       // ✅ Updated endpoint for JWT auth
-      const res = await apiCall('/api/auth/login', {
+      const data = await apiCall('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
       })
-      
-      const data = await res.json()
-      
-      if (!res.ok) {
-        setError(data.error || 'Login failed')
-        setLoading(false)
-        return
-      }
 
-      // ✅ Check if response has required fields
       if (!data.success || !data.token || !data.user) {
-        setError('Invalid response from server')
+        setError(data.error || 'Login failed')
         setLoading(false)
         return
       }
@@ -72,7 +66,9 @@ export default function Login({ onLogin }){
         ...data.user,
         token: data.token,
         permissions: data.permissions || null
-      })
+      });
+      // Redirect to dashboard after login
+      navigate('/dashboard');
 
     } catch (err) {
       console.error('Login error:', err)
@@ -156,16 +152,37 @@ export default function Login({ onLogin }){
             <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900 mb-2">
               Password
             </label>
-            <input
-              id="password"
-              type="password"
-              className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              placeholder="Enter your password"
-              required
-            />
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                className="w-full border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-10"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+                placeholder="Enter your password"
+                required
+              />
+              <button
+                type="button"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                onClick={() => setShowPassword(v => !v)}
+                className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none"
+                tabIndex={0}
+              >
+                {showPassword ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.5 12c2.273 4.55 7.022 7.5 12 7.5 2.042 0 3.98-.41 5.73-1.127M15 12a3 3 0 11-6 0 3 3 0 016 0zm6.02-3.777A10.477 10.477 0 0122.5 12c-2.273 4.55-7.022 7.5-12 7.5a10.477 10.477 0 01-5.73-1.127" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12c0-4.55 4.75-7.5 9.75-7.5s9.75 2.95 9.75 7.5-4.75 7.5-9.75 7.5S2.25 16.55 2.25 12z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
 
           <button

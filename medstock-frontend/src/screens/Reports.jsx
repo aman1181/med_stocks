@@ -22,7 +22,7 @@ function Toast({ message, onClose }) {
   );
 }
 
-import { API, apiCall, apiCallJSON } from '../utils/api';
+import { API, apiCall } from '../utils/api';
 
 const useAuth = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -162,7 +162,7 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
       const fetchDailySales = async () => {
         try {
           // Method 1: Try dedicated daily sales endpoint
-          const dailyData = await apiCallJSON('/api/reports/sales/daily', { 
+          const dailyData = await apiCall('/api/reports/sales/daily', { 
             headers: getAuthHeaders() 
           });
           
@@ -173,7 +173,7 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
           
           try {
             // Method 2: If daily endpoint fails, calculate from bills
-            const billsData = await apiCallJSON('/api/billing', { 
+            const billsData = await apiCall('/api/billing', { 
               headers: getAuthHeaders() 
             });
             
@@ -233,7 +233,7 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
       }
       for (const endpointInfo of endpoints) {
         try {
-          const data = await apiCallJSON(endpointInfo.endpoint, { 
+          const data = await apiCall(endpointInfo.endpoint, { 
             headers: getAuthHeaders() 
           });
           const processedData = Array.isArray(data) ? data : [];

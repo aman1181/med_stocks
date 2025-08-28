@@ -3383,3 +3383,627 @@
 2025-08-25T13:50:15.790Z - REPORT_GENERATED - Daily sales report generated: 7 transactions, ₹2035 revenue - {"type":"daily_sales","date":"2025-08-25","transactions":7,"revenue":2035,"sales":52,"status":"success"}
 2025-08-25T13:50:45.762Z - REPORT_GENERATED - Daily sales report requested - {"type":"daily_sales","requestedBy":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
 2025-08-25T13:50:45.776Z - REPORT_GENERATED - Daily sales report generated: 7 transactions, ₹2035 revenue - {"type":"daily_sales","date":"2025-08-25","transactions":7,"revenue":2035,"sales":52,"status":"success"}
+2025-08-25T13:51:15.761Z - REPORT_GENERATED - Daily sales report requested - {"type":"daily_sales","requestedBy":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-25T13:51:15.774Z - REPORT_GENERATED - Daily sales report generated: 7 transactions, ₹2035 revenue - {"type":"daily_sales","date":"2025-08-25","transactions":7,"revenue":2035,"sales":52,"status":"success"}
+2025-08-25T13:51:45.786Z - REPORT_GENERATED - Daily sales report requested - {"type":"daily_sales","requestedBy":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-25T13:51:45.811Z - REPORT_GENERATED - Daily sales report generated: 7 transactions, ₹2035 revenue - {"type":"daily_sales","date":"2025-08-25","transactions":7,"revenue":2035,"sales":52,"status":"success"}
+2025-08-26T07:26:37.649Z - REPORT_GENERATED - Daily sales report requested - {"type":"daily_sales","requestedBy":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-26T07:26:37.690Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-26T07:26:37.710Z - REPORT_GENERATED - Daily sales report requested - {"type":"daily_sales","requestedBy":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-26T07:26:37.726Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-26T07:27:04.823Z - REPORT_GENERATED - Bills fetched successfully: 17 bills - {"type":"bills_list","action":"fetch_success","billCount":17}
+2025-08-26T07:27:04.893Z - REPORT_GENERATED - Bills fetched successfully: 17 bills - {"type":"bills_list","action":"fetch_success","billCount":17}
+2025-08-26T07:28:42.835Z - REPORT_GENERATED - Bills fetched successfully: 17 bills - {"type":"bills_list","action":"fetch_success","billCount":17}
+2025-08-26T07:28:42.926Z - REPORT_GENERATED - Bills fetched successfully: 17 bills - {"type":"bills_list","action":"fetch_success","billCount":17}
+2025-08-26T07:31:05.418Z - REPORT_GENERATED - Bills fetched successfully: 17 bills - {"type":"bills_list","action":"fetch_success","billCount":17}
+2025-08-26T07:31:05.533Z - REPORT_GENERATED - Bills fetched successfully: 17 bills - {"type":"bills_list","action":"fetch_success","billCount":17}
+2025-08-26T07:34:03.905Z - REPORT_GENERATED - Bills fetched successfully: 17 bills - {"type":"bills_list","action":"fetch_success","billCount":17}
+2025-08-26T07:34:04.014Z - REPORT_GENERATED - Bills fetched successfully: 17 bills - {"type":"bills_list","action":"fetch_success","billCount":17}
+2025-08-26T07:34:12.781Z - REPORT_GENERATED - Daily sales report requested - {"type":"daily_sales","requestedBy":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-26T07:34:12.802Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-26T07:34:12.834Z - REPORT_GENERATED - Weekly sales report requested - {"type":"weekly_sales","requestedBy":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-26T07:34:12.847Z - REPORT_GENERATED - Weekly sales report generated: 2 weeks - {"type":"weekly_sales","weekCount":2,"dataSource":"bills_table","status":"success"}
+2025-08-26T07:34:12.877Z - REPORT_GENERATED - Monthly sales report requested - {"type":"monthly_sales","requestedBy":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-26T07:34:12.887Z - REPORT_GENERATED - Monthly sales report generated: 1 months - {"type":"monthly_sales","monthCount":1,"dataSource":"bills_table","status":"success"}
+2025-08-26T07:34:12.914Z - REPORT_GENERATED - Doctor-wise sales report requested - {"type":"doctor_wise_sales","requestedBy":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-26T07:34:12.946Z - SYSTEM_ERROR - Doctor-wise sales report generation failed - {"error":"Doctor-wise sales report failed","details":"billsTableExists is not defined","requestedBy":"::1"}
+2025-08-26T07:34:12.988Z - REPORT_GENERATED - Vendor-wise sales report requested - {"type":"vendor_wise_sales","requestedBy":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-26T07:34:13.009Z - REPORT_GENERATED - Vendor-wise sales report generated: 6 vendors - {"type":"vendor_wise_sales","vendorCount":6,"status":"success"}
+2025-08-26T07:34:13.047Z - REPORT_GENERATED - Stock report requested - {"type":"stock_report","requestedBy":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-26T07:34:13.068Z - REPORT_GENERATED - Stock report generated: 7 products - {"type":"stock_report","productCount":7,"stockStats":{"Low Stock":3,"In Stock":4},"status":"success"}
+2025-08-26T07:34:13.092Z - REPORT_GENERATED - Expiry report requested for 30 days - {"type":"expiry_report","days":30,"requestedBy":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-26T07:34:13.104Z - REPORT_GENERATED - Expiry report generated: 3 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":3,"expiryStats":{"Expired":2,"Expires Soon":1},"status":"success"}
+2025-08-26T07:34:20.778Z - REPORT_GENERATED - Users list fetched by admin: 6 users - {"type":"users_list","userCount":6,"requestedBy":"admin","requestedById":"b34b73cb-9b1f-47f5-8867-cc12634446d1","ip":"::1"}
+2025-08-26T07:34:20.814Z - REPORT_GENERATED - Users list fetched by admin: 6 users - {"type":"users_list","userCount":6,"requestedBy":"admin","requestedById":"b34b73cb-9b1f-47f5-8867-cc12634446d1","ip":"::1"}
+2025-08-26T07:43:05.380Z - USER_LOGIN - User updated by admin: henry (audit → pharmacist) - {"action":"user_updated","targetUserId":"8e29d6ee-3303-4fb5-8b27-5fa1ce6b4029","targetUsername":"henry","oldRole":"audit","newRole":"pharmacist","updatedBy":"admin","updatedById":"b34b73cb-9b1f-47f5-8867-cc12634446d1","passwordChanged":false,"ip":"::1"}
+2025-08-26T07:43:09.451Z - REPORT_GENERATED - Users list fetched by admin: 6 users - {"type":"users_list","userCount":6,"requestedBy":"admin","requestedById":"b34b73cb-9b1f-47f5-8867-cc12634446d1","ip":"::1"}
+2025-08-26T14:28:00.635Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"PostmanRuntime/7.45.0"}
+2025-08-26T14:28:01.020Z - USER_LOGIN - Login failed - user not found: admin - {"action":"login_failed","username":"admin","reason":"user_not_found"}
+2025-08-26T14:31:51.722Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"PostmanRuntime/7.45.0"}
+2025-08-26T14:31:51.773Z - USER_LOGIN - Login failed - user not found: admin - {"action":"login_failed","username":"admin","reason":"user_not_found"}
+2025-08-26T14:32:07.857Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"PostmanRuntime/7.45.0"}
+2025-08-26T14:32:07.905Z - USER_LOGIN - Login failed - user not found: admin - {"action":"login_failed","username":"admin","reason":"user_not_found"}
+2025-08-27T06:12:13.863Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-27T06:12:13.970Z - USER_LOGIN - Login failed - user not found: admin - {"action":"login_failed","username":"admin","reason":"user_not_found"}
+2025-08-27T06:14:27.465Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-27T06:14:27.740Z - USER_LOGIN - Login failed - user not found: admin - {"action":"login_failed","username":"admin","reason":"user_not_found"}
+2025-08-27T06:14:45.074Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-27T06:14:45.110Z - USER_LOGIN - Login failed - user not found: admin - {"action":"login_failed","username":"admin","reason":"user_not_found"}
+2025-08-27T06:15:00.273Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-27T06:15:00.293Z - USER_LOGIN - Login failed - user not found: admin - {"action":"login_failed","username":"admin","reason":"user_not_found"}
+2025-08-27T07:18:47.264Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-27T07:18:49.754Z - USER_LOGIN - Login failed - user not found: admin - {"action":"login_failed","username":"admin","reason":"user_not_found"}
+2025-08-27T07:21:56.007Z - USER_LOGIN - Registration attempt: admin as admin - {"action":"register_attempt","username":"admin","role":"admin","ip":"::1","userAgent":"PostmanRuntime/7.45.0"}
+2025-08-27T07:21:56.218Z - USER_LOGIN - User registered successfully: admin as admin - {"action":"register_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"PostmanRuntime/7.45.0"}
+2025-08-27T07:21:56.217Z - USER_LOGIN - User created: admin with role admin - {"action":"user_created","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","timestamp":"2025-08-27T07:21:56.217Z"}
+2025-08-27T07:23:31.527Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-27T07:23:31.734Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-08-27T07:23:31.764Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36","tokenGenerated":true}
+2025-08-27T07:23:50.558Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-27T07:23:50.646Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-08-27T07:23:50.651Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36","tokenGenerated":true}
+2025-08-27T07:25:40.453Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-27T07:25:40.582Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-08-27T07:25:40.601Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36","tokenGenerated":true}
+2025-08-27T07:25:43.087Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-27T07:25:43.663Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T07:25:57.955Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T07:25:58.353Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T07:25:59.400Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T07:25:59.503Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T07:26:10.282Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T07:26:10.345Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T07:26:14.472Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T07:26:14.620Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T07:27:29.054Z - REPORT_GENERATED - Users list fetched by admin: 11 users - {"type":"users_list","userCount":11,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-27T07:27:29.264Z - REPORT_GENERATED - Users list fetched by admin: 11 users - {"type":"users_list","userCount":11,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-27T08:20:57.120Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-27T08:20:57.376Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T08:20:58.929Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T08:20:59.034Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T08:21:02.517Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T08:21:02.590Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T08:21:48.751Z - REPORT_GENERATED - Users list fetched by admin: 11 users - {"type":"users_list","userCount":11,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-27T08:21:48.819Z - REPORT_GENERATED - Users list fetched by admin: 11 users - {"type":"users_list","userCount":11,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-27T09:37:12.193Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-27T09:37:12.287Z - REPORT_GENERATED - Weekly sales report generated: 0 weeks - {"type":"weekly_sales","weekCount":0,"status":"success"}
+2025-08-27T09:37:12.340Z - REPORT_GENERATED - Monthly sales report generated: 0 months - {"type":"monthly_sales","monthCount":0,"status":"success"}
+2025-08-27T09:37:12.382Z - REPORT_GENERATED - Doctor-wise sales report generated: 0 doctors - {"type":"doctor_wise_sales","doctorCount":0,"status":"success"}
+2025-08-27T09:37:12.433Z - REPORT_GENERATED - Vendor-wise sales report generated: 0 vendors - {"type":"vendor_wise_sales","vendorCount":0,"status":"success"}
+2025-08-27T09:37:12.482Z - REPORT_GENERATED - Stock report generated: 0 products - {"type":"stock_report","productCount":0,"stockStats":{},"status":"success"}
+2025-08-27T09:37:12.534Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-27T09:37:15.153Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-27T09:37:15.197Z - REPORT_GENERATED - Weekly sales report generated: 0 weeks - {"type":"weekly_sales","weekCount":0,"status":"success"}
+2025-08-27T09:37:15.238Z - REPORT_GENERATED - Monthly sales report generated: 0 months - {"type":"monthly_sales","monthCount":0,"status":"success"}
+2025-08-27T09:37:15.278Z - REPORT_GENERATED - Doctor-wise sales report generated: 0 doctors - {"type":"doctor_wise_sales","doctorCount":0,"status":"success"}
+2025-08-27T09:37:15.322Z - REPORT_GENERATED - Vendor-wise sales report generated: 0 vendors - {"type":"vendor_wise_sales","vendorCount":0,"status":"success"}
+2025-08-27T09:37:15.360Z - REPORT_GENERATED - Stock report generated: 0 products - {"type":"stock_report","productCount":0,"stockStats":{},"status":"success"}
+2025-08-27T09:37:15.403Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-27T09:49:13.868Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-27T09:49:14.087Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-08-27T09:49:14.129Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","tokenGenerated":true}
+2025-08-27T09:49:22.173Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-27T09:49:22.249Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T10:10:02.975Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-27T10:10:03.194Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T10:27:57.348Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T10:27:57.677Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T10:33:16.060Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-27T10:33:16.242Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","tokenGenerated":true}
+2025-08-27T10:33:16.217Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-08-27T10:33:18.680Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-27T10:33:18.770Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","tokenGenerated":true}
+2025-08-27T10:33:18.769Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-08-27T10:33:19.352Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-27T10:33:19.442Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-08-27T10:33:19.444Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","tokenGenerated":true}
+2025-08-27T10:33:27.427Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-27T10:33:27.517Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36","tokenGenerated":true}
+2025-08-27T10:33:27.515Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-08-27T10:33:33.733Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-27T10:33:33.821Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-08-27T10:33:33.823Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","tokenGenerated":true}
+2025-08-27T10:33:34.415Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-27T10:33:34.504Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-08-27T10:33:34.505Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","tokenGenerated":true}
+2025-08-27T10:33:56.198Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-27T10:33:56.286Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-08-27T10:33:56.289Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36","tokenGenerated":true}
+2025-08-27T10:38:51.880Z - USER_LOGIN - User profile accessed: admin - {"action":"user_profile_accessed","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1"}
+2025-08-27T10:39:10.060Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-27T10:39:10.161Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-08-27T10:39:10.165Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36","tokenGenerated":true}
+2025-08-27T10:39:12.750Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-27T10:39:13.384Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T10:40:44.854Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T10:40:44.962Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T11:10:56.387Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-27T11:10:56.573Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-08-27T11:10:56.595Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36","tokenGenerated":true}
+2025-08-27T11:10:58.877Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-27T11:10:59.504Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T11:38:51.961Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T11:38:52.027Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T11:44:19.216Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-27T11:44:19.275Z - REPORT_GENERATED - Weekly sales report generated: 0 weeks - {"type":"weekly_sales","weekCount":0,"status":"success"}
+2025-08-27T11:44:19.310Z - REPORT_GENERATED - Monthly sales report generated: 0 months - {"type":"monthly_sales","monthCount":0,"status":"success"}
+2025-08-27T11:44:19.351Z - REPORT_GENERATED - Doctor-wise sales report generated: 0 doctors - {"type":"doctor_wise_sales","doctorCount":0,"status":"success"}
+2025-08-27T11:44:19.393Z - REPORT_GENERATED - Vendor-wise sales report generated: 0 vendors - {"type":"vendor_wise_sales","vendorCount":0,"status":"success"}
+2025-08-27T11:44:19.429Z - REPORT_GENERATED - Stock report generated: 0 products - {"type":"stock_report","productCount":0,"stockStats":{},"status":"success"}
+2025-08-27T11:44:19.467Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-27T11:44:21.995Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T11:44:22.221Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T12:25:30.505Z - REPORT_GENERATED - Users list fetched by admin: 11 users - {"type":"users_list","userCount":11,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-27T12:25:30.635Z - REPORT_GENERATED - Users list fetched by admin: 11 users - {"type":"users_list","userCount":11,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-27T12:26:16.787Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-27T12:26:16.888Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T12:26:20.049Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-27T12:26:20.110Z - REPORT_GENERATED - Weekly sales report generated: 0 weeks - {"type":"weekly_sales","weekCount":0,"status":"success"}
+2025-08-27T12:26:20.161Z - REPORT_GENERATED - Monthly sales report generated: 0 months - {"type":"monthly_sales","monthCount":0,"status":"success"}
+2025-08-27T12:26:20.204Z - REPORT_GENERATED - Doctor-wise sales report generated: 0 doctors - {"type":"doctor_wise_sales","doctorCount":0,"status":"success"}
+2025-08-27T12:26:20.257Z - REPORT_GENERATED - Vendor-wise sales report generated: 1 vendors - {"type":"vendor_wise_sales","vendorCount":1,"status":"success"}
+2025-08-27T12:26:20.293Z - REPORT_GENERATED - Stock report generated: 1 products - {"type":"stock_report","productCount":1,"stockStats":{"In Stock":1},"status":"success"}
+2025-08-27T12:26:20.336Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-27T12:27:11.618Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T12:27:11.676Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T12:33:01.103Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T12:33:01.412Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T12:33:10.505Z - REPORT_GENERATED - Users list fetched by admin: 11 users - {"type":"users_list","userCount":11,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-27T12:33:10.576Z - REPORT_GENERATED - Users list fetched by admin: 11 users - {"type":"users_list","userCount":11,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-27T12:33:28.244Z - USER_LOGIN - Registration attempt: aman as admin - {"action":"register_attempt","username":"aman","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-27T12:33:28.434Z - SYSTEM_ERROR - Registration system error: aman - {"error":"Registration failed","username":"aman","details":"E11000 duplicate key error collection: test.users index: email_1 dup key: { email: null }","ip":"::1"}
+2025-08-27T12:33:34.970Z - REPORT_GENERATED - Users list fetched by admin: 11 users - {"type":"users_list","userCount":11,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-27T12:33:35.144Z - REPORT_GENERATED - Users list fetched by admin: 11 users - {"type":"users_list","userCount":11,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-27T12:34:53.360Z - USER_LOGIN - Registration attempt: aman as admin - {"action":"register_attempt","username":"aman","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-27T12:34:53.582Z - SYSTEM_ERROR - Registration system error: aman - {"error":"Registration failed","username":"aman","details":"E11000 duplicate key error collection: test.users index: email_1 dup key: { email: null }","ip":"::1"}
+2025-08-27T12:35:08.483Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-27T12:35:08.569Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T12:35:13.752Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-27T12:35:13.803Z - REPORT_GENERATED - Weekly sales report generated: 0 weeks - {"type":"weekly_sales","weekCount":0,"status":"success"}
+2025-08-27T12:35:13.852Z - REPORT_GENERATED - Monthly sales report generated: 0 months - {"type":"monthly_sales","monthCount":0,"status":"success"}
+2025-08-27T12:35:13.901Z - REPORT_GENERATED - Doctor-wise sales report generated: 0 doctors - {"type":"doctor_wise_sales","doctorCount":0,"status":"success"}
+2025-08-27T12:35:13.952Z - REPORT_GENERATED - Vendor-wise sales report generated: 1 vendors - {"type":"vendor_wise_sales","vendorCount":1,"status":"success"}
+2025-08-27T12:35:14.007Z - REPORT_GENERATED - Stock report generated: 1 products - {"type":"stock_report","productCount":1,"stockStats":{"In Stock":1},"status":"success"}
+2025-08-27T12:35:14.079Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-27T12:35:15.115Z - REPORT_GENERATED - Users list fetched by admin: 11 users - {"type":"users_list","userCount":11,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-27T12:35:15.193Z - REPORT_GENERATED - Users list fetched by admin: 11 users - {"type":"users_list","userCount":11,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-27T13:42:50.069Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T13:42:50.217Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T13:42:54.190Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-27T13:42:54.238Z - REPORT_GENERATED - Weekly sales report generated: 0 weeks - {"type":"weekly_sales","weekCount":0,"status":"success"}
+2025-08-27T13:42:54.275Z - REPORT_GENERATED - Monthly sales report generated: 0 months - {"type":"monthly_sales","monthCount":0,"status":"success"}
+2025-08-27T13:42:54.313Z - REPORT_GENERATED - Doctor-wise sales report generated: 0 doctors - {"type":"doctor_wise_sales","doctorCount":0,"status":"success"}
+2025-08-27T13:42:54.362Z - REPORT_GENERATED - Vendor-wise sales report generated: 2 vendors - {"type":"vendor_wise_sales","vendorCount":2,"status":"success"}
+2025-08-27T13:42:54.396Z - REPORT_GENERATED - Stock report generated: 3 products - {"type":"stock_report","productCount":3,"stockStats":{"Low Stock":1,"In Stock":2},"status":"success"}
+2025-08-27T13:42:54.434Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-27T13:42:56.489Z - REPORT_GENERATED - Users list fetched by admin: 11 users - {"type":"users_list","userCount":11,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-27T13:42:56.544Z - REPORT_GENERATED - Users list fetched by admin: 11 users - {"type":"users_list","userCount":11,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-27T13:42:58.931Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-26","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-27T13:42:58.988Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T13:43:01.647Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-27T13:43:01.720Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:08:19.393Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:08:19.496Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:14:58.839Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:14:58.906Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:20:56.439Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:20:56.731Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:21:09.029Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:21:09.114Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:31:55.619Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:31:55.743Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:31:57.965Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:31:58.042Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:32:01.753Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:32:01.799Z - REPORT_GENERATED - Weekly sales report generated: 0 weeks - {"type":"weekly_sales","weekCount":0,"status":"success"}
+2025-08-28T06:32:01.837Z - REPORT_GENERATED - Monthly sales report generated: 0 months - {"type":"monthly_sales","monthCount":0,"status":"success"}
+2025-08-28T06:32:01.876Z - REPORT_GENERATED - Doctor-wise sales report generated: 0 doctors - {"type":"doctor_wise_sales","doctorCount":0,"status":"success"}
+2025-08-28T06:32:01.923Z - REPORT_GENERATED - Vendor-wise sales report generated: 2 vendors - {"type":"vendor_wise_sales","vendorCount":2,"status":"success"}
+2025-08-28T06:32:01.969Z - REPORT_GENERATED - Stock report generated: 3 products - {"type":"stock_report","productCount":3,"stockStats":{"In Stock":3},"status":"success"}
+2025-08-28T06:32:02.012Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-28T06:32:05.330Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:32:05.387Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:32:06.761Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:32:06.841Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:32:12.676Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:32:12.751Z - REPORT_GENERATED - Weekly sales report generated: 0 weeks - {"type":"weekly_sales","weekCount":0,"status":"success"}
+2025-08-28T06:32:12.784Z - REPORT_GENERATED - Monthly sales report generated: 0 months - {"type":"monthly_sales","monthCount":0,"status":"success"}
+2025-08-28T06:32:12.817Z - REPORT_GENERATED - Doctor-wise sales report generated: 0 doctors - {"type":"doctor_wise_sales","doctorCount":0,"status":"success"}
+2025-08-28T06:32:12.864Z - REPORT_GENERATED - Vendor-wise sales report generated: 2 vendors - {"type":"vendor_wise_sales","vendorCount":2,"status":"success"}
+2025-08-28T06:32:12.898Z - REPORT_GENERATED - Stock report generated: 3 products - {"type":"stock_report","productCount":3,"stockStats":{"In Stock":3},"status":"success"}
+2025-08-28T06:32:12.927Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-28T06:32:13.710Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:32:13.771Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:32:44.337Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:32:44.382Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:33:14.299Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:33:14.342Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:33:43.611Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:33:43.657Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:34:05.228Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:34:05.288Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:36:09.707Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:36:10.061Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:39:05.393Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:39:19.335Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:39:19.913Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:41:40.026Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:44:37.734Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:44:54.210Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:51:46.968Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-28T06:51:47.251Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-08-28T06:51:47.292Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","tokenGenerated":true}
+2025-08-28T06:51:47.705Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:51:47.755Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:52:18.120Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:52:18.742Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:52:48.850Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:52:49.481Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:53:18.852Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:53:19.465Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:53:48.888Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:53:49.514Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:54:18.852Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:54:19.460Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:54:48.859Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:54:49.481Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:55:13.079Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:55:13.611Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:56:55.399Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:57:27.864Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-28T06:57:27.930Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:57:29.914Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:57:30.253Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:59:02.749Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T06:59:35.658Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T07:02:33.022Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T07:04:38.637Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T07:08:54.160Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T07:15:16.848Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T07:17:02.737Z - REPORT_GENERATED - Bills fetched successfully: 0 bills - {"type":"bills_list","action":"fetch_success","billCount":0}
+2025-08-28T07:18:36.644Z - SYSTEM_ERROR -  - {"error":"Doctor not found"}
+2025-08-28T07:18:40.012Z - SYSTEM_ERROR -  - {"error":"Doctor not found"}
+2025-08-28T07:18:54.815Z - SYSTEM_ERROR -  - {"error":"Doctor not found"}
+2025-08-28T07:20:37.054Z - SYSTEM_ERROR -  - {"error":"Doctor not found"}
+2025-08-28T07:23:33.953Z - BILL_CREATED -  - {"billId":"68b003f517827d03101c97bd","doctorId":"68aeee070e51697b4eff6354","total":540}
+2025-08-28T07:23:50.946Z - BILL_CREATED -  - {"billId":"68b0040617827d03101c97c4","doctorId":"68aeee070e51697b4eff6354","total":540}
+2025-08-28T07:24:36.837Z - BILL_CREATED -  - {"billId":"68b0043417827d03101c97cb","doctorId":"68aeee070e51697b4eff6354","total":540}
+2025-08-28T07:30:36.992Z - REPORT_GENERATED - Bills fetched successfully: 3 bills - {"type":"bills_list","action":"fetch_success","billCount":3}
+2025-08-28T07:31:19.506Z - BILL_CREATED -  - {"billId":"68b005c717827d03101c97e2","doctorId":"68aeedc80e51697b4eff634d","total":540}
+2025-08-28T07:31:34.334Z - BILL_CREATED -  - {"billId":"68b005d617827d03101c97e9","doctorId":"68aeedc80e51697b4eff634d","total":540}
+2025-08-28T07:37:56.051Z - REPORT_GENERATED - Bills fetched successfully: 5 bills - {"type":"bills_list","action":"fetch_success","billCount":5}
+2025-08-28T07:39:06.076Z - BILL_CREATED -  - {"billId":"68b0079a17827d03101c9802","doctorId":"68aeee070e51697b4eff6354","total":540}
+2025-08-28T07:39:10.978Z - BILL_CREATED -  - {"billId":"68b0079e17827d03101c9809","doctorId":"68aeee070e51697b4eff6354","total":540}
+2025-08-28T07:44:04.160Z - REPORT_GENERATED - Bills fetched successfully: 7 bills - {"type":"bills_list","action":"fetch_success","billCount":7}
+2025-08-28T07:44:15.731Z - REPORT_GENERATED - Bills fetched successfully: 7 bills - {"type":"bills_list","action":"fetch_success","billCount":7}
+2025-08-28T07:44:15.990Z - REPORT_GENERATED - Bills fetched successfully: 7 bills - {"type":"bills_list","action":"fetch_success","billCount":7}
+2025-08-28T07:44:45.272Z - BILL_CREATED -  - {"billId":"68b008edcc00c67136e7a418","doctorId":"68aeedc80e51697b4eff634d","total":2460}
+2025-08-28T07:44:57.503Z - BILL_CREATED -  - {"billId":"68b008f9cc00c67136e7a422","doctorId":"68aeedc80e51697b4eff634d","total":2460}
+2025-08-28T07:44:59.690Z - REPORT_GENERATED - Daily sales report generated: 9 transactions, ₹8700 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":9,"revenue":8700,"sales":90,"status":"success"}
+2025-08-28T07:44:59.783Z - REPORT_GENERATED - Bills fetched successfully: 9 bills - {"type":"bills_list","action":"fetch_success","billCount":9}
+2025-08-28T07:45:22.451Z - REPORT_GENERATED - Bills fetched successfully: 9 bills - {"type":"bills_list","action":"fetch_success","billCount":9}
+2025-08-28T07:45:22.557Z - REPORT_GENERATED - Bills fetched successfully: 9 bills - {"type":"bills_list","action":"fetch_success","billCount":9}
+2025-08-28T07:48:36.644Z - REPORT_GENERATED - Bills fetched successfully: 9 bills - {"type":"bills_list","action":"fetch_success","billCount":9}
+2025-08-28T07:49:01.436Z - BILL_CREATED -  - {"billId":"68b009edcc00c67136e7a4c6","doctorId":"68aeedc80e51697b4eff634d","total":2460}
+2025-08-28T07:51:00.367Z - REPORT_GENERATED - Bills fetched successfully: 10 bills - {"type":"bills_list","action":"fetch_success","billCount":10}
+2025-08-28T07:51:11.022Z - REPORT_GENERATED - Bills fetched successfully: 10 bills - {"type":"bills_list","action":"fetch_success","billCount":10}
+2025-08-28T07:51:11.169Z - REPORT_GENERATED - Bills fetched successfully: 10 bills - {"type":"bills_list","action":"fetch_success","billCount":10}
+2025-08-28T07:51:49.912Z - BILL_CREATED -  - {"billId":"68b00a95cc00c67136e7a525","doctorId":"68aeedc80e51697b4eff634d","total":150}
+2025-08-28T07:52:08.323Z - BILL_CREATED -  - {"billId":"68b00aa8cc00c67136e7a52f","doctorId":"68aeedc80e51697b4eff634d","total":150}
+2025-08-28T07:52:28.495Z - REPORT_GENERATED - Bills fetched successfully: 12 bills - {"type":"bills_list","action":"fetch_success","billCount":12}
+2025-08-28T07:58:33.435Z - REPORT_GENERATED - Bills fetched successfully: 12 bills - {"type":"bills_list","action":"fetch_success","billCount":12}
+2025-08-28T07:58:59.954Z - BILL_CREATED -  - {"billId":"68b00c439fe85c4230fe1795","doctorId":"68aeedc80e51697b4eff634d","total":150}
+2025-08-28T07:59:14.770Z - BILL_CREATED -  - {"billId":"68b00c529fe85c4230fe179f","doctorId":"68aeedc80e51697b4eff634d","total":150}
+2025-08-28T07:59:19.734Z - REPORT_GENERATED - Bills fetched successfully: 14 bills - {"type":"bills_list","action":"fetch_success","billCount":14}
+2025-08-28T08:05:29.818Z - BILL_CREATED -  - {"billId":"68b00dc99fe85c4230fe17c4","doctorId":"68aeddeb0e51697b4eff6276","total":180}
+2025-08-28T08:05:34.310Z - REPORT_GENERATED - Bills fetched successfully: 15 bills - {"type":"bills_list","action":"fetch_success","billCount":15}
+2025-08-28T08:10:45.498Z - REPORT_GENERATED - Bills fetched successfully: 15 bills - {"type":"bills_list","action":"fetch_success","billCount":15}
+2025-08-28T08:12:26.290Z - REPORT_GENERATED - Daily sales report generated: 15 transactions, ₹11940 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":15,"revenue":11940,"sales":152,"status":"success"}
+2025-08-28T08:12:26.404Z - REPORT_GENERATED - Bills fetched successfully: 15 bills - {"type":"bills_list","action":"fetch_success","billCount":15}
+2025-08-28T08:12:34.698Z - REPORT_GENERATED - Bills fetched successfully: 15 bills - {"type":"bills_list","action":"fetch_success","billCount":15}
+2025-08-28T08:12:34.805Z - REPORT_GENERATED - Bills fetched successfully: 15 bills - {"type":"bills_list","action":"fetch_success","billCount":15}
+2025-08-28T08:12:45.844Z - REPORT_GENERATED - Bills fetched successfully: 15 bills - {"type":"bills_list","action":"fetch_success","billCount":15}
+2025-08-28T08:12:45.953Z - REPORT_GENERATED - Bills fetched successfully: 15 bills - {"type":"bills_list","action":"fetch_success","billCount":15}
+2025-08-28T08:13:27.077Z - BILL_CREATED -  - {"billId":"68b00fa79fe85c4230fe18b6","doctorId":"68aeedc80e51697b4eff634d","total":945}
+2025-08-28T08:13:35.473Z - REPORT_GENERATED - Bills fetched successfully: 16 bills - {"type":"bills_list","action":"fetch_success","billCount":16}
+2025-08-28T08:20:11.268Z - BILL_CREATED -  - {"billId":"68b0113b9fe85c4230fe18dd","doctorId":"68aeee070e51697b4eff6354","total":300}
+2025-08-28T08:25:10.634Z - BILL_CREATED -  - {"billId":"68b01266257088b0c32588e2","doctorId":"68aeee070e51697b4eff6354","total":105}
+2025-08-28T08:26:47.833Z - REPORT_GENERATED - Bills fetched successfully: 18 bills - {"type":"bills_list","action":"fetch_success","billCount":18}
+2025-08-28T08:27:21.577Z - BILL_CREATED -  - {"billId":"68b012e9257088b0c325890b","doctorId":"68aeedc80e51697b4eff634d","total":105}
+2025-08-28T08:28:23.260Z - REPORT_GENERATED - Bills fetched successfully: 19 bills - {"type":"bills_list","action":"fetch_success","billCount":19}
+2025-08-28T08:28:50.815Z - BILL_CREATED -  - {"billId":"68b01342257088b0c3258935","doctorId":"68aeedc80e51697b4eff634d","total":105}
+2025-08-28T08:28:51.320Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:31:05.624Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:31:09.844Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:31:12.385Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:31:17.218Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:31:23.086Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:32:04.638Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:32:04.723Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:32:07.045Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:32:07.133Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:32:13.478Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:32:13.982Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:34:50.575Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:34:50.694Z - REPORT_GENERATED - Weekly sales report generated: 1 weeks - {"type":"weekly_sales","weekCount":1,"status":"success"}
+2025-08-28T08:34:50.772Z - REPORT_GENERATED - Monthly sales report generated: 1 months - {"type":"monthly_sales","monthCount":1,"status":"success"}
+2025-08-28T08:34:50.893Z - REPORT_GENERATED - Doctor-wise sales report generated: 3 doctors - {"type":"doctor_wise_sales","doctorCount":3,"status":"success"}
+2025-08-28T08:34:50.943Z - REPORT_GENERATED - Vendor-wise sales report generated: 3 vendors - {"type":"vendor_wise_sales","vendorCount":3,"status":"success"}
+2025-08-28T08:34:51.001Z - REPORT_GENERATED - Stock report generated: 4 products - {"type":"stock_report","productCount":4,"stockStats":{"Out of Stock":1,"Low Stock":1,"In Stock":2},"status":"success"}
+2025-08-28T08:34:51.071Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-28T08:39:53.395Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:39:53.518Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:39:58.201Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:39:58.294Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:40:22.742Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:40:22.831Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:40:43.198Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:40:43.289Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:40:45.629Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:40:56.360Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:41:00.368Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:43:44.841Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:43:44.990Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:44:14.331Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:44:14.419Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:44:44.324Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:44:44.403Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:44:54.749Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:44:54.862Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:45:25.322Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:45:25.411Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:45:55.337Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:45:55.421Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:46:04.542Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:46:04.639Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:46:35.420Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:46:35.583Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:47:05.329Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:47:05.415Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:47:35.342Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:47:35.426Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:48:06.362Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:48:06.468Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:48:30.781Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:48:30.872Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:49:01.310Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:49:01.951Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:49:13.915Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:49:13.999Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:49:30.769Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:49:30.853Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:49:44.330Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:49:44.410Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:50:01.326Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:50:01.405Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:50:14.323Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:50:14.406Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:50:28.208Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:50:28.381Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:50:28.621Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:50:28.726Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:50:29.057Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:50:29.139Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:50:59.353Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:50:59.449Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:51:14.004Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:51:23.639Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:51:29.337Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:51:29.424Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:51:31.881Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:51:58.760Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:51:58.874Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:52:21.554Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:52:21.650Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:52:29.336Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:52:29.414Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:52:58.722Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:52:58.842Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:53:29.336Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:53:29.419Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:53:59.326Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:53:59.409Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:54:29.329Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:54:29.419Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:54:59.326Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:54:59.408Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:55:42.615Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:55:42.720Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:55:45.894Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:55:45.979Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:55:58.688Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:55:58.801Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:56:17.743Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:56:17.808Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:56:20.121Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:56:20.201Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:56:50.358Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:56:50.455Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:57:20.309Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:57:20.390Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T08:57:42.038Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:58:12.182Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:58:42.338Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:59:12.333Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T08:59:42.351Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:00:12.326Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:00:42.033Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:01:12.326Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:01:42.334Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:02:12.172Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:02:13.914Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:02:44.345Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:03:14.352Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:03:44.348Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:04:01.104Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:04:31.341Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:05:01.334Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:05:16.001Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:05:23.661Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T09:05:23.733Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T09:06:13.994Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T09:06:20.379Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T09:06:50.384Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:06:52.698Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:07:23.320Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:07:53.298Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:08:23.300Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:08:53.302Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:09:23.307Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:09:38.261Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:10:08.861Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:10:38.865Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:11:08.880Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:11:38.859Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:12:08.892Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:12:56.551Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:13:07.015Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:13:08.960Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T09:13:09.060Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T09:13:12.150Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:13:12.191Z - REPORT_GENERATED - Weekly sales report generated: 1 weeks - {"type":"weekly_sales","weekCount":1,"status":"success"}
+2025-08-28T09:13:12.236Z - REPORT_GENERATED - Monthly sales report generated: 1 months - {"type":"monthly_sales","monthCount":1,"status":"success"}
+2025-08-28T09:13:12.297Z - REPORT_GENERATED - Doctor-wise sales report generated: 3 doctors - {"type":"doctor_wise_sales","doctorCount":3,"status":"success"}
+2025-08-28T09:13:12.335Z - REPORT_GENERATED - Vendor-wise sales report generated: 3 vendors - {"type":"vendor_wise_sales","vendorCount":3,"status":"success"}
+2025-08-28T09:13:12.369Z - REPORT_GENERATED - Stock report generated: 4 products - {"type":"stock_report","productCount":4,"stockStats":{"Out of Stock":1,"Low Stock":1,"In Stock":2},"status":"success"}
+2025-08-28T09:13:12.405Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-28T09:13:13.019Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:13:42.925Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:14:13.351Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:14:42.388Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:14:42.436Z - REPORT_GENERATED - Weekly sales report generated: 1 weeks - {"type":"weekly_sales","weekCount":1,"status":"success"}
+2025-08-28T09:14:42.515Z - REPORT_GENERATED - Monthly sales report generated: 1 months - {"type":"monthly_sales","monthCount":1,"status":"success"}
+2025-08-28T09:14:42.614Z - REPORT_GENERATED - Doctor-wise sales report generated: 3 doctors - {"type":"doctor_wise_sales","doctorCount":3,"status":"success"}
+2025-08-28T09:14:42.665Z - REPORT_GENERATED - Vendor-wise sales report generated: 3 vendors - {"type":"vendor_wise_sales","vendorCount":3,"status":"success"}
+2025-08-28T09:14:42.711Z - REPORT_GENERATED - Stock report generated: 4 products - {"type":"stock_report","productCount":4,"stockStats":{"Out of Stock":1,"Low Stock":1,"In Stock":2},"status":"success"}
+2025-08-28T09:14:42.779Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-28T09:15:06.586Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:16:23.953Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:16:54.314Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:17:23.828Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:17:42.471Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T09:17:42.794Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T09:20:48.976Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:20:50.549Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:20:50.601Z - REPORT_GENERATED - Weekly sales report generated: 1 weeks - {"type":"weekly_sales","weekCount":1,"status":"success"}
+2025-08-28T09:20:50.633Z - REPORT_GENERATED - Monthly sales report generated: 1 months - {"type":"monthly_sales","monthCount":1,"status":"success"}
+2025-08-28T09:20:50.718Z - REPORT_GENERATED - Doctor-wise sales report generated: 3 doctors - {"type":"doctor_wise_sales","doctorCount":3,"status":"success"}
+2025-08-28T09:20:50.751Z - REPORT_GENERATED - Vendor-wise sales report generated: 3 vendors - {"type":"vendor_wise_sales","vendorCount":3,"status":"success"}
+2025-08-28T09:20:50.793Z - REPORT_GENERATED - Stock report generated: 4 products - {"type":"stock_report","productCount":4,"stockStats":{"Out of Stock":1,"Low Stock":1,"In Stock":2},"status":"success"}
+2025-08-28T09:20:50.824Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-28T09:21:05.086Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:21:35.038Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:22:05.904Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:22:35.857Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:23:05.124Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:23:11.357Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:23:11.399Z - REPORT_GENERATED - Weekly sales report generated: 1 weeks - {"type":"weekly_sales","weekCount":1,"status":"success"}
+2025-08-28T09:23:11.450Z - REPORT_GENERATED - Monthly sales report generated: 1 months - {"type":"monthly_sales","monthCount":1,"status":"success"}
+2025-08-28T09:23:11.505Z - REPORT_GENERATED - Doctor-wise sales report generated: 3 doctors - {"type":"doctor_wise_sales","doctorCount":3,"status":"success"}
+2025-08-28T09:23:11.545Z - REPORT_GENERATED - Vendor-wise sales report generated: 3 vendors - {"type":"vendor_wise_sales","vendorCount":3,"status":"success"}
+2025-08-28T09:23:11.573Z - REPORT_GENERATED - Stock report generated: 4 products - {"type":"stock_report","productCount":4,"stockStats":{"Out of Stock":1,"Low Stock":1,"In Stock":2},"status":"success"}
+2025-08-28T09:23:11.616Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-28T09:23:14.050Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:23:44.342Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:23:54.452Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:24:13.579Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T09:24:14.014Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T09:24:16.698Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:24:16.739Z - REPORT_GENERATED - Weekly sales report generated: 1 weeks - {"type":"weekly_sales","weekCount":1,"status":"success"}
+2025-08-28T09:24:16.775Z - REPORT_GENERATED - Monthly sales report generated: 1 months - {"type":"monthly_sales","monthCount":1,"status":"success"}
+2025-08-28T09:24:16.845Z - REPORT_GENERATED - Doctor-wise sales report generated: 3 doctors - {"type":"doctor_wise_sales","doctorCount":3,"status":"success"}
+2025-08-28T09:24:16.876Z - REPORT_GENERATED - Vendor-wise sales report generated: 3 vendors - {"type":"vendor_wise_sales","vendorCount":3,"status":"success"}
+2025-08-28T09:24:16.912Z - REPORT_GENERATED - Stock report generated: 4 products - {"type":"stock_report","productCount":4,"stockStats":{"Out of Stock":1,"Low Stock":1,"In Stock":2},"status":"success"}
+2025-08-28T09:24:16.943Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-28T09:24:20.030Z - REPORT_GENERATED - Users list fetched by admin: 11 users - {"type":"users_list","userCount":11,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-28T09:24:20.101Z - REPORT_GENERATED - Users list fetched by admin: 11 users - {"type":"users_list","userCount":11,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-28T09:24:47.794Z - USER_LOGIN - Registration attempt: jony as pharmacist - {"action":"register_attempt","username":"jony","role":"pharmacist","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-28T09:24:47.918Z - SYSTEM_ERROR - Registration system error: jony - {"error":"Registration failed","username":"jony","details":"User validation failed: role: `pharmacist` is not a valid enum value for path `role`.","ip":"::1"}
+2025-08-28T09:26:32.846Z - USER_LOGIN - Registration attempt: jony as pharmacist - {"action":"register_attempt","username":"jony","role":"pharmacist","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-28T09:26:32.975Z - SYSTEM_ERROR - Registration system error: jony - {"error":"Registration failed","username":"jony","details":"User validation failed: role: `pharmacist` is not a valid enum value for path `role`.","ip":"::1"}
+2025-08-28T09:27:33.553Z - USER_LOGIN - Registration attempt: jony as pharmacist - {"action":"register_attempt","username":"jony","role":"pharmacist","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-28T09:27:33.866Z - SYSTEM_ERROR - Registration system error: jony - {"error":"Registration failed","username":"jony","details":"E11000 duplicate key error collection: test.users index: email_1 dup key: { email: null }","ip":"::1"}
+2025-08-28T09:27:40.741Z - USER_LOGIN - Registration attempt: jony as pharmacist - {"action":"register_attempt","username":"jony","role":"pharmacist","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-28T09:27:40.877Z - SYSTEM_ERROR - Registration system error: jony - {"error":"Registration failed","username":"jony","details":"E11000 duplicate key error collection: test.users index: email_1 dup key: { email: null }","ip":"::1"}
+2025-08-28T09:29:33.223Z - USER_LOGIN - Registration attempt: jhon as pharmacist - {"action":"register_attempt","username":"jhon","role":"pharmacist","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-28T09:29:33.383Z - SYSTEM_ERROR - Registration system error: jhon - {"error":"Registration failed","username":"jhon","details":"E11000 duplicate key error collection: test.users index: email_1 dup key: { email: null }","ip":"::1"}
+2025-08-28T09:29:57.462Z - USER_LOGIN - Registration attempt: jhon as pharmacist - {"action":"register_attempt","username":"jhon","role":"pharmacist","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-28T09:29:57.695Z - SYSTEM_ERROR - Registration system error: jhon - {"error":"Registration failed","username":"jhon","details":"E11000 duplicate key error collection: test.users index: email_1 dup key: { email: null }","ip":"::1"}
+2025-08-28T09:33:23.371Z - USER_LOGIN - Registration attempt: jhon as pharmacist - {"action":"register_attempt","username":"jhon","role":"pharmacist","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-28T09:33:23.545Z - USER_LOGIN - User registered successfully: jhon as pharmacist - {"action":"register_success","userId":"68b022631c85cca6aaf80a8c","username":"jhon","role":"pharmacist","ip":"::1","userAgent":"Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36"}
+2025-08-28T09:33:23.544Z - USER_LOGIN - User created: jhon with role pharmacist - {"action":"user_created","userId":"68b022631c85cca6aaf80a8c","username":"jhon","role":"pharmacist","timestamp":"2025-08-28T09:33:23.544Z"}
+2025-08-28T09:33:27.965Z - REPORT_GENERATED - Users list fetched by admin: 12 users - {"type":"users_list","userCount":12,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-28T09:33:48.925Z - USER_LOGIN - Registration attempt: aman as audit - {"action":"register_attempt","username":"aman","role":"audit","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-28T09:33:49.034Z - USER_LOGIN - User created: aman with role audit - {"action":"user_created","userId":"68b0227d1c85cca6aaf80a9a","username":"aman","role":"audit","timestamp":"2025-08-28T09:33:49.034Z"}
+2025-08-28T09:33:49.035Z - USER_LOGIN - User registered successfully: aman as audit - {"action":"register_success","userId":"68b0227d1c85cca6aaf80a9a","username":"aman","role":"audit","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-28T09:33:53.091Z - REPORT_GENERATED - Users list fetched by admin: 13 users - {"type":"users_list","userCount":13,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-28T09:33:59.461Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:34:02.607Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:34:02.647Z - REPORT_GENERATED - Weekly sales report generated: 1 weeks - {"type":"weekly_sales","weekCount":1,"status":"success"}
+2025-08-28T09:34:02.683Z - REPORT_GENERATED - Monthly sales report generated: 1 months - {"type":"monthly_sales","monthCount":1,"status":"success"}
+2025-08-28T09:34:02.749Z - REPORT_GENERATED - Doctor-wise sales report generated: 3 doctors - {"type":"doctor_wise_sales","doctorCount":3,"status":"success"}
+2025-08-28T09:34:02.792Z - REPORT_GENERATED - Vendor-wise sales report generated: 3 vendors - {"type":"vendor_wise_sales","vendorCount":3,"status":"success"}
+2025-08-28T09:34:02.823Z - REPORT_GENERATED - Stock report generated: 4 products - {"type":"stock_report","productCount":4,"stockStats":{"Out of Stock":1,"Low Stock":1,"In Stock":2},"status":"success"}
+2025-08-28T09:34:02.894Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-28T09:34:15.675Z - USER_LOGIN - Login attempt: aman - {"action":"login_attempt","username":"aman","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-28T09:34:15.825Z - USER_LOGIN - User logged in successfully: aman (audit) - {"action":"login_success","userId":"68b0227d1c85cca6aaf80a9a","username":"aman","role":"audit","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","tokenGenerated":true}
+2025-08-28T09:34:15.820Z - USER_LOGIN - User verified successfully: aman - {"action":"user_verified","userId":"68b0227d1c85cca6aaf80a9a","username":"aman","role":"audit"}
+2025-08-28T09:34:16.059Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:34:42.404Z - USER_LOGIN - Login attempt: jhon - {"action":"login_attempt","username":"jhon","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-28T09:34:42.590Z - USER_LOGIN - User logged in successfully: jhon (pharmacist) - {"action":"login_success","userId":"68b022631c85cca6aaf80a8c","username":"jhon","role":"pharmacist","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","tokenGenerated":true}
+2025-08-28T09:34:42.587Z - USER_LOGIN - User verified successfully: jhon - {"action":"user_verified","userId":"68b022631c85cca6aaf80a8c","username":"jhon","role":"pharmacist"}
+2025-08-28T09:34:46.321Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T09:34:46.403Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T09:34:48.880Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T09:34:49.196Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T09:35:06.862Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-28T09:35:07.004Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","tokenGenerated":true}
+2025-08-28T09:35:07.002Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-08-28T09:35:07.245Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:35:11.083Z - REPORT_GENERATED - Users list fetched by admin: 13 users - {"type":"users_list","userCount":13,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-28T09:35:11.136Z - REPORT_GENERATED - Users list fetched by admin: 13 users - {"type":"users_list","userCount":13,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-28T09:36:02.947Z - SYSTEM_ERROR - Update user system error - {"error":"Update user failed","targetUserId":"68b022631c85cca6aaf80a8c","updatedBy":"admin","details":"db is not defined"}
+2025-08-28T09:36:46.048Z - SYSTEM_ERROR - Update user system error - {"error":"Update user failed","targetUserId":"68b022631c85cca6aaf80a8c","updatedBy":"admin","details":"db is not defined"}
+2025-08-28T09:40:04.802Z - SYSTEM_ERROR - Update user system error - {"error":"Update user failed","targetUserId":"68b022631c85cca6aaf80a8c","updatedBy":"admin","details":"db is not defined"}
+2025-08-28T09:42:34.832Z - USER_LOGIN - User updated by admin: viren (pharmacist → pharmacist) - {"action":"user_updated","targetUserId":"68b022631c85cca6aaf80a8c","targetUsername":"viren","oldRole":"pharmacist","newRole":"pharmacist","updatedBy":"admin","updatedById":"68aeb214f5f14434bd5481a6","passwordChanged":true,"ip":"::1"}
+2025-08-28T09:42:39.264Z - REPORT_GENERATED - Users list fetched by admin: 13 users - {"type":"users_list","userCount":13,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-28T09:42:50.004Z - REPORT_GENERATED - Daily sales report generated: 20 transactions, ₹13500 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":20,"revenue":13500,"sales":170,"status":"success"}
+2025-08-28T09:42:52.888Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T09:42:52.993Z - REPORT_GENERATED - Bills fetched successfully: 20 bills - {"type":"bills_list","action":"fetch_success","billCount":20}
+2025-08-28T10:10:54.901Z - BILL_CREATED -  - {"billId":"68b02b2eb8cdbb85de920199","doctorId":"68aeedc80e51697b4eff634d","total":105}
+2025-08-28T10:10:54.999Z - REPORT_GENERATED - Bills fetched successfully: 21 bills - {"type":"bills_list","action":"fetch_success","billCount":21}
+2025-08-28T10:13:18.328Z - REPORT_GENERATED - Daily sales report generated: 21 transactions, ₹13605 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":21,"revenue":13605,"sales":171,"status":"success"}
+2025-08-28T10:13:20.178Z - REPORT_GENERATED - Bills fetched successfully: 21 bills - {"type":"bills_list","action":"fetch_success","billCount":21}
+2025-08-28T10:13:20.695Z - REPORT_GENERATED - Bills fetched successfully: 21 bills - {"type":"bills_list","action":"fetch_success","billCount":21}
+2025-08-28T10:13:21.680Z - REPORT_GENERATED - Daily sales report generated: 21 transactions, ₹13605 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":21,"revenue":13605,"sales":171,"status":"success"}
+2025-08-28T10:13:21.736Z - REPORT_GENERATED - Weekly sales report generated: 1 weeks - {"type":"weekly_sales","weekCount":1,"status":"success"}
+2025-08-28T10:13:21.790Z - REPORT_GENERATED - Monthly sales report generated: 1 months - {"type":"monthly_sales","monthCount":1,"status":"success"}
+2025-08-28T10:13:21.849Z - REPORT_GENERATED - Doctor-wise sales report generated: 3 doctors - {"type":"doctor_wise_sales","doctorCount":3,"status":"success"}
+2025-08-28T10:13:21.884Z - REPORT_GENERATED - Vendor-wise sales report generated: 3 vendors - {"type":"vendor_wise_sales","vendorCount":3,"status":"success"}
+2025-08-28T10:13:21.912Z - REPORT_GENERATED - Stock report generated: 4 products - {"type":"stock_report","productCount":4,"stockStats":{"Out of Stock":1,"Low Stock":1,"In Stock":2},"status":"success"}
+2025-08-28T10:13:21.947Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-08-28T10:13:24.006Z - REPORT_GENERATED - Users list fetched by admin: 13 users - {"type":"users_list","userCount":13,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-28T10:13:24.059Z - REPORT_GENERATED - Users list fetched by admin: 13 users - {"type":"users_list","userCount":13,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-08-28T10:15:08.420Z - REPORT_GENERATED - Bills fetched successfully: 21 bills - {"type":"bills_list","action":"fetch_success","billCount":21}
+2025-08-28T10:15:08.580Z - REPORT_GENERATED - Bills fetched successfully: 21 bills - {"type":"bills_list","action":"fetch_success","billCount":21}
+2025-08-28T10:17:26.816Z - REPORT_GENERATED - Bills fetched successfully: 21 bills - {"type":"bills_list","action":"fetch_success","billCount":21}
+2025-08-28T10:17:46.323Z - REPORT_GENERATED - Bills fetched successfully: 21 bills - {"type":"bills_list","action":"fetch_success","billCount":21}
+2025-08-28T10:18:11.421Z - REPORT_GENERATED - Bills fetched successfully: 21 bills - {"type":"bills_list","action":"fetch_success","billCount":21}
+2025-08-28T10:26:23.853Z - BILL_CREATED -  - {"billId":"68b02ecfb8cdbb85de920392","doctorId":"68aeddeb0e51697b4eff6276","total":105}
+2025-08-28T10:26:24.027Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-28T10:26:24.127Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-28T10:28:23.583Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-28T10:28:23.757Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-28T10:29:35.199Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-28T10:29:35.222Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-28T10:29:47.620Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-28T10:29:54.814Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-28T10:29:54.918Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-28T10:30:01.727Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-28T10:30:01.811Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-28T10:30:05.795Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-28T10:30:05.858Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-28T10:45:48.439Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-08-28T10:45:49.086Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-08-28T10:45:49.215Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","tokenGenerated":true}
+2025-08-28T10:45:50.293Z - REPORT_GENERATED - Daily sales report generated: 22 transactions, ₹13710 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":22,"revenue":13710,"sales":172,"status":"success"}
