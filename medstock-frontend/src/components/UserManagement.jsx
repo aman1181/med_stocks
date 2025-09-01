@@ -385,15 +385,17 @@ const UserManagement = ({ onLogout }) => {
         <div className="flex items-center justify-between mb-2">
           <h1 className="text-3xl font-semibold text-gray-900">User Management</h1>
           {canCreate && (
-            <button
-              onClick={() => setShowAddUserModal(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              <span>Add User</span>
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowAddUserModal(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                <span>Add User</span>
+              </button>
+            </div>
           )}
         </div>
         <p className="text-gray-600">
@@ -586,7 +588,7 @@ const UserManagement = ({ onLogout }) => {
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex items-center justify-end space-x-2">
                         {canUpdate || canDelete ? (
-                          <>
+                          <React.Fragment>
                             {canUpdate && (
                               <button 
                                 onClick={() => handleEditUser(user)}
@@ -609,7 +611,7 @@ const UserManagement = ({ onLogout }) => {
                                 </svg>
                               </button>
                             )}
-                          </>
+                          </React.Fragment>
                         ) : (
                           <span className="text-gray-400 text-sm px-2 py-1 bg-gray-100 rounded">
                             View Only
@@ -742,15 +744,36 @@ const UserManagement = ({ onLogout }) => {
                   />
                 </div>
                 
-                <div>
+                <div className="relative">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                  <input
-                    type="password"
-                    value={editingUser.password}
-                    onChange={(e) => setEditingUser({...editingUser, password: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Leave blank to keep current password"
-                  />
+                  <div className="relative">
+                    <input
+                      type={editingUser.showPassword ? "text" : "password"}
+                      value={editingUser.password}
+                      onChange={(e) => setEditingUser({...editingUser, password: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-10"
+                      placeholder="Leave blank to keep current password"
+                    />
+                    <button
+                      type="button"
+                      aria-label={editingUser.showPassword ? "Hide password" : "Show password"}
+                      onClick={() => setEditingUser({...editingUser, showPassword: !editingUser.showPassword})}
+                      className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none"
+                      tabIndex={0}
+                    >
+                      {editingUser.showPassword ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.5 12c2.273 4.55 7.022 7.5 12 7.5 2.042 0 3.98-.41 5.73-1.127M15 12a3 3 0 11-6 0 3 3 0 016 0zm6.02-3.777A10.477 10.477 0 0122.5 12c-2.273 4.55-7.022 7.5-12 7.5a10.477 10.477 0 01-5.73-1.127" />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M3 3l18 18" />
+                        </svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12c0-4.55 4.75-7.5 9.75-7.5s9.75 2.95 9.75 7.5-4.75 7.5-9.75 7.5S2.25 16.55 2.25 12z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                   <p className="text-xs text-gray-500 mt-1">Leave blank to keep current password</p>
                 </div>
                 

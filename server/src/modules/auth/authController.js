@@ -148,7 +148,7 @@ exports.login = async (req, res) => {
         const token = jwt.sign(
             { id: user._id, username: user.username, role: user.role },
             JWT_SECRET,
-            { expiresIn: '24h' }
+            { expiresIn: '7d' } // Extended token expiry to 7 days
         );
         logEvent(Events.USER_LOGIN, {
             action: 'login_success',
