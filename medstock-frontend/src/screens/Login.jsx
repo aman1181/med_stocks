@@ -30,7 +30,6 @@ export default function Login({ onLogin }){
       }
 
       // ✅ FIXED: Save token separately AND in user object
-      console.log('💾 Saving login data...');
       
       // Save token separately
       localStorage.setItem('token', data.token);
@@ -44,22 +43,10 @@ export default function Login({ onLogin }){
       // ✅ Verification
       const savedToken = localStorage.getItem('token');
       const savedUser = localStorage.getItem('user');
-      console.log('✅ Token saved separately:', !!savedToken);
-      console.log('✅ User saved with token:', !!savedUser);
 
-      console.log('🔍 POST-LOGIN CHECK:');
-      console.log('Token:', data.token);
-      console.log('User:', data.user);
-      console.log('Saved Token:', savedToken);
-      console.log('Saved User:', JSON.parse(savedUser));
 
       
 
-      console.log('Login successful:', {
-        user: data.user.username,
-        role: data.user.role,
-        token: data.token ? 'Present' : 'Missing'
-      })
 
       // ✅ Pass complete user data with token info
       onLogin({
@@ -105,7 +92,6 @@ export default function Login({ onLogin }){
             }
           }
         } catch (err) {
-          console.log('Token validation failed:', err)
         }
         
         // Clear invalid tokens

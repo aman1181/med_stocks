@@ -169,7 +169,6 @@ export default function Reports({ setCurrentScreen, user, onLogout }) {
           return dailyData;
           
         } catch (err) {
-          console.log('Daily sales endpoint failed, trying bills endpoint...');
           
           try {
             // Method 2: If daily endpoint fails, calculate from bills

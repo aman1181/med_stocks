@@ -121,15 +121,11 @@ const Doctors = ({ user, onLogout }) => {
       const data = await apiCall('/api/doctors', {
         headers: getAuthHeaders()
       });
-      console.log('API /api/doctors response:', data);
       // Support both array and object with doctors property
       const doctorList = Array.isArray(data) ? data : (Array.isArray(data?.doctors) ? data.doctors : []);
-      console.log('doctorList after mapping:', doctorList);
       const validDoctors = doctorList.filter(d => d._id);
-      console.log('validDoctors:', validDoctors);
       setDoctors(validDoctors.map(d => ({ ...d, id: d._id })));
       setTimeout(() => {
-        console.log('Doctors state after setDoctors:', validDoctors.map(d => ({ ...d, id: d._id })));
       }, 500);
     } catch (err) {
       console.error('Error in fetchDoctors:', err);
@@ -224,7 +220,6 @@ const Doctors = ({ user, onLogout }) => {
     (doctor.specialization && doctor.specialization.toLowerCase().includes(search.toLowerCase()))) &&
     (selectedSpecialization === 'All' || doctor.specialization === selectedSpecialization)
   );
-  console.log('filteredDoctors:', filteredDoctors);
 
   // Removed sorting logic
 

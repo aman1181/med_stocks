@@ -1,4 +1,5 @@
 
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
@@ -437,46 +438,38 @@ exports.updateUserRole = (req, res) => {
 
 // --- API: Delete user (admin only) ---
 // Replace your current deleteUser function with this:
-exports.deleteUser = (req, res) => {
+exports.deleteUser = async (req, res) => {
     try {
-        const { id } = req.params; // Get ID from URL params (not userId)
-
+        const { id } = req.params;
         console.log('🗑️ Deleting user:', id, 'by:', req.user?.username);
 
-        // Get user data
-        const user = db.get('SELECT * FROM users WHERE uuid = ?', [id]);
+        // Find user by Mongoose
+        const user = await User.findById(id);
         if (!user) {
-            return res.status(404).json({ 
+            return res.status(404).json({
                 error: 'User not found',
-                success: false 
+                success: false
             });
         }
 
         // Don't allow deleting admin users
         if (user.role === 'admin') {
-            return res.status(400).json({ 
+            return res.status(400).json({
                 error: 'Cannot delete admin users',
-                success: false 
+                success: false
             });
         }
 
         // Don't allow users to delete themselves
         if (id === req.user.id) {
-            return res.status(400).json({ 
+            return res.status(400).json({
                 error: 'Cannot delete your own account',
-                success: false 
+                success: false
             });
         }
 
-        // Delete user
-        const result = db.run('DELETE FROM users WHERE uuid = ?', [id]);
-
-        if (result.changes === 0) {
-            return res.status(404).json({ 
-                error: 'User not found',
-                success: false 
-            });
-        }
+        // Delete user with Mongoose
+        await User.findByIdAndDelete(id);
 
         // Log user deletion
         logEvent(Events.USER_LOGIN, {
@@ -497,17 +490,15 @@ exports.deleteUser = (req, res) => {
         });
     } catch (error) {
         console.error('❌ Delete user error:', error);
-        
         logEvent(Events.SYSTEM_ERROR, {
             error: 'Delete user failed',
             targetUserId: req.params.id,
             deletedBy: req.user?.username,
             details: error.message
         }, 'Delete user system error');
-
-        res.status(500).json({ 
+        res.status(500).json({
             error: 'Failed to delete user',
-            success: false 
+            success: false
         });
     }
 };

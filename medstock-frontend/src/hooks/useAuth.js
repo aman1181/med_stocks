@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export const useAuth = () => {
+const useAuth = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [currentUserRole, setCurrentUserRole] = useState('');
   const [loading, setLoading] = useState(true);
@@ -25,10 +25,10 @@ export const useAuth = () => {
         // If no user found, clear states
         setCurrentUser(null);
         setCurrentUserRole('');
-        console.log('👤 No user found in localStorage');
+        console.log('  No user found in localStorage');
         
       } catch (err) {
-        console.error('❌ Error parsing user data:', err);
+        console.error(' Error parsing user data:', err);
         setCurrentUser(null);
         setCurrentUserRole('');
       } finally {
@@ -111,3 +111,4 @@ export const useAuth = () => {
     logout
   };
 };
+export default useAuth;

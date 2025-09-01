@@ -4039,3 +4039,131 @@
 2025-08-28T11:32:00.316Z - REPORT_GENERATED - Daily sales report generated: 22 transactions, ₹13710 revenue - {"type":"daily_sales","date":"2025-08-27","transactions":22,"revenue":13710,"sales":172,"status":"success"}
 2025-08-28T11:32:11.242Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
 2025-08-28T11:32:11.343Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-28T11:43:02.220Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-28T11:43:02.354Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:39:36.225Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-28","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-29T06:42:59.569Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-28","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-29T06:43:03.566Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:43:04.032Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:43:26.150Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-28","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-08-29T06:43:38.791Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:43:39.399Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:47:00.662Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:49:18.899Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:50:11.073Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:50:31.574Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:50:38.952Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:51:05.102Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:51:18.307Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:51:25.067Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:52:10.081Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:52:15.397Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:52:24.956Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:53:33.101Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:53:48.661Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:53:59.796Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:54:30.248Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:59:16.865Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-08-29T06:59:30.077Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T10:23:37.837Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-09-01T10:23:38.013Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-09-01T10:23:38.019Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","tokenGenerated":true}
+2025-09-01T10:23:38.319Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-31","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-09-01T10:23:46.092Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T10:23:46.487Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T10:27:10.518Z - REPORT_GENERATED - Users list fetched by admin: 13 users - {"type":"users_list","userCount":13,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-09-01T10:27:10.575Z - REPORT_GENERATED - Users list fetched by admin: 13 users - {"type":"users_list","userCount":13,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-09-01T10:28:24.611Z - USER_LOGIN - Registration attempt: admino as admin - {"action":"register_attempt","username":"admino","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-09-01T10:28:24.799Z - USER_LOGIN - User registered successfully: admino as admin - {"action":"register_success","userId":"68b575484743dd72ca13e749","username":"admino","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-09-01T10:28:24.799Z - USER_LOGIN - User created: admino with role admin - {"action":"user_created","userId":"68b575484743dd72ca13e749","username":"admino","role":"admin","timestamp":"2025-09-01T10:28:24.799Z"}
+2025-09-01T10:28:28.876Z - REPORT_GENERATED - Users list fetched by admin: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-09-01T10:30:43.461Z - USER_LOGIN - Login attempt: admino - {"action":"login_attempt","username":"admino","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-09-01T10:30:43.598Z - USER_LOGIN - Login failed - invalid password: admino - {"action":"login_failed","userId":"68b575484743dd72ca13e749","username":"admino","reason":"invalid_password"}
+2025-09-01T10:46:19.159Z - USER_LOGIN - Login attempt: admino - {"action":"login_attempt","username":"admino","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-09-01T10:46:19.269Z - USER_LOGIN - Login failed - invalid password: admino - {"action":"login_failed","userId":"68b575484743dd72ca13e749","username":"admino","reason":"invalid_password"}
+2025-09-01T10:46:21.417Z - USER_LOGIN - Login attempt: admino - {"action":"login_attempt","username":"admino","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-09-01T10:46:21.505Z - USER_LOGIN - Login failed - invalid password: admino - {"action":"login_failed","userId":"68b575484743dd72ca13e749","username":"admino","reason":"invalid_password"}
+2025-09-01T10:46:55.601Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-09-01T10:46:55.737Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","tokenGenerated":true}
+2025-09-01T10:46:55.700Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-09-01T10:46:56.113Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-31","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-09-01T10:50:42.072Z - USER_LOGIN - Login attempt: admino - {"action":"login_attempt","username":"admino","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-09-01T10:50:42.188Z - USER_LOGIN - Login failed - invalid password: admino - {"action":"login_failed","userId":"68b575484743dd72ca13e749","username":"admino","reason":"invalid_password"}
+2025-09-01T10:55:55.751Z - SYSTEM_ERROR - Get bill by ID failed: history - {"error":"Get bill by ID failed","billId":"history","details":"Cast to ObjectId failed for value \"history\" (type string) at path \"_id\" for model \"Bill\""}
+2025-09-01T10:55:55.959Z - SYSTEM_ERROR - Get bill by ID failed: history - {"error":"Get bill by ID failed","billId":"history","details":"Cast to ObjectId failed for value \"history\" (type string) at path \"_id\" for model \"Bill\""}
+2025-09-01T10:56:42.446Z - SYSTEM_ERROR - Get bill by ID failed: history - {"error":"Get bill by ID failed","billId":"history","details":"Cast to ObjectId failed for value \"history\" (type string) at path \"_id\" for model \"Bill\""}
+2025-09-01T10:56:42.482Z - SYSTEM_ERROR - Get bill by ID failed: history - {"error":"Get bill by ID failed","billId":"history","details":"Cast to ObjectId failed for value \"history\" (type string) at path \"_id\" for model \"Bill\""}
+2025-09-01T10:56:50.291Z - SYSTEM_ERROR - Get bill by ID failed: history - {"error":"Get bill by ID failed","billId":"history","details":"Cast to ObjectId failed for value \"history\" (type string) at path \"_id\" for model \"Bill\""}
+2025-09-01T10:56:50.333Z - SYSTEM_ERROR - Get bill by ID failed: history - {"error":"Get bill by ID failed","billId":"history","details":"Cast to ObjectId failed for value \"history\" (type string) at path \"_id\" for model \"Bill\""}
+2025-09-01T10:57:33.599Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-31","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-09-01T10:57:33.663Z - REPORT_GENERATED - Weekly sales report generated: 1 weeks - {"type":"weekly_sales","weekCount":1,"status":"success"}
+2025-09-01T10:57:33.766Z - REPORT_GENERATED - Monthly sales report generated: 1 months - {"type":"monthly_sales","monthCount":1,"status":"success"}
+2025-09-01T10:57:33.898Z - REPORT_GENERATED - Doctor-wise sales report generated: 3 doctors - {"type":"doctor_wise_sales","doctorCount":3,"status":"success"}
+2025-09-01T10:57:33.937Z - REPORT_GENERATED - Vendor-wise sales report generated: 3 vendors - {"type":"vendor_wise_sales","vendorCount":3,"status":"success"}
+2025-09-01T10:57:33.969Z - REPORT_GENERATED - Stock report generated: 4 products - {"type":"stock_report","productCount":4,"stockStats":{"Out of Stock":1,"Low Stock":1,"In Stock":2},"status":"success"}
+2025-09-01T10:57:34.002Z - REPORT_GENERATED - Expiry report generated: 0 products expiring in 30 days - {"type":"expiry_report","days":30,"productCount":0,"expiryStats":{},"status":"success"}
+2025-09-01T11:04:52.999Z - SYSTEM_ERROR - Get bill by ID failed: history - {"error":"Get bill by ID failed","billId":"history","details":"Cast to ObjectId failed for value \"history\" (type string) at path \"_id\" for model \"Bill\""}
+2025-09-01T11:04:53.478Z - SYSTEM_ERROR - Get bill by ID failed: history - {"error":"Get bill by ID failed","billId":"history","details":"Cast to ObjectId failed for value \"history\" (type string) at path \"_id\" for model \"Bill\""}
+2025-09-01T11:06:26.213Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-31","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-09-01T11:06:29.493Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T11:06:29.810Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T11:08:32.830Z - USER_LOGIN - Login attempt: admino - {"action":"login_attempt","username":"admino","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-09-01T11:08:32.947Z - USER_LOGIN - Login failed - invalid password: admino - {"action":"login_failed","userId":"68b575484743dd72ca13e749","username":"admino","reason":"invalid_password"}
+2025-09-01T11:09:31.201Z - USER_LOGIN - Login attempt: admin - {"action":"login_attempt","username":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-09-01T11:09:31.317Z - USER_LOGIN - User logged in successfully: admin (admin) - {"action":"login_success","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","tokenGenerated":true}
+2025-09-01T11:09:31.298Z - USER_LOGIN - User verified successfully: admin - {"action":"user_verified","userId":"68aeb214f5f14434bd5481a6","username":"admin","role":"admin"}
+2025-09-01T11:09:31.649Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-31","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-09-01T11:09:36.230Z - REPORT_GENERATED - Users list fetched by admin: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-09-01T11:09:36.279Z - REPORT_GENERATED - Users list fetched by admin: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-09-01T11:09:40.167Z - SYSTEM_ERROR - Delete user system error - {"error":"Delete user failed","targetUserId":"68b575484743dd72ca13e749","deletedBy":"admin","details":"db is not defined"}
+2025-09-01T11:09:43.472Z - REPORT_GENERATED - Users list fetched by admin: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-09-01T11:09:43.518Z - REPORT_GENERATED - Users list fetched by admin: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-09-01T11:09:47.467Z - SYSTEM_ERROR - Delete user system error - {"error":"Delete user failed","targetUserId":"68b575484743dd72ca13e749","deletedBy":"admin","details":"db is not defined"}
+2025-09-01T11:13:59.190Z - SYSTEM_ERROR - Delete user system error - {"error":"Delete user failed","targetUserId":"68b575484743dd72ca13e749","deletedBy":"admin","details":"db is not defined"}
+2025-09-01T11:14:04.632Z - REPORT_GENERATED - Users list fetched by admin: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-09-01T11:14:04.700Z - REPORT_GENERATED - Users list fetched by admin: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-09-01T11:14:09.221Z - SYSTEM_ERROR - Delete user system error - {"error":"Delete user failed","targetUserId":"68b575484743dd72ca13e749","deletedBy":"admin","details":"db is not defined"}
+2025-09-01T11:19:33.426Z - REPORT_GENERATED - Users list fetched by admin: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-09-01T11:19:33.511Z - REPORT_GENERATED - Users list fetched by admin: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-09-01T11:19:37.462Z - SYSTEM_ERROR - Delete user system error - {"error":"Delete user failed","targetUserId":"68b575484743dd72ca13e749","deletedBy":"admin","details":"Model.findById() no longer accepts a callback"}
+2025-09-01T11:19:50.676Z - REPORT_GENERATED - Users list fetched by admin: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-09-01T11:19:51.283Z - REPORT_GENERATED - Users list fetched by admin: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-09-01T11:19:56.585Z - SYSTEM_ERROR - Delete user system error - {"error":"Delete user failed","targetUserId":"68b575484743dd72ca13e749","deletedBy":"admin","details":"Model.findById() no longer accepts a callback"}
+2025-09-01T11:26:06.326Z - REPORT_GENERATED - Users list fetched by admin: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-09-01T11:26:06.388Z - REPORT_GENERATED - Users list fetched by admin: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-09-01T11:27:50.136Z - USER_LOGIN - User updated by admin: admino (admin → admin) - {"action":"user_updated","targetUserId":"68b575484743dd72ca13e749","targetUsername":"admino","oldRole":"admin","newRole":"admin","updatedBy":"admin","updatedById":"68aeb214f5f14434bd5481a6","passwordChanged":true,"ip":"::1"}
+2025-09-01T11:27:54.191Z - REPORT_GENERATED - Users list fetched by admin: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-09-01T11:28:24.905Z - USER_LOGIN - Login attempt: admino - {"action":"login_attempt","username":"admino","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"}
+2025-09-01T11:28:25.006Z - USER_LOGIN - User logged in successfully: admino (admin) - {"action":"login_success","userId":"68b575484743dd72ca13e749","username":"admino","role":"admin","ip":"::1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36","tokenGenerated":true}
+2025-09-01T11:28:24.997Z - USER_LOGIN - User verified successfully: admino - {"action":"user_verified","userId":"68b575484743dd72ca13e749","username":"admino","role":"admin"}
+2025-09-01T11:28:25.317Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-31","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-09-01T11:28:30.002Z - REPORT_GENERATED - Users list fetched by admino: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admino","requestedById":"68b575484743dd72ca13e749","ip":"::1"}
+2025-09-01T11:28:30.053Z - REPORT_GENERATED - Users list fetched by admino: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admino","requestedById":"68b575484743dd72ca13e749","ip":"::1"}
+2025-09-01T11:28:37.318Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T11:28:37.680Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T11:29:14.790Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T11:30:55.131Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T11:30:55.199Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T11:30:56.247Z - REPORT_GENERATED - Daily sales report generated: 0 transactions, ₹0 revenue - {"type":"daily_sales","date":"2025-08-31","transactions":0,"revenue":0,"sales":0,"status":"success"}
+2025-09-01T11:31:00.837Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T11:31:00.921Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T11:31:41.249Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T11:31:41.319Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T11:32:27.426Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T11:32:27.496Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T11:36:01.553Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T11:36:02.017Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T11:36:03.027Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T11:36:03.090Z - REPORT_GENERATED - Bills fetched successfully: 22 bills - {"type":"bills_list","action":"fetch_success","billCount":22}
+2025-09-01T11:36:57.007Z - BILL_CREATED -  - {"billId":"68b5855851628b0758a54f15","doctorId":"68b03c42534b28b6fa984052","total":60}
+2025-09-01T11:36:57.153Z - REPORT_GENERATED - Bills fetched successfully: 23 bills - {"type":"bills_list","action":"fetch_success","billCount":23}
+2025-09-01T11:36:57.216Z - REPORT_GENERATED - Bills fetched successfully: 23 bills - {"type":"bills_list","action":"fetch_success","billCount":23}
+2025-09-01T11:37:07.948Z - REPORT_GENERATED - Daily sales report generated: 1 transactions, ₹60 revenue - {"type":"daily_sales","date":"2025-08-31","transactions":1,"revenue":60,"sales":1,"status":"success"}
+2025-09-01T11:37:10.558Z - REPORT_GENERATED - Users list fetched by admino: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admino","requestedById":"68b575484743dd72ca13e749","ip":"::1"}
+2025-09-01T11:37:10.597Z - REPORT_GENERATED - Users list fetched by admino: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admino","requestedById":"68b575484743dd72ca13e749","ip":"::1"}
+2025-09-01T11:37:12.795Z - REPORT_GENERATED - Daily sales report generated: 1 transactions, ₹60 revenue - {"type":"daily_sales","date":"2025-08-31","transactions":1,"revenue":60,"sales":1,"status":"success"}
+2025-09-01T11:37:14.753Z - REPORT_GENERATED - Bills fetched successfully: 23 bills - {"type":"bills_list","action":"fetch_success","billCount":23}
+2025-09-01T11:37:14.814Z - REPORT_GENERATED - Bills fetched successfully: 23 bills - {"type":"bills_list","action":"fetch_success","billCount":23}
+2025-09-01T11:37:28.690Z - REPORT_GENERATED - Daily sales report generated: 1 transactions, ₹60 revenue - {"type":"daily_sales","date":"2025-08-31","transactions":1,"revenue":60,"sales":1,"status":"success"}
+2025-09-01T11:37:35.302Z - REPORT_GENERATED - Users list fetched by admin: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}
+2025-09-01T11:37:35.342Z - REPORT_GENERATED - Users list fetched by admin: 14 users - {"type":"users_list","userCount":14,"requestedBy":"admin","requestedById":"68aeb214f5f14434bd5481a6","ip":"::1"}

@@ -238,7 +238,6 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
   };
 
   const handleSubmit = async (e) => {
-  console.log('📝 FormData before submit:', formData);
   e.preventDefault();
   // Example: setToastMsg('Inventory updated successfully!'); after successful inventory action
     
@@ -253,28 +252,6 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
         ? `/api/inventory/${editId}`
         : `/api/inventory`;
       const method = isEditing ? "PUT" : "POST";
-      console.log(`📦 ${isEditing ? 'Updating' : 'Adding'} product:`, {
-        endpoint,
-        method,
-        product_id: editId,
-        batch_id: formData.batch_id,
-        data: {
-          ...formData,
-          qty: parseInt(formData.qty) || 0,
-          cost: parseFloat(formData.cost) || 0,
-          price: parseFloat(formData.price) || 0,
-          tax: parseFloat(formData.tax) || 0
-        }
-      });
-      if (!isEditing) {
-        console.log('🟢 Add Product Request Data:', {
-          ...formData,
-          qty: parseInt(formData.qty) || 0,
-          cost: parseFloat(formData.cost) || 0,
-          price: parseFloat(formData.price) || 0,
-          tax: parseFloat(formData.tax) || 0
-        });
-      }
       
       const result = await apiCall(endpoint, {
         method,
@@ -288,7 +265,6 @@ export default function Inventory({ setCurrentScreen, user, onLogout }) {
         }),
       });
 
-      console.log(`📦 Product ${isEditing ? 'update' : 'add'} result:`, result);
       
       if (result && result.success) {
         showToast(`Product ${isEditing ? 'updated' : 'added'} successfully!`);

@@ -39,8 +39,8 @@ export const apiCall = async (endpoint, options = {}) => {
     }
   };
   if (import.meta.env.DEV) {
-    console.log(`🌐 API Call: ${finalOptions.method || 'GET'} ${url}`);
-    console.log(`📤 Request options:`, finalOptions);
+    console.log(` API Call: ${finalOptions.method || 'GET'} ${url}`);
+    console.log(` Request options:`, finalOptions);
   }
   try {
     const response = await fetch(url, finalOptions);
@@ -58,7 +58,7 @@ export const apiCall = async (endpoint, options = {}) => {
       throw new Error('Invalid JSON response from server');
     }
   } catch (error) {
-    console.error(`❌ Network/API Error: ${error.message} - ${url}`);
+    console.error(`Network/API Error: ${error.message} - ${url}`);
     throw error;
   }
 };
